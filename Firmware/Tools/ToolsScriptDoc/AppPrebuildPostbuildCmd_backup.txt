@@ -1,0 +1,1 @@
+.\..\..\Tools\prebuid.bat .\..\..\Tools\ReplaceAdd.py .\..\FwBootloader\Build\dist\default\production\pic16f_bl.X.production.map .\..\FwApp\Src\system.h
