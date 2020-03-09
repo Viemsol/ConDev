@@ -1,0 +1,6 @@
+#objectfile
+*.o
+*.ko
+*.obj
+*.html
+/build/default/production/
