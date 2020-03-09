@@ -12,7 +12,7 @@ def split_by_n( seq, n ):
 		yield seq[:n]
 		seq = seq[n:]
 		
-def FectInjectSn(file_path,Sn,DevTyp):
+def FectInjectSn(file_path,Sn,DevTyp,Checksum_in):
 	#prepare injectant
 	
 	###checksum = 0xDF + ord(Sn[0]) + ord(Sn[1]) + ord(Sn[2]) + ord(Sn[3])
@@ -20,6 +20,9 @@ def FectInjectSn(file_path,Sn,DevTyp):
 	tempDevTyp = hex(DevTyp).split('x')[-1]
 	if(len(tempDevTyp)==1):
 	   tempDevTyp = '0' + tempDevTyp
+	tempChecksum_in = hex(Checksum_in).split('x')[-1]
+	if(len(tempChecksum_in)==1):
+	   tempChecksum_in = '0' + tempChecksum_in
 	New_Hex_File_Path=os.path.splitext(file_path)[0]
 	New_Hex_File_Path=New_Hex_File_Path + "Factory.hex"
 	thefile = open(New_Hex_File_Path, 'w')
@@ -35,21 +38,29 @@ def FectInjectSn(file_path,Sn,DevTyp):
 				e = hex(d)[2:] # '30'
 				snsubst = ':' + a + e
 				print snsubst
-				thefile.write(snsubst+'\n')
+				crc = ':04E1E000'+tempDevTyp+'34'+tempChecksum_in+'34CC'
+				a = crc[1:(len(crc)-2)]
+				b = [a[i:i+2] for i in range(0, len(a), 2)] # ['10', 'F8', '00', ...
+				c = [int(i, 16) for i in b] # [16, 248, 0, ...
+				d = 256 - sum(c) % 256 # 0x30
+				e = hex(d)[2:] # '30'
+				crc = ':' + a + e
+				print crc
+				thefile.write(crc + '\n' +snsubst+'\n')
 			elif fectorypattern in line:
 				line2 = line[0:-3] + '0134CC'
+				new = list(line2)
+				new[2] = '4'
+				new = ''.join(new)
+				line2=new
 				a = line2[1:(len(line2)-2)]
 				b = [a[i:i+2] for i in range(0, len(a), 2)] # ['10', 'F8', '00', ...
 				c = [int(i, 16) for i in b] # [16, 248, 0, ...
 				d = 256 - sum(c) % 256 # 0x30
 				e = hex(d)[2:] # '30'
 				line2 = ':' + a + e
-				
-				new = list(line2)
-				new[2] = '4'
-				new = ''.join(new)
-				print new
-				thefile.write(new+'\n')
+				print line2
+				thefile.write(line2+'\n')
 			else:
 				thefile.write(line)
 	finally:
@@ -59,14 +70,15 @@ def main():
 	print "\nLog:\nTotal argument passed: " + str(len(sys.argv))
 	for arg in sys.argv[1:]:
 			print "Argument :" + arg
-	if(len(sys.argv)>=4):
+	if(len(sys.argv)>=5):
 		Sn = (sys.argv[2])
 		DevTyp = int(sys.argv[3])
+		checksum_in = int(sys.argv[4])
 		print "\n"
 		dirname = os.path.dirname(__file__)
 		fin_name = os.path.join(dirname, sys.argv[1])
 		print("Hex File Entered : " + fin_name)
-		FectInjectSn(fin_name,Sn,DevTyp)
+		FectInjectSn(fin_name,Sn,DevTyp,checksum_in)
 	else:
 		print "Failed invalid argument length !!!"
 if __name__ == "__main__":

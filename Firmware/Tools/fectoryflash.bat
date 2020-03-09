@@ -2,6 +2,7 @@
 
 set SN=%1
 set DEVTYPE=%2
+set CHECKSUM=%3
 @REM build boot loader, build application, put boot loader hex , application hex , combined hex and OTA file Image folder
 @REM build bootloader
 set "mppath=C:\Program Files\Microchip\MPLABX\v4.05\mplab_ipe"
@@ -24,7 +25,7 @@ set IMAGEDIRAPPBOOTHEXFACTPROGPATH=.\..\..\Image\AppBootCombineFactory.Hex
 @echo on
 Echo Injecting  Serial no and Device type
 @REM genrate OTA file from hex file with extension .OTA
-C:\Python27\python.exe InjectSnSetFect.py %IMAGEDIRAPPBOOTHEXPATH% %SN% %DEVTYPE%
+C:\Python27\python.exe InjectSnSetFect.py %IMAGEDIRAPPBOOTHEXPATH% %SN% %DEVTYPE% %CHECKSUM%
 
 Echo programming Combined hex file
 cd %APPWORKINGDIR%
