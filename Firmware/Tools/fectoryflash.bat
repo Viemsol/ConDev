@@ -19,15 +19,14 @@ set IMAGEDIROTAPATH=.\..\Image\App.OTA
 set IMAGEDIRAPPHEXPATH=.\..\Image\App.Hex
 set IMAGEDIRBOOTHEXPATH=.\..\Image\Boot.Hex
 set IMAGEDIRAPPBOOTHEXPATH=.\..\Image\AppBootCombine.Hex
-set IMAGEDIRAPPBOOTHEXPROGPATH=.\..\..\Image\AppBootCombine.Hex
-set SCRIPT ='C:\Python27\python.exe InjectSnSetFect.py'
+set IMAGEDIRAPPBOOTHEXFACTPROGPATH=.\..\..\Image\AppBootCombineFactory.Hex
+
 Echo Injecting  Serial no and Device type
 @REM genrate OTA file from hex file with extension .OTA
 C:\Python27\python.exe InjectSnSetFect.py %IMAGEDIRAPPBOOTHEXPATH% %SN% %DEVTYPE%
 
 Echo programming Combined hex file
 cd %APPWORKINGDIR%
-@REM PK3CMD -P16F18313 -FC:\AppBootCombine.Hex -V5.000 -M -Y
+PK3CMD -P16F18313 -F%IMAGEDIRAPPBOOTHEXFACTPROGPATH% -V5.000 -M -Y
 cd %TOOLWORKINGDIRRELATIV%
-@REM  make -f %APPLICATIONMAKEPATH% 'SUBPROJECTS=' '.build-conf'
-@REM hexmate boot.hex firmware.hex -Ocombined.hex
+

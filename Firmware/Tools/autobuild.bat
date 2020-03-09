@@ -22,30 +22,21 @@ set IMAGEDIRAPPBOOTHEXPROGPATH=.\..\..\Image\AppBootCombine.Hex
 @REM build Bootloader
 Echo Building bootloader
 cd %BOOTLOWORKINGDIR%
-@REM make -f nbproject/Makefile-default.mk SUBPROJECTS= .build-conf
+make -f nbproject/Makefile-default.mk SUBPROJECTS= .build-conf
 cd %TOOLWORKINGDIRRELATIV%
 
 
 @REM build Application and OTA
 Echo Building Application and OTA file
 cd %APPWORKINGDIR%
-@REM make -f nbproject/Makefile-default.mk SUBPROJECTS= .build-conf
+make -f nbproject/Makefile-default.mk SUBPROJECTS= .build-conf
 cd %TOOLWORKINGDIRRELATIV%
 
 Echo Creating Combined file
-@REM hexmate -O%IMAGEDIRAPPBOOTHEXPATH% %APPHEXDIR% +%BOOTHEXDIR%
+hexmate -O%IMAGEDIRAPPBOOTHEXPATH% %APPHEXDIR% +%BOOTHEXDIR%
 
 @REM Copy Files to Image folder
 Echo Updating Image folder
 COPY %APPOTADIR% %IMAGEDIROTAPATH%
 COPY %APPHEXDIR% %IMAGEDIRAPPHEXPATH%
 COPY %BOOTHEXDIR% %IMAGEDIRBOOTHEXPATH%
-
-Echo Injecting  Serial no and Device type
-
-Echo programming Combined hex file
-cd %APPWORKINGDIR%
-PK3CMD -P16F18313 -FC:\AppBootCombine.Hex -V5.000 -M -Y
-cd %TOOLWORKINGDIRRELATIV%
-@REM  make -f %APPLICATIONMAKEPATH% 'SUBPROJECTS=' '.build-conf'
-@REM hexmate boot.hex firmware.hex -Ocombined.hex
