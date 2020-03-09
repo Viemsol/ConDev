@@ -3,4 +3,11 @@
 *.ko
 *.obj
 *.html
+*.lst
+*.mum
+*.obj
+*.dmp
+*.rlf
+*.sdb
+*.sym
 /build/default/production/
