@@ -1,0 +1,2 @@
+update Sn and flash tool
+Binary OTA TLV file
