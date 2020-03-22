@@ -171,7 +171,6 @@ inline void byte_received(void)
 {
     uint8 temp_data;
     temp_data = RX_BYTE;
-    led0_blink(2);
     if(!((com.rx_ovrfl)&& (RX_HEAD_TALE_EQUAL)))
 	{
 		com.rx_ovrfl = 0;

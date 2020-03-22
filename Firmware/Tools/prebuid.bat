@@ -1,4 +1,4 @@
-Echo Prebuilding..
+@echo off
 set ADDREPLACE=%1
 set INFILE=%2
 set OUTFILE=%3

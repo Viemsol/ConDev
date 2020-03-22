@@ -54,7 +54,7 @@
 	#define FIVE_SEC 5
     #define TEN_SEC 10
     #define FIFTEEN_SEC 15
-    
+    #define TWENTY_SEC 20
     #define MAX_CMD_FRAME_LEN 16 
     #define ENCRIPTION_LEN (MAX_CMD_FRAME_LEN -1)
 

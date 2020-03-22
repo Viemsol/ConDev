@@ -102,8 +102,8 @@ ifneq ($(INFORMATION_MESSAGE), )
 endif
 	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/Build.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 	@echo "--------------------------------------"
-	@echo "User defined post-build step: [.\..\..\Tools\postbuild.bat .\..\..\Tools\OtaBuilderMplab.py .\..\FwApp\Build\dist\default\production\Build.production.hex 01]"
-	@.\..\..\Tools\postbuild.bat .\..\..\Tools\OtaBuilderMplab.py .\..\FwApp\Build\dist\default\production\Build.production.hex 01
+	@echo "User defined post-build step: [.\..\..\Tools\postbuild.bat .\..\..\Tools\OtaBuilderMplab.py .\..\FwApp]"
+	@.\..\..\Tools\postbuild.bat .\..\..\Tools\OtaBuilderMplab.py .\..\FwApp
 	@echo "--------------------------------------"
 
 MP_PROCESSOR_OPTION=16F18313

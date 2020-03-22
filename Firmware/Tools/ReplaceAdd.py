@@ -6,7 +6,7 @@ import os
 import string
 sys.path.append(os.path.realpath('..'))
 def main():
-	print "\nLog:\nTotal argument passed: " + str(len(sys.argv)) 
+	print "-------------Replacing App Function Addressfrom Boot loader -----------\nLog:\nTotal argument passed: " + str(len(sys.argv)) 
 	count = 0
 	if(len(sys.argv)>=3):
 		for arg in sys.argv[1:]:

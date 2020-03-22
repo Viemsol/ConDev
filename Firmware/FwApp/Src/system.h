@@ -182,11 +182,11 @@ void eep_write_char(uint8 add, uint8 data);
 
 extern volatile union Un_Bt_Data Bt_Data @  0x68;
 
-extern void   Bt_ComSendData(void)       @  0x00225;
-extern void   Bt_UnlockSeq(void)         @  0x00263;
-extern void   Bt_WriteEep(void)          @  0x0023C;
-extern void   Bt_FlashWriteBlock(void)   @  0x0019E;
+extern void   Bt_ComSendData(void)       @  0x00221;
+extern void   Bt_UnlockSeq(void)         @  0x0025F;
+extern void   Bt_WriteEep(void)          @  0x00238;
+extern void   Bt_FlashWriteBlock(void)   @  0x0019A;
 
-extern void   Bt_ReadData(void)          @  0x0020A;
+extern void   Bt_ReadData(void)          @  0x00206;
 
 #endif

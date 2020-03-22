@@ -1,0 +1,18 @@
+CDXXXX Bootloader Requirments:
+
+-On FLAH Command Application write 0xFF to Application valid and reset the device
+- Buttoader find mismatch in Application valid not equal to Device type and do not jump to Application
+-API for FLASh and EEP read write
+- Validates Device Type in OTA file == Fectory Stored Device type
+- Validates CHECKSUM of IMAG FLASH 
+- JUMP to APPLICATION if CHECKSUM and DEVICE TYPE iS VALID
+
+-Can write one byte in EEPROM ata time
+-Can write 64 bytes flash ata time
+
+-Bootloader data format
+- EERPOM WRITE
+  2[command] 240[LSB address] 240[MSB Address] 255[data] 0[dummy byte]
+- FLASh WRITE
+  1[command] 160[LSB address] 2[MSB Address] 197[data] 42[data] 255[data]....64 data bytes
+- 255 is dummy commmand

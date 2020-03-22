@@ -67,7 +67,7 @@
         <makeCustomizationPreStepEnabled>true</makeCustomizationPreStepEnabled>
         <makeCustomizationPreStep>.\..\..\Tools\prebuid.bat .\..\..\Tools\ReplaceAdd.py .\..\FwBootloader\Build\dist\default\production\Build.production.map .\..\FwApp\Src\system.h</makeCustomizationPreStep>
         <makeCustomizationPostStepEnabled>true</makeCustomizationPostStepEnabled>
-        <makeCustomizationPostStep>.\..\..\Tools\postbuild.bat .\..\..\Tools\OtaBuilderMplab.py .\..\FwApp\Build\dist\default\production\Build.production.hex 01</makeCustomizationPostStep>
+        <makeCustomizationPostStep>.\..\..\Tools\postbuild.bat .\..\..\Tools\OtaBuilderMplab.py .\..\FwApp</makeCustomizationPostStep>
         <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>true</makeCustomizationNormalizeHexFile>

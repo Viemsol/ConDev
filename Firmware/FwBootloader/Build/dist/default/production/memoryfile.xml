@@ -3,9 +3,9 @@
   <executable name="dist/default/production\Build.production.hex">
     <memory name="program">
       <units>words</units>
-      <length>640</length>
-      <used>634</used>
-      <free>6</free>
+      <length>672</length>
+      <used>626</used>
+      <free>46</free>
     </memory>
     <memory name="data">
       <units>bytes</units>

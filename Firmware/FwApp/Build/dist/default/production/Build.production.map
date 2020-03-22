@@ -6,10 +6,10 @@ Linker command line:
   --UDF=html\Build.production.link.html -cs \
   -h+dist/default/production\Build.production.sym \
   --cmf=dist/default/production\Build.production.cmf -z -Q16F18313 \
-  -oC:\Users\acer\AppData\Local\Temp\s1kuk.2 \
+  -oC:\Users\acer\AppData\Local\Temp\s5ot0.2 \
   -Mdist/default/production/Build.production.map -E1 -ver=XC8 \
   -ASTACK=02098h-020efh -pstack=STACK -p_sys_ver_text=F0F2h \
-  -p_sys_typ_text=F0FCh -ACODE=02A0h-07FFh -ASTRCODE=02A0h-07FFh \
+  -ACODE=02A0h-07FFh -ASTRCODE=02A0h-07FFh \
   -ASTRING=02A0h-02FFh,0300h-03FFhx5 -ACONST=02A0h-02FFh,0300h-03FFhx5 \
   -AENTRY=02A0h-02FFh,0300h-03FFhx5 -ACOMMON=070h-07Fh -ABANK0=020h-06Fh \
   -ABANK1=0A0h-0EFh -ABANK2=0120h-016Fh -ABIGRAM=02000h-020EFh \
@@ -30,7 +30,7 @@ Linker command line:
   -DCONFIG=2 -AIDLOC=08000h-08003h -pidloc=IDLOC -DIDLOC=2 \
   -AEEDATA=00h-0FFh/0F000h -peeprom_data=EEDATA -DEEDATA=2 -DCODE=2 \
   -DSTRCODE=2 -DSTRING=2 -DCONST=2 -DENTRY=2 --MS=program,0,800,800 \
-  --MS=data,0,1000,80 -k C:\Users\acer\AppData\Local\Temp\s1kuk.obj \
+  --MS=data,0,1000,80 -k C:\Users\acer\AppData\Local\Temp\s5ot0.obj \
   dist/default/production\Build.production.obj 
 
 Object code version is 3.11
@@ -45,102 +45,104 @@ MEMORY SPACES
 
 
                 Name                               Link     Load   Length Selector   Space         Scale
-C:\Users\acer\AppData\Local\Temp\s1kuk.obj
+C:\Users\acer\AppData\Local\Temp\s5ot0.obj
                 end_init                            2C5      2C5        1      548      program
                 reset_vec                           2A0      2A0        1      540      program
                 config                             8007     8007        4    1000E      program
 dist/default/production\Build.production.obj
-                cinit                               2C6      2C6       1E      548      program
+                cinit                               2C6      2C6       1C      548      program
                 intentry                            2A4      2A4       21      548      program
-                text29                              5C5      5C5       2D      548      program
-                text28                              5F2      5F2       24      548      program
-                text26                              597      597       2E      548      program
-                text25                              6F7      6F7       14      548      program
-                text24                              6A2      6A2       18      548      program
-                text23                              566      566       31      548      program
-                text22                              73D      73D        E      548      program
-                text21                              6BA      6BA       15      548      program
-                text20                              636      636       1E      548      program
-                text19                              68A      68A       18      548      program
-                text18                              72F      72F        E      548      program
-                text17                              71D      71D       12      548      program
-                text16                              616      616       20      548      program
-                text15                              6E3      6E3       14      548      program
-                text14                              777      777        1      548      program
-                text13                              776      776        1      548      program
-                text12                              2E4      2E4      170      548      program
-                text11                              454      454       50      548      program
-                text10                              654      654       1D      548      program
-                text9                               4A4      4A4       48      548      program
-                text8                               6CF      6CF       14      548      program
-                text7                               4EC      4EC       44      548      program
-                text6                               74B      74B        C      548      program
-                text5                               775      775        1      548      program
-                text4                               757      757        B      548      program
-                text3                               530      530       36      548      program
-                text2                               771      771        3      548      program
-                text1                               671      671       19      548      program
-                maintext                            76E      76E        3      548      program
-                cstackBANK0l                         49       49        E       20         data
-                cstackBANK0h                         57       57        3       20         data
+                text29                              613      613       27      548      program
+                text28                              63A      63A       24      548      program
+                text26                              5B4      5B4       31      548      program
+                text25                              5E5      5E5       2E      548      program
+                text24                              73F      73F       14      548      program
+                text23                              6EA      6EA       18      548      program
+                text22                              785      785        E      548      program
+                text21                              702      702       15      548      program
+                text20                              67E      67E       1E      548      program
+                text19                              6D2      6D2       18      548      program
+                text18                              777      777        E      548      program
+                text17                              765      765       12      548      program
+                text16                              65E      65E       20      548      program
+                text15                              72B      72B       14      548      program
+                text14                              7D0      7D0        1      F76      program
+                text13                              7CF      7CF        1      F76      program
+                text12                              2E2      2E2      186      548      program
+                text11                              468      468       71      548      program
+                text10                              69C      69C       1D      548      program
+                text9                               4D9      4D9       61      548      program
+                text8                               717      717       14      548      program
+                text7                               53A      53A       44      548      program
+                text6                               793      793        C      548      program
+                text5                               7CE      7CE        1      F76      program
+                text4                               79F      79F        B      548      program
+                text3                               57E      57E       36      548      program
+                text2                               7CA      7CA        3      F76      program
+                text1                               6B9      6B9       19      548      program
+                maintext                            7C7      7C7        3      F76      program
+                cstackBANK0l                         4D       4D        E       20         data
+                cstackBANK0h                         5B       5B        3       20         data
                 cstackCOMMON                         70       70        A       70         data
-                clrtext                             768      768        6      548      program
-                inittext                            762      762        6      548      program
+                clrtext                             7C1      7C1        6      F76      program
+                inittext                            7BB      7BB        6      F76      program
                 dataBANK1                            D6       D6       12       A0         data
                 bssBANK1                             A0       A0       36       A0         data
-                dataBANK0l                           5A       5A        1       20         data
-                bssBANK0l                            20       20       29       20         data
-                bssCOMMON                            7A       7A        3       70         data
+                dataBANK0l                           5E       5E        1       20         data
+                bssBANK0l                            20       20       2D       20         data
+                bssCOMMON                            7A       7A        1       70         data
+                stringtext2                         7B4      7B4        7      F54      program
+                stringtext1                         7AA      7AA        A      F54      program
                 _sys_ver_text                      F0F2     F0F2        1    1E1E4      program
-                _sys_typ_text                      F0FC     F0FC        1    1E1F8      program
-                idataBANK1                          70B      70B       12      548      program
-                idataBANK0l                         774      774        1      548      program
+                idataBANK1                          753      753       12      548      program
+                idataBANK0l                         7CD      7CD        1      F76      program
 
 TOTAL           Name                               Link     Load   Length     Space
         CLASS   STACK          
 
         CLASS   CODE           
                 end_init                            2C5      2C5        1    program   
-                cinit                               2C6      2C6       1E    program   
+                cinit                               2C6      2C6       1C    program   
                 intentry                            2A4      2A4       21    program   
                 reset_vec                           2A0      2A0        1    program   
-                text29                              5C5      5C5       2D    program   
-                text28                              5F2      5F2       24    program   
-                text26                              597      597       2E    program   
-                text25                              6F7      6F7       14    program   
-                text24                              6A2      6A2       18    program   
-                text23                              566      566       31    program   
-                text22                              73D      73D        E    program   
-                text21                              6BA      6BA       15    program   
-                text20                              636      636       1E    program   
-                text19                              68A      68A       18    program   
-                text18                              72F      72F        E    program   
-                text17                              71D      71D       12    program   
-                text16                              616      616       20    program   
-                text15                              6E3      6E3       14    program   
-                text14                              777      777        1    program   
-                text13                              776      776        1    program   
-                text12                              2E4      2E4      170    program   
-                text11                              454      454       50    program   
-                text10                              654      654       1D    program   
-                text9                               4A4      4A4       48    program   
-                text8                               6CF      6CF       14    program   
-                text7                               4EC      4EC       44    program   
-                text6                               74B      74B        C    program   
-                text5                               775      775        1    program   
-                text4                               757      757        B    program   
-                text3                               530      530       36    program   
-                text2                               771      771        3    program   
-                text1                               671      671       19    program   
-                maintext                            76E      76E        3    program   
-                clrtext                             768      768        6    program   
-                inittext                            762      762        6    program   
+                text29                              613      613       27    program   
+                text28                              63A      63A       24    program   
+                text26                              5B4      5B4       31    program   
+                text25                              5E5      5E5       2E    program   
+                text24                              73F      73F       14    program   
+                text23                              6EA      6EA       18    program   
+                text22                              785      785        E    program   
+                text21                              702      702       15    program   
+                text20                              67E      67E       1E    program   
+                text19                              6D2      6D2       18    program   
+                text18                              777      777        E    program   
+                text17                              765      765       12    program   
+                text16                              65E      65E       20    program   
+                text15                              72B      72B       14    program   
+                text14                              7D0      7D0        1    program   
+                text13                              7CF      7CF        1    program   
+                text12                              2E2      2E2      186    program   
+                text11                              468      468       71    program   
+                text10                              69C      69C       1D    program   
+                text9                               4D9      4D9       61    program   
+                text8                               717      717       14    program   
+                text7                               53A      53A       44    program   
+                text6                               793      793        C    program   
+                text5                               7CE      7CE        1    program   
+                text4                               79F      79F        B    program   
+                text3                               57E      57E       36    program   
+                text2                               7CA      7CA        3    program   
+                text1                               6B9      6B9       19    program   
+                maintext                            7C7      7C7        3    program   
+                clrtext                             7C1      7C1        6    program   
+                inittext                            7BB      7BB        6    program   
                 _sys_ver_text                      F0F2     F0F2        1    program   
-                _sys_typ_text                      F0FC     F0FC        1    program   
-                idataBANK1                          70B      70B       12    program   
-                idataBANK0l                         774      774        1    program   
+                idataBANK1                          753      753       12    program   
+                idataBANK0l                         7CD      7CD        1    program   
 
         CLASS   STRCODE        
+                stringtext2                         7B4      7B4        7    program   
+                stringtext1                         7AA      7AA        A    program   
 
         CLASS   STRING         
 
@@ -150,13 +152,13 @@ TOTAL           Name                               Link     Load   Length     Sp
 
         CLASS   COMMON         
                 cstackCOMMON                         70       70        A    data      
-                bssCOMMON                            7A       7A        3    data      
+                bssCOMMON                            7A       7A        1    data      
 
         CLASS   BANK0          
-                cstackBANK0l                         49       49        E    data      
-                cstackBANK0h                         57       57        3    data      
-                dataBANK0l                           5A       5A        1    data      
-                bssBANK0l                            20       20       29    data      
+                cstackBANK0l                         4D       4D        E    data      
+                cstackBANK0h                         5B       5B        3    data      
+                dataBANK0l                           5E       5E        1    data      
+                bssBANK0l                            20       20       2D    data      
 
         CLASS   BANK1          
                 dataBANK1                            D6       D6       12    data      
@@ -304,33 +306,34 @@ TOTAL           Name                               Link     Load   Length     Sp
 
 SEGMENTS        Name                           Load    Length   Top    Selector   Space  Class     Delta
 
-                bssBANK0l                      000020  00003B  00005B        20     data        BANK0       1
-                cstackCOMMON                   000070  00000D  00007D        70     data        COMMON      1
+                bssBANK0l                      000020  00003F  00005F        20     data        BANK0       1
+                cstackCOMMON                   000070  00000B  00007B        70     data        COMMON      1
                 bssBANK1                       0000A0  000048  0000E8        A0     data        BANK1       1
                 reset_vec                      0002A0  000001  0002A1       540     program     CODE        2
-                intentry                       0002A4  0004D4  000778       548     program     CODE        2
+                intentry                       0002A4  000506  0007AA       548     program     CODE        2
+                stringtext1                    0007AA  000011  0007BB       F54     program     STRCODE     2
+                inittext                       0007BB  000016  0007D1       F76     program     CODE        2
                 config                         008007  000004  00800B     1000E     program     CONFIG      2
                 _sys_ver_text                  00F0F2  000001  00F0F3     1E1E4     program     CODE        2
-                _sys_typ_text                  00F0FC  000001  00F0FD     1E1F8     program     CODE        2
 
 
 UNUSED ADDRESS RANGES
 
         Name                Unused          Largest block    Delta
-        BANK0            0005B-0006F              15           1
+        BANK0            0005F-0006F              11           1
         BANK1            000E8-000EF               8           1
         BANK2            00120-0016F              50           1
         BIGRAM           02000-020EF              F0           1
         CODE             002A1-002A3               3           2
-                         00778-007FF              88
-        COMMON           0007D-0007D               1           1
+                         007D1-007FF              2F
+        COMMON           0007B-0007D               3           1
         CONST            002A1-002A3               3           2
-                         00778-007FF              88
+                         007D1-007FF              2F
         EEDATA           0F000-0F0FF             100           2
         ENTRY            002A1-002A3               3           2
-                         00778-007FF              88
+                         007D1-007FF              2F
         IDLOC            08000-08003               4           2
-        RAM              0005B-0006F              15           1
+        RAM              0005F-0006F              11           1
                          000E8-000EF               8
                          00120-0016F              50
         SFR0             00000-0001F              20           1
@@ -367,43 +370,45 @@ UNUSED ADDRESS RANGES
         SFR9             00480-004EF              70           1
         STACK            02098-020EF              58           1
         STRCODE          002A1-002A3               3           2
-                         00778-007FF              88
+                         007D1-007FF              2F
         STRING           002A1-002A3               3           2
-                         00778-007FF              88
+                         007D1-007FF              2F
 
                                   Symbol Table
 
 ?_os_get_sys_tim                cstackCOMMON  00074
 ?_read_mem                      cstackCOMMON  00074
 CRC_Chk@MacKey                  cstackCOMMON  00076
-CRC_Chk@dbuf                    cstackBANK0h  00059
+CRC_Chk@dbuf                    cstackBANK0h  0005D
 CRC_Chk@flg                     cstackCOMMON  00075
 CRC_Chk@len                     cstackCOMMON  00074
-CRC_Chk@st                      cstackBANK0h  00057
-CRC_Chk@sum                     cstackBANK0h  00058
+CRC_Chk@st                      cstackBANK0h  0005B
+CRC_Chk@sum                     cstackBANK0h  0005C
 Sys_Ini@count                   cstackCOMMON  00078
 _ADIF                           (abs)         0008E
 _ANSELA                         (abs)         0018C
 _Bt_Data                        (abs)         00068
-_Bt_ReadData                    (abs)         0020A
-_Bt_WriteEep                    (abs)         0023C
+_Bt_ReadData                    (abs)         00206
+_Bt_WriteEep                    (abs)         00238
 _CPUDOZE                        (abs)         00918
-_CRC_Chk                        text26        00597
+_CRC_Chk                        text25        005E5
 _INTCONbits                     (abs)         0000B
-_Ini_Dio                        text6         0074B
-_Ini_Oscillator                 text5         00775
-_Ini_Timer_0                    text4         00757
+_Ini_Dio                        text6         00793
+_Ini_Oscillator                 text5         007CE
+_Ini_Timer_0                    text4         0079F
 _LATA                           (abs)         0010C
 _LATAbits                       (abs)         0010C
-_Led_st_cnt                     bssBANK0l     00028
+_Led_st_cnt                     bssBANK0l     0002C
 _PIE0bits                       (abs)         00090
 _PIR0bits                       (abs)         00010
 _PIR1bits                       (abs)         00011
 _PORTAbits                      (abs)         0000C
 _RC1REG                         (abs)         00199
 _RCIE                           (abs)         0048D
-_Run_Os                         text7         004EC
-_Sys_Ini                        text1         00671
+_Replay_Attack                  bssBANK0l     00028
+_Replay_Attack_Frame            bssBANK0l     00027
+_Run_Os                         text7         0053A
+_Sys_Ini                        text1         006B9
 _T0CON0bits                     (abs)         00017
 _T0CON1bits                     (abs)         00018
 _TMR0H                          (abs)         00016
@@ -430,7 +435,6 @@ __CFG_PWRTE$OFF                 (abs)         00000
 __CFG_STVREN$ON                 (abs)         00000
 __CFG_WDTE$OFF                  (abs)         00000
 __CFG_WRT$OFF                   (abs)         00000
-__H_sys_typ_text                _sys_typ_text 0F0FD
 __H_sys_ver_text                _sys_ver_text 0F0F3
 __Habs1                         abs1          00000
 __Hbank0                        bank0         00000
@@ -469,7 +473,7 @@ __Hbigram                       bigram        00000
 __HbssBANK0l                    bssBANK0l     00000
 __HbssBANK1                     bssBANK1      00000
 __HbssCOMMON                    bssCOMMON     00000
-__Hcinit                        cinit         002E4
+__Hcinit                        cinit         002E2
 __Hclrtext                      clrtext       00000
 __Hcode                         code          00000
 __Hcommon                       common        00000
@@ -524,14 +528,16 @@ __Hsfr6                         sfr6          00000
 __Hsfr7                         sfr7          00000
 __Hsfr8                         sfr8          00000
 __Hsfr9                         sfr9          00000
-__Hspace_0                      (abs)         0F0FD
+__Hspace_0                      (abs)         0F0F3
 __Hspace_1                      (abs)         000E8
 __Hspace_2                      (abs)         00000
 __Hspace_3                      (abs)         00000
 __Hstack                        stack         00000
 __Hstrings                      strings       00000
+__Hstringtext1                  stringtext1   00000
+__Hstringtext2                  stringtext2   00000
+__Hstringtext3                  stringtext3   00000
 __Htext                         text          00000
-__L_sys_typ_text                _sys_typ_text 0F0FC
 __L_sys_ver_text                _sys_ver_text 0F0F2
 __Labs1                         abs1          00000
 __Lbank0                        bank0         00000
@@ -631,6 +637,9 @@ __Lspace_2                      (abs)         00000
 __Lspace_3                      (abs)         00000
 __Lstack                        stack         00000
 __Lstrings                      strings       00000
+__Lstringtext1                  stringtext1   00000
+__Lstringtext2                  stringtext2   00000
+__Lstringtext3                  stringtext3   00000
 __Ltext                         text          00000
 __S0                            (abs)         0800B
 __S1                            (abs)         000E8
@@ -639,82 +648,83 @@ __S3                            (abs)         00000
 ___int_sp                       stack         00000
 ___latbits                      (abs)         00000
 ___sp                           stack         00000
-__end_of_CRC_Chk                text26        005C5
-__end_of_Ini_Dio                text6         00757
-__end_of_Ini_Oscillator         text5         00776
-__end_of_Ini_Timer_0            text4         00762
-__end_of_Run_Os                 text7         00530
-__end_of_Sys_Ini                text1         0068A
-__end_of__initialization        cinit         002E1
-__end_of_app_ini                text3         00566
-__end_of_app_test_1000ms        text11        004A4
-__end_of_app_test_100ms         text12        00454
-__end_of_app_test_10ms          text13        00777
-__end_of_app_test_1ms           text14        00778
-__end_of_app_test_BG            text9         004EC
-__end_of_byte_received          text29        005F2
-__end_of_byte_transmit          text28        00616
-__end_of_com_get_rx_buf_lnt     text25        0070B
-__end_of_com_get_tx_buf_lnt     text8         006E3
-__end_of_com_ini                text2         00774
-__end_of_com_rx_read_char       text24        006BA
-__end_of_com_send_dat           text23        00597
-__end_of_eep_write_char         text22        0074B
-__end_of_enc_dec                text21        006CF
-__end_of_event_push             text20        00654
-__end_of_event_read             text10        00671
-__end_of_get_temp_key           text18        0073D
+__end_of_CRC_Chk                text25        00613
+__end_of_Ini_Dio                text6         0079F
+__end_of_Ini_Oscillator         text5         007CF
+__end_of_Ini_Timer_0            text4         007AA
+__end_of_Run_Os                 text7         0057E
+__end_of_Sys_Ini                text1         006D2
+__end_of__initialization        cinit         002DF
+__end_of_app_ini                text3         005B4
+__end_of_app_test_1000ms        text11        004D9
+__end_of_app_test_100ms         text12        00468
+__end_of_app_test_10ms          text13        007D0
+__end_of_app_test_1ms           text14        007D1
+__end_of_app_test_BG            text9         0053A
+__end_of_byte_received          text29        0063A
+__end_of_byte_transmit          text28        0065E
+__end_of_com_get_rx_buf_lnt     text24        00753
+__end_of_com_get_tx_buf_lnt     text8         0072B
+__end_of_com_ini                text2         007CD
+__end_of_com_rx_read_char       text23        00702
+__end_of_com_send_dat           text26        005E5
+__end_of_eep_write_char         text22        00793
+__end_of_enc_dec                text21        00717
+__end_of_event_push             text20        0069C
+__end_of_event_read             text10        006B9
+__end_of_get_temp_key           text18        00785
 __end_of_isr                    intentry      002C5
-__end_of_led0_task              text17        0072F
-__end_of_main                   maintext      00771
-__end_of_mem_compare            text16        00636
-__end_of_os_get_sys_tim         text19        006A2
-__end_of_read_mem               text15        006F7
-__end_of_sys_typ                _sys_typ_text 0F0FD
+__end_of_led0_task              text17        00777
+__end_of_main                   maintext      007CA
+__end_of_mem_compare            text16        0067E
+__end_of_os_get_sys_tim         text19        006EA
+__end_of_read_mem               text15        0073F
 __end_of_sys_ver                _sys_ver_text 0F0F3
 __initialization                cinit         002C6
-__p_sys_typ_text                _sys_typ_text 0F0FC
 __p_sys_ver_text                _sys_ver_text 0F0F2
 __pbssBANK0l                    bssBANK0l     00020
 __pbssBANK1                     bssBANK1      000A0
 __pbssCOMMON                    bssCOMMON     0007A
-__pcstackBANK0h                 cstackBANK0h  00057
-__pcstackBANK0l                 cstackBANK0l  00049
+__pcstackBANK0h                 cstackBANK0h  0005B
+__pcstackBANK0l                 cstackBANK0l  0004D
 __pcstackCOMMON                 cstackCOMMON  00070
-__pdataBANK0l                   dataBANK0l    0005A
+__pdataBANK0l                   dataBANK0l    0005E
 __pdataBANK1                    dataBANK1     000D6
-__pidataBANK0l                  idataBANK0l   00774
-__pidataBANK1                   idataBANK1    0070B
+__pidataBANK0l                  idataBANK0l   007CD
+__pidataBANK1                   idataBANK1    00753
 __pintentry                     intentry      002A4
-__pmaintext                     maintext      0076E
-__ptext1                        text1         00671
-__ptext10                       text10        00654
-__ptext11                       text11        00454
-__ptext12                       text12        002E4
-__ptext13                       text13        00776
-__ptext14                       text14        00777
-__ptext15                       text15        006E3
-__ptext16                       text16        00616
-__ptext17                       text17        0071D
-__ptext18                       text18        0072F
-__ptext19                       text19        0068A
-__ptext2                        text2         00771
-__ptext20                       text20        00636
-__ptext21                       text21        006BA
-__ptext22                       text22        0073D
-__ptext23                       text23        00566
-__ptext24                       text24        006A2
-__ptext25                       text25        006F7
-__ptext26                       text26        00597
-__ptext28                       text28        005F2
-__ptext29                       text29        005C5
-__ptext3                        text3         00530
-__ptext4                        text4         00757
-__ptext5                        text5         00775
-__ptext6                        text6         0074B
-__ptext7                        text7         004EC
-__ptext8                        text8         006CF
-__ptext9                        text9         004A4
+__pmaintext                     maintext      007C7
+__pstringtext1                  stringtext1   007AA
+__pstringtext2                  stringtext2   007B4
+__pstringtext3                  stringtext3   00000
+__ptext1                        text1         006B9
+__ptext10                       text10        0069C
+__ptext11                       text11        00468
+__ptext12                       text12        002E2
+__ptext13                       text13        007CF
+__ptext14                       text14        007D0
+__ptext15                       text15        0072B
+__ptext16                       text16        0065E
+__ptext17                       text17        00765
+__ptext18                       text18        00777
+__ptext19                       text19        006D2
+__ptext2                        text2         007CA
+__ptext20                       text20        0067E
+__ptext21                       text21        00702
+__ptext22                       text22        00785
+__ptext23                       text23        006EA
+__ptext24                       text24        0073F
+__ptext25                       text25        005E5
+__ptext26                       text26        005B4
+__ptext28                       text28        0063A
+__ptext29                       text29        00613
+__ptext3                        text3         0057E
+__ptext4                        text4         0079F
+__ptext5                        text5         007CE
+__ptext6                        text6         00793
+__ptext7                        text7         0053A
+__ptext8                        text8         00717
+__ptext9                        text9         004D9
 __size_of_CRC_Chk               (abs)         00000
 __size_of_Ini_Dio               (abs)         00000
 __size_of_Ini_Oscillator        (abs)         00000
@@ -745,76 +755,74 @@ __size_of_main                  (abs)         00000
 __size_of_mem_compare           (abs)         00000
 __size_of_os_get_sys_tim        (abs)         00000
 __size_of_read_mem              (abs)         00000
-_app_ini                        text3         00530
-_app_test_1000ms                text11        00454
-_app_test_1000ms$172            cstackBANK0l  00049
-_app_test_1000ms$173            cstackBANK0l  0004B
-_app_test_100ms                 text12        002E4
-_app_test_10ms                  text13        00776
-_app_test_1ms                   text14        00777
-_app_test_BG                    text9         004A4
-_app_test_BG$176                cstackBANK0h  00057
-_byte_received                  text29        005C5
-_byte_transmit                  text28        005F2
-_cmd_res_data                   bssBANK0l     00039
+_app_ini                        text3         0057E
+_app_test_1000ms                text11        00468
+_app_test_1000ms$173            cstackBANK0l  0004D
+_app_test_1000ms$174            cstackBANK0l  0004F
+_app_test_100ms                 text12        002E2
+_app_test_10ms                  text13        007CF
+_app_test_1ms                   text14        007D0
+_app_test_BG                    text9         004D9
+_app_test_BG$178                cstackBANK0h  0005B
+_byte_received                  text29        00613
+_byte_transmit                  text28        0063A
+_cmd_res_data                   bssBANK0l     0003D
 _com                            bssBANK1      000A0
-_com_get_rx_buf_lnt             text25        006F7
-_com_get_tx_buf_lnt             text8         006CF
-_com_ini                        text2         00771
-_com_rx_read_char               text24        006A2
-_com_send_dat                   text23        00566
-_eep_write_char                 text22        0073D
-_enc_dec                        text21        006BA
-_event_push                     text20        00636
-_event_read                     text10        00654
-_get_temp_key                   text18        0072F
+_com_get_rx_buf_lnt             text24        0073F
+_com_get_tx_buf_lnt             text8         00717
+_com_ini                        text2         007CA
+_com_rx_read_char               text23        006EA
+_com_send_dat                   text26        005B4
+_eep_write_char                 text22        00785
+_enc_dec                        text21        00702
+_event_push                     text20        0067E
+_event_read                     text10        0069C
+_get_temp_key                   text18        00777
 _isr                            intentry      002A4
 _j_1                            bssCOMMON     0007A
-_led0_task                      text17        0071D
-_lock_id                        bssBANK0l     00029
-_main                           maintext      0076E
-_mem_compare                    text16        00616
+_led0_task                      text17        00765
+_lock_id                        bssBANK0l     0002D
+_main                           maintext      007C7
+_mem_compare                    text16        0065E
 _os                             dataBANK1     000D6
-_os_get_sys_tim                 text19        0068A
-_read_mem                       text15        006E3
+_os_get_sys_tim                 text19        006D2
+_read_mem                       text15        0072B
 _str_event                      bssBANK0l     00020
-_sw0_st_prev                    bssBANK0l     00027
-_sys_typ                        _sys_typ_text 0F0FC
-_sys_typ_absaddr                (abs)         0F0FC
+_sw0_st_prev                    bssBANK0l     00029
 _sys_ver                        _sys_ver_text 0F0F2
 _sys_ver_absaddr                (abs)         0F0F2
-_temp_key                       dataBANK0l    0005A
-_tmr_1ses                       bssCOMMON     0007C
-_tmr_temp_key                   bssCOMMON     0007B
-app_ini@dest_add                cstackBANK0l  00049
-app_ini@temp_add                cstackBANK0l  0004B
-app_test_1000ms@temp_time       cstackBANK0l  0004D
-app_test_100ms@MacKeyTemp       cstackBANK0l  00052
-app_test_100ms@cmd_idx_offset   cstackBANK0l  00051
-app_test_100ms@dat_idx_offset   cstackBANK0l  0004F
-app_test_100ms@i                cstackBANK0l  00054
-app_test_100ms@resp_len         cstackBANK0l  00053
-app_test_100ms@sw0_st           cstackBANK0l  00055
-app_test_100ms@temp_add_or_rand cstackBANK0l  00050
-app_test_BG@temp_time           cstackBANK0h  00059
+_temp_key                       dataBANK0l    0005E
+_tmr_1ses                       bssBANK0l     0002B
+_tmr_temp_key                   bssBANK0l     0002A
+app_ini@dest_add                cstackBANK0l  0004D
+app_ini@temp_add                cstackBANK0l  0004F
+app_test_1000ms@temp_time       cstackBANK0l  00051
+app_test_100ms@MacKeyTemp       cstackBANK0l  00056
+app_test_100ms@cmd_idx_offset   cstackBANK0l  00055
+app_test_100ms@dat_idx_offset   cstackBANK0l  00053
+app_test_100ms@i                cstackBANK0l  00058
+app_test_100ms@resp_len         cstackBANK0l  00057
+app_test_100ms@sw0_st           cstackBANK0l  00059
+app_test_100ms@temp_add_or_rand cstackBANK0l  00054
+app_test_BG@temp_time           cstackBANK0h  0005D
 btemp                           (abs)         0007E
 byte_received@temp_data         cstackCOMMON  00071
-clear_ram0                      clrtext       00768
+clear_ram0                      clrtext       007C1
 com_get_rx_buf_lnt@temp_dif     cstackCOMMON  00075
 com_get_tx_buf_lnt@temp_dif     cstackCOMMON  00075
 com_rx_read_char@temp_val       cstackCOMMON  00075
-com_send_dat@len                cstackCOMMON  00074
-com_send_dat@ptr                cstackCOMMON  00076
+com_send_dat@len                cstackCOMMON  00076
+com_send_dat@ptr                cstackCOMMON  00074
 eep_write_char@add              cstackCOMMON  00076
 eep_write_char@data             cstackCOMMON  00074
 enc_dec@data                    cstackCOMMON  00078
 enc_dec@len                     cstackCOMMON  00074
 enc_dec@temp_key_0              cstackCOMMON  00075
-end_of_initialization           cinit         002E1
+end_of_initialization           cinit         002DF
 event_push@Event_ID             cstackCOMMON  00075
 event_read@temp_event_id        cstackCOMMON  00075
 get_temp_key@temp_key           cstackCOMMON  00079
-init_ram                        inittext      00762
+init_ram                        inittext      007BB
 int$flags                       (abs)         0007E
 intlevel0                       functab       00000
 intlevel1                       functab       00000
@@ -826,7 +834,7 @@ mem_compare@dest                cstackCOMMON  00078
 mem_compare@len                 cstackCOMMON  00075
 mem_compare@sour                cstackCOMMON  00074
 mem_compare@status              cstackCOMMON  00077
-os_get_sys_tim@temp_tim         cstackBANK0l  00049
+os_get_sys_tim@temp_tim         cstackBANK0l  0004D
 read_mem@mem_addr               cstackCOMMON  00074
 read_mem@typ                    cstackCOMMON  00076
 reset_vec                       reset_vec     002A0
@@ -935,7 +943,7 @@ Total ram usage:        0 bytes
 
  *************** function _app_ini *****************
  Defined at:
-		line 11 in file "../Src/app.c"
+		line 16 in file "../Src/app.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1121,7 +1129,7 @@ Total ram usage:        2 bytes
 
  *************** function _app_test_BG *****************
  Defined at:
-		line 298 in file "../Src/app.c"
+		line 320 in file "../Src/app.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1143,6 +1151,7 @@ Total ram usage:        5 bytes
  Hardware stack levels used:    1
  Hardware stack levels required when called:    4
  This function calls:
+		_com_send_dat
 		_eep_write_char
 		_event_push
 		_event_read
@@ -1183,7 +1192,7 @@ Total ram usage:        2 bytes
 
  *************** function _app_test_1000ms *****************
  Defined at:
-		line 273 in file "../Src/app.c"
+		line 284 in file "../Src/app.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1191,7 +1200,7 @@ Total ram usage:        2 bytes
  Return value:  Size  Location     Type
                   1    wreg      void 
  Registers used:
-		wreg, status,2, status,0
+		wreg, fsr0l, fsr0h, fsr1l, fsr1h, status,2, status,0, pclath, cstack
  Tracked objects:
 		On entry : 
 		On exit  : 
@@ -1203,9 +1212,9 @@ Total ram usage:        2 bytes
       Totals:         2       0       5       0       0
 Total ram usage:        7 bytes
  Hardware stack levels used:    1
- Hardware stack levels required when called:    2
+ Hardware stack levels required when called:    3
  This function calls:
-		Nothing
+		_com_send_dat
  This function is called by:
 		_Run_Os
  This function uses a non-reentrant model
@@ -1213,7 +1222,7 @@ Total ram usage:        7 bytes
 
  *************** function _app_test_100ms *****************
  Defined at:
-		line 48 in file "../Src/app.c"
+		line 53 in file "../Src/app.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1259,7 +1268,7 @@ Total ram usage:        9 bytes
 
  *************** function _app_test_10ms *****************
  Defined at:
-		line 43 in file "../Src/app.c"
+		line 48 in file "../Src/app.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1289,7 +1298,7 @@ Total ram usage:        0 bytes
 
  *************** function _app_test_1ms *****************
  Defined at:
-		line 39 in file "../Src/app.c"
+		line 44 in file "../Src/app.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1351,7 +1360,7 @@ Total ram usage:        3 bytes
 
  *************** function _mem_compare *****************
  Defined at:
-		line 332 in file "../Src/app.c"
+		line 361 in file "../Src/app.c"
  Parameters:    Size  Location     Type
   dest            1    wreg     PTR unsigned char 
 		 -> cmd_res_data(16), 
@@ -1508,7 +1517,7 @@ Total ram usage:        2 bytes
 
  *************** function _enc_dec *****************
  Defined at:
-		line 370 in file "../Src/app.c"
+		line 399 in file "../Src/app.c"
  Parameters:    Size  Location     Type
   data            1    wreg     PTR unsigned char 
 		 -> cmd_res_data(16), 
@@ -1569,40 +1578,6 @@ Total ram usage:        3 bytes
  This function is called by:
 		_app_test_100ms
 		_app_test_BG
- This function uses a non-reentrant model
-
-
- *************** function _com_send_dat *****************
- Defined at:
-		line 5 in file "../Src/uart.c"
- Parameters:    Size  Location     Type
-  ptr             1    wreg     PTR unsigned char 
-		 -> cmd_res_data(16), 
-  len             1    4[COMMON] unsigned char 
- Auto vars:     Size  Location     Type
-  ptr             1    6[COMMON] PTR unsigned char 
-		 -> cmd_res_data(16), 
- Return value:  Size  Location     Type
-                  1    wreg      void 
- Registers used:
-		wreg, fsr1l, fsr1h, status,2, status,0
- Tracked objects:
-		On entry : 
-		On exit  : 
-		Unchanged: 
- Data sizes:     COMMON  BANK0h  BANK0l   BANK1   BANK2
-      Params:         1       0       0       0       0
-      Locals:         1       0       0       0       0
-      Temps:          1       0       0       0       0
-      Totals:         3       0       0       0       0
-Total ram usage:        3 bytes
- Hardware stack levels used:    1
- Hardware stack levels required when called:    2
- This function calls:
-		Nothing
- This function is called by:
-		_app_test_100ms
-		_com_send_string
  This function uses a non-reentrant model
 
 
@@ -1669,7 +1644,7 @@ Total ram usage:        2 bytes
 
  *************** function _CRC_Chk *****************
  Defined at:
-		line 350 in file "../Src/app.c"
+		line 379 in file "../Src/app.c"
  Parameters:    Size  Location     Type
   dbuf            1    wreg     PTR unsigned char 
 		 -> cmd_res_data(16), 
@@ -1701,6 +1676,41 @@ Total ram usage:        7 bytes
 		Nothing
  This function is called by:
 		_app_test_100ms
+ This function uses a non-reentrant model
+
+
+ *************** function _com_send_dat *****************
+ Defined at:
+		line 5 in file "../Src/uart.c"
+ Parameters:    Size  Location     Type
+  ptr             2    4[COMMON] PTR unsigned char 
+		 -> STR_2(7), STR_1(10), cmd_res_data(16), lock_id(16), 
+  len             1    6[COMMON] unsigned char 
+ Auto vars:     Size  Location     Type
+		None
+ Return value:  Size  Location     Type
+                  1    wreg      void 
+ Registers used:
+		wreg, fsr0l, fsr0h, fsr1l, fsr1h, status,2, status,0, pclath
+ Tracked objects:
+		On entry : 
+		On exit  : 
+		Unchanged: 
+ Data sizes:     COMMON  BANK0h  BANK0l   BANK1   BANK2
+      Params:         3       0       0       0       0
+      Locals:         0       0       0       0       0
+      Temps:          1       0       0       0       0
+      Totals:         4       0       0       0       0
+Total ram usage:        4 bytes
+ Hardware stack levels used:    1
+ Hardware stack levels required when called:    2
+ This function calls:
+		Nothing
+ This function is called by:
+		_app_test_100ms
+		_app_test_1000ms
+		_app_test_BG
+		_com_send_string
  This function uses a non-reentrant model
 
 
@@ -1737,7 +1747,7 @@ Total ram usage:        2 bytes
 
  *************** function _byte_transmit *****************
  Defined at:
-		line 188 in file "../Src/uart.c"
+		line 187 in file "../Src/uart.c"
  Parameters:    Size  Location     Type
 		None
  Auto vars:     Size  Location     Type
@@ -1798,55 +1808,54 @@ MODULE INFORMATION
 
 Module		Function		Class		Link	Load	Size
 ../Src/os.c
-		_event_push    		CODE           	0636	0000	31
-		_get_temp_key  		CODE           	072F	0000	15
-		_main          		CODE           	076E	0000	4
-		_Run_Os        		CODE           	04EC	0000	69
-		_event_read    		CODE           	0654	0000	30
-		_os_get_sys_tim		CODE           	068A	0000	25
+		_event_push    		CODE           	067E	0000	31
+		_get_temp_key  		CODE           	0777	0000	15
+		_main          		CODE           	07C7	0000	4
+		_Run_Os        		CODE           	053A	0000	69
+		_event_read    		CODE           	069C	0000	30
+		_os_get_sys_tim		CODE           	06D2	0000	25
 
 ../Src/os.c estimated size: 174
 
 ../Src/uart.c
-		_byte_transmit 		CODE           	05F2	0000	37
-		_com_get_rx_buf_lnt		CODE           	06F7	0000	21
-		_com_get_tx_buf_lnt		CODE           	06CF	0000	21
-		_com_ini       		CODE           	0771	0000	4
-		_byte_received 		CODE           	05C5	0000	46
-		_com_send_dat  		CODE           	0566	0000	50
-		_com_rx_read_char		CODE           	06A2	0000	25
+		_byte_transmit 		CODE           	063A	0000	37
+		_com_get_rx_buf_lnt		CODE           	073F	0000	21
+		_com_get_tx_buf_lnt		CODE           	0717	0000	21
+		_com_ini       		CODE           	07CA	0000	4
+		_byte_received 		CODE           	0613	0000	40
+		_com_send_dat  		CODE           	05B4	0000	50
+		_com_rx_read_char		CODE           	06EA	0000	25
 
-../Src/uart.c estimated size: 204
+../Src/uart.c estimated size: 198
 
 ../Src/system.c
-		_Ini_Dio       		CODE           	074B	0000	13
-		_Sys_Ini       		CODE           	0671	0000	26
-		_Ini_Oscillator		CODE           	0775	0000	2
-		_Ini_Timer_0   		CODE           	0757	0000	12
-		_eep_write_char		CODE           	073D	0000	15
-		_read_mem      		CODE           	06E3	0000	21
+		_Ini_Dio       		CODE           	0793	0000	13
+		_Sys_Ini       		CODE           	06B9	0000	26
+		_Ini_Oscillator		CODE           	07CE	0000	2
+		_Ini_Timer_0   		CODE           	079F	0000	12
+		_eep_write_char		CODE           	0785	0000	15
+		_read_mem      		CODE           	072B	0000	21
 		_isr           		CODE           	02A4	0000	34
-		_led0_task     		CODE           	071D	0000	19
+		_led0_task     		CODE           	0765	0000	19
 
 ../Src/system.c estimated size: 142
 
 shared
 		_sys_ver       		CODE           	F0F2	0000	2
-		__initialization		CODE           	02C6	0000	28
-		_sys_typ       		CODE           	F0FC	0000	2
+		__initialization		CODE           	02C6	0000	26
 
-shared estimated size: 32
+shared estimated size: 28
 
 ../Src/app.c
-		_app_test_BG   		CODE           	04A4	0000	73
-		_app_test_1ms  		CODE           	0777	0000	2
-		_app_test_10ms 		CODE           	0776	0000	2
-		_mem_compare   		CODE           	0616	0000	33
-		_CRC_Chk       		CODE           	0597	0000	47
-		_app_test_100ms		CODE           	02E4	0000	369
-		_app_ini       		CODE           	0530	0000	55
-		_app_test_1000ms		CODE           	0454	0000	81
-		_enc_dec       		CODE           	06BA	0000	22
+		_app_test_BG   		CODE           	04D9	0000	98
+		_app_test_1ms  		CODE           	07D0	0000	2
+		_app_test_10ms 		CODE           	07CF	0000	2
+		_mem_compare   		CODE           	065E	0000	33
+		_CRC_Chk       		CODE           	05E5	0000	47
+		_app_test_100ms		CODE           	02E2	0000	391
+		_app_ini       		CODE           	057E	0000	55
+		_app_test_1000ms		CODE           	0468	0000	114
+		_enc_dec       		CODE           	0702	0000	22
 
-../Src/app.c estimated size: 684
+../Src/app.c estimated size: 764
 

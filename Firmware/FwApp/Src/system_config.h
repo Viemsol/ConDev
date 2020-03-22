@@ -159,10 +159,10 @@
 #define FECT_DAT_DEV_TYP_ADDRESS 0x70FC  // this data (device id) indicates app is valid and can be jmed to app after CRC validation
 #define FECT_DAT_VALID_TYP_ADDRESS 0x70FF
 
-#define SYSTEM_VER 0x03  // give info about version number 
- #define DEVICE_TYP 0x01  // give info about product (01 is demo test product) {1: DEMO ; 2 :Wall switch ...}
+#define SYSTEM_VER 0x03 // give info about version number 
+#define DEVICE_TYP 0x01 // give info about product (01 is demo test product) {1: DEMO ; 2 :Wall switch ...}
 
 const unsigned char sys_ver @ 0xF0F2 = SYSTEM_VER; 
-const unsigned char sys_typ @ 0xF0FC = DEVICE_TYP; 
+//const unsigned char sys_typ @ 0xF0FC = DEVICE_TYP; // Not this data is updated in EEP in combined image by parsing #define DEVICE_TYP
 
 #endif

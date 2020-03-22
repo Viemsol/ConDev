@@ -119,7 +119,7 @@ typedef long unsigned int uint32;
 // 0xF8 (248)      LID  0                   0xXX...// unique lock ID  UN/PW 
 const unsigned char Bl_Ver1 @ 0xF0FE = 0x01; // Bl_Ver
 
-const unsigned char LID_EEP[4] @ 0xF0F8 = {'1','2','3','5'};// default LID to be used for fectory programming
+// const unsigned char LID_EEP[4] @ 0xF0F8 = {'1','2','3','5'};//  LID to be written at factory programming
 
 
 // below is FDR data (0xF0 to F7))
@@ -364,14 +364,14 @@ void main(void)
                     Bt_ReadData(); // read eeprom
 
                     flash_range_ok = 1;
-                    if((frame[3u] > FDR_DAT_APP_VERSION_ADDRESS_LSB))  // user canot wite this once written without FDR
+                    if((frame[1u] > FDR_DAT_APP_VERSION_ADDRESS_LSB))  // user canot wite this once written without FDR
                     {
                           //protect Device ID write if already written
-                          if((frame[3u] < FECT_DAT_START_ADDRESS_LSB) && ((uint8)Bt_Data.ReadMem.result != 0xFF))
+                          if((frame[1u] < FECT_DAT_START_ADDRESS_LSB) && ((uint8)Bt_Data.ReadMem.result != 0xFF))
                           {
-                              flash_range_ok = 0;
+                              flash_range_ok = 0; // canot write mac data device alredy commisiond
                           }
-                          else if(frame[3u] == FECT_DAT_VALID_TYP_ADDRESS_LSB)
+                          else //its fectory data address 0xF8 to 0xFF if(frame[1u] == FECT_DAT_VALID_TYP_ADDRESS_LSB)
                           {
                               Bt_Data.ReadMem.add = FECT_DAT_VALID_TYP_ADDRESS;
                               Bt_ReadData(); // read eeprom

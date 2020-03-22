@@ -1,0 +1,95 @@
+install git
+// command
+git
+pwd: display prest workind dir
+cd Desktop
+cd /c
+push: push to server
+pull: pull from server
+go to one directory and rightclik and gitbash
+now configure git UN pw 
+git config --global user.name "Nand"
+git config --global user.email "nand@gmail.com"
+git config --list # will printyour info in 3 times
+
+# lets create git repo locally
+#create one folder and add some file , open git bash a
+git status # give status if its git repo , will display not a git repo
+git init # will make forlde as git repository, will create hidden .git folder 
+git status # will display on branch master
+# lats commit all files
+git add --a #will add all files to staging
+git status # will display changes to be commiteed 
+git commit -m "Initial commit" # will create commit all file with comment and its snapshot
+git status # will display on branch master nothing to commit
+git log # will give all commit log
+# now change one or two files and save
+git status # will display modified files and will say need to be commited
+#now lat say you want to stage only one file
+git add file1.txt # will satge file1.txt
+git status # will display satge file1.txt yet to commit and file2.txt hve changed but not staged
+git commit -m "added file1.txt" # will commit all file staged now only file1.txt
+git status # will status and file2.txt hve changed but not staged
+git log # will give all commit log and comment and user
+# lat say you are done and you want to delete contnt of folder and use it for new repo use below command
+rm -rf .git # will delete .git folder content and keep other content now its not a git repository folder 
+
+#lets clone the new project repo ie download the code from git hub , go to git hub projet , copy url 
+git clone URL # this will download all files
+git status # will say not in git repo as we are in otside clone dir
+pwd #display working dir
+ls # isaply all file directory 
+#now lets move to directory 
+cd newprojdir/
+#now change it some files 
+git add --a #will add all files to staging
+git status # will display changes to be commiteed 
+git commit -m "chnaged some files"
+git status # will display we are one commit ahead of master 
+#but we canot mearge it to master but you are not master but you are owner of copy of project 
+press q enter to come to consol 
+
+# now lats take a look at file which is staged file1.txt and later modifed file1.txt
+git status # will show file1.txt stagged and also modifed 
+git commit -m "" #will ony tage staged copy of file and modified file will not be taken for snap shot
+git add file1.txt # will replace the staged file with changes 
+
+# lets say you want some files to be ignored by git , shuld not be shown modifed and you dont want them to be pushed 
+touch .gitignore #touch command creates file , will crate file named .gitignore , like software logs to be ignored 
+#now put all fils names to be ignored in this .gitignore lat say file1.txt 
+git status # will not show file1.txt modifed but will show .gitignore
+# now push .gitignore to repo 
+git add --a 
+git commit -m "added ignore file list" # now any changes in file1.txt will be ignore thow its in repo 
+#now lt say you want to ignore all files with extetion .log then add *.log to .gitignore and commit .gitignore
+#now let say you want to ignore complete dirctory then add foldername/ to .gitignore and commit .gitignore and changes in that directoy will be ignored
+#NOTE it will ignore all the folder with foldername, for specific floder use /foldername/, will ignor foldername inside repo but not within other folder which have folder name as foldername, inside folders to ignore use floder1name/folder2name , will ignore folder2name
+git diff # this comares filse in working dir vs staging
+git diff --staged #this will compare stage area with last commit
+git commit -a -m "commit direct" # this will stage and commit all changed files  #NOTE:  untracked file will not commited (ie.newly crated files)
+rm file1.txt # will remove file and also will put in satging # NOTE if you delete file manually , you need to commad git aaa and then git commit
+git commit -m "removed file1.txt" # now file is deleted
+
+######renaming the file and put into stage
+git mv file1.txt file1_rename.txt # will rename the file1.txt and stage it
+
+#####if file is added to ignore list , when its alredy tracked ie commited , then we need to explicity run below command
+git rm --cached file1.txt
+
+####unstaging the file
+git restore --staged file1.txt # will move back file from staged to unstaged
+
+#unmodifing any file to content of commit
+git checkout --file1.txt # will replace content of file1.txt in working dir to commit one
+
+#this will mache all directory content to the last commit, all modified content will go away
+git checkout -f
+
+#######################working with server GIT HUB,,,push pull , mearge###################
+git rpo are hosted by many web sites one is git hub
+# crate git hub repository on web and creat one working derectory
+#now create remote with the web repo name, this is just to give name to remote dir.. URL name is git hub repo ssh name
+git remote add origin git@github.com:saura50330/TestRepo.git
+ git push -u origine master # this will push files to remoe host NOTE this will push commited files only 
+
+

@@ -1,6 +1,5 @@
-Echo Postbuilding..
+@echo off
 set GENOTA=%1
-set HEXFILE=%2
-set DEVTYPE=%3
+set APP_FOLDER=%2
 @REM genrate OTA file from hex file with extension .OTA
-%GENOTA% %HEXFILE% %DEVTYPE%
+%GENOTA% %APP_FOLDER%

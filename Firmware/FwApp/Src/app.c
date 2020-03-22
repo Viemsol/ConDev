@@ -8,6 +8,11 @@ uint8 temp_key = 0xFF; // temp key session key
 uint8 sw0_st_prev;
 uint8 lock_id[16]; // holds eep read
 
+#define MAX_REPLY_ATTACK_COUNT 5 // 5 continuous error frames 
+#define MAX_REPLY_ATTACK_TIME 30 // lock down for 30 seconds
+uint8 Replay_Attack = 0;
+uint8 Replay_Attack_Frame = 0;
+
 inline void app_ini(void)
 {
     uint16 temp_add,dest_add;
@@ -88,7 +93,7 @@ void app_test_100ms(void)
             resp_len = 5;
         }
         // below command are for master and user 
-        else if((i ==  MAX_CMD_FRAME_LEN)) // bothe commands are of maximum length
+        else if((i ==  MAX_CMD_FRAME_LEN) && (Replay_Attack == 0)) // bothe commands are of maximum length
         {
             //cmd_1,enc(not_used)_1,mac(rand)_1,mac_4,dev_id_4,dev_typ_1,func_1,data_2,CRC_1 // 16 bytes
             
@@ -215,7 +220,7 @@ void app_test_100ms(void)
                 }
                 
                 CRC_Chk(&cmd_res_data[0],ENCRIPTION_LEN,1,MacKeyTemp);// update CRC
-                
+                Replay_Attack_Frame=0;
 #if(ENABLE_ENCRIPTION == TRUE)
                 // encript the data
                 // 1st byte is command , other decrypt// decrypt here
@@ -224,6 +229,12 @@ void app_test_100ms(void)
             }
             else
             {
+			   Replay_Attack_Frame++;
+			   if(Replay_Attack_Frame> MAX_REPLY_ATTACK_COUNT)
+			   {
+			        Replay_Attack_Frame=0;
+					Replay_Attack=MAX_REPLY_ATTACK_TIME;
+			   }
               //  cmd_res_data[0] = ERROR_FRAME;
               //  cmd_res_data[1] = CRC_ERROR;
             }
@@ -287,12 +298,23 @@ void app_test_1000ms(void)
          temp_key = ~temp_key; // key expier
     }
 #endif
+    if(Replay_Attack)
+	{
+		Replay_Attack--;
+	}
     temp_time = OS_Read_Tmr(tmr_1ses);
      
     if((temp_time >= TEN_SEC) && (temp_time <= FIFTEEN_SEC))
     {
         led0_blink(4); 
     }
+	else if((temp_time == TWENTY_SEC)) //Set UN
+	{
+	    //Set the NAME to BLE chip
+	    com_send_dat("AT+NAMECD",9);
+	    com_send_dat(&lock_id[8],4);
+		led0_blink(10); 
+	}
 
 }
 void app_test_BG(void)
@@ -315,17 +337,24 @@ void app_test_BG(void)
                 {
                   event_push(FDR);
                 }
-            }   
+            }
+            else
+            {
+				//Set PW to BLE chip
+				com_send_dat("AT+PIN",6);
+				com_send_dat(&lock_id[8],4);
+				led0_blink(10);
+			}			
             
         break;
         
         case FDR :
+
+        led0_blink(40); // odd no is to compenste for FDR   
         eep_write_char(FDR_DAT_MASTER_FREEZ_ADD_LSB,0xFF); // uncommision the device
         lock_id[3]=0xFF; // device not commision
-        //TODO: below code can be remove after cosistancy check of erase , by verifieng LED
-        led0_blink(40); // odd no is to compenste for FDR   
-        // else FDR fail
-        break;   
+        break;
+		
     }
      
 }
