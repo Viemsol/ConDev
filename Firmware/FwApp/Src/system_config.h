@@ -115,7 +115,34 @@
 
 
 #define MAX_EVENT 4
-
+enum
+{
+    EEP_E8,
+    EEP_E9,
+    EEP_EA,
+    EEP_DAY_RTC_ACTION,
+    EEP_DAY_RTC_HRS_STOP,
+    EEP_DAY_RTC_HRS_START,
+    EEP_DAY_IN_USE_LSB,
+    EEP_DAY_IN_USE_MSB,
+    EEP_APP_VALID,
+    EEP_APP_CHKSM,
+    EEP_APP_VERSION,
+    EEP_APP_MACOK,
+    EEP_APP_MAC0,
+    EEP_APP_MAC1,
+    EEP_APP_MAC2,
+    EEP_APP_MAC3,
+    EEP_APP_LID0,
+    EEP_APP_LID1,
+    EEP_APP_LID2,
+    EEP_APP_LID3,
+    EEP_APP_DEVTYP,
+    EEP_FD,
+    EEP_BOOT_VERSION,
+    EEP_FECTORY_OK,
+    MAX_EEP_IDX
+};
 // un changed EEPROM  location or updated in fectory command 
 // location   meaning                  value  
 // 0xFF       fectory data present     0x01   // when this bit is set application can not program keys OR locations from 0xF8 to 0xFF
@@ -137,6 +164,16 @@
 // 0xF1       app checksum                   0xXX
 // 0xF0       app valid                      0xXX    // written by OTA at end ,if matches with device type 0xFC jump to crc validation 
 
+// below is other Application specific data
+  
+// 0xEF       DAY IN USE MSB		   0x01   // this is incremented every 24hrs , updated to value 00 in factory
+// 0xEE       DAY IN USE LSB           0x01   // this is incremented every 24hrs , updated to value 00 in factory
+// 0xED       DAY_RTC_HRS_START        0xXX   // Timed event value stored for action (0-23)
+// 0xEC       DAY_RTC_HRS_STOP         0xXX   // Timed event value stored for action (0-59)
+// 0xEB       DAY_RTC_ACTION               0xXX   //(MSB:1=enable, LSB : Status in Start stop duration :ON/OFF:0/1) device take previous state after event, or event get cancelled for a day on override 
+// 0xEA       NA                       0xXX   // Timed event value stored for action (0-59)
+// 0xE9       NA                       0xXX   //(MSB:1=enable, LSB : Status in Start stop duration :ON/OFF:0/1) device take previous state after event, or event get cancelled for a day on override 
+// 0xE8       NA                       0xXX   // unique lock ID  UN/PW 
 
 #define FDR_DAT_START_ADDRESS_LSB 0xF0
 #define FDR_DAT_APP_VALID_ADDRESS_LSB 0xF0   // eep write address are 1 byte
@@ -158,6 +195,16 @@
 
 #define FECT_DAT_DEV_TYP_ADDRESS 0x70FC  // this data (device id) indicates app is valid and can be jmed to app after CRC validation
 #define FECT_DAT_VALID_TYP_ADDRESS 0x70FF
+
+#define DAY_IN_USE_ADD_HIGH_LSB 0xEF
+#define DAY_IN_USE_ADD_LOW_LSB  0xEE
+#define DAY_RTC_ACTION_START_TYM_ADD_LSB 0xED
+#define DAY_RTC_ACTION_STOP_TYM_ADD_LSB 0xEC
+#define DAY_RTC_ACTION_ADD_LSB 0xEB
+#define EEP_DEF_VAL 0xFF
+
+#define APP_EEP_START_ADDRESS_LSB 0xE8   // eep write address are 1 byte
+#define APP_EEP_START_ADDRESS  0x70E8
 
 #define SYSTEM_VER 0x03 // give info about version number 
 #define DEVICE_TYP 0x01 // give info about product (01 is demo test product) {1: DEMO ; 2 :Wall switch ...}

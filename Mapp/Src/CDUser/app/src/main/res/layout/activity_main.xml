@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:screenOrientation="portrait"
+    android:configChanges="orientation|screenSize"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/Heading"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+
+            android:background="#333"
+            android:text="Connected Device Manager"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/ButAddDev"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="22"
+
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+
+
+                android:background="#333"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text=" + "/>
+            <Button
+                android:id="@+id/ButHelp"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="22"
+
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+
+
+                android:background="#333"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="Help"/>
+
+
+
+            <Button
+                android:id="@+id/ButQuit"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="22"
+
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+
+
+                android:background="#333"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="QUIT"/>
+
+            <Button
+                android:id="@+id/ButLogout"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="22"
+
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+
+
+                android:background="#333"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="Logout"/>
+
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/loadingPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp">
+
+            <ProgressBar
+                android:maxHeight="350dip"
+                android:minHeight="350dip"
+                android:minWidth="100dip"
+                android:maxWidth="100dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
+                android:theme="@color/colorAccent"
+                android:gravity="center" />
+            <TextView
+                android:id="@+id/TxtVPercentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:visibility="invisible"
+                android:textColor="@android:color/holo_green_dark" />
+        </RelativeLayout>
+        <ListView
+            android:id="@+id/Lw_BleDev"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:visibility="invisible"
+            android:layout_marginBottom="5dp"
+            android:fastScrollAlwaysVisible="true"
+            app:layout_constraintBottom_toBottomOf="@+id/Heading"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:layout_editor_absoluteX="24dp">
+
+
+        </ListView>
+        <Button
+            android:id="@+id/ButCancel"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+
+            android:background="#333"
+            android:gravity="center"
+            android:textColor="#fff"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Cancel"
+            android:visibility="gone"
+            />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:scrollbars="vertical" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

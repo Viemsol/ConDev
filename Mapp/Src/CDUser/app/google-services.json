@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "65287622797",
+    "firebase_url": "https://cdmaster-f51fc.firebaseio.com",
+    "project_id": "cdmaster-f51fc",
+    "storage_bucket": "cdmaster-f51fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65287622797:android:403e2935feb36f7d2312c4",
+        "android_client_info": {
+          "package_name": "com.example.cdmaster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65287622797-bq0hgigsg316qumm46f5v0dbke140hbg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cdmaster",
+            "certificate_hash": "53f2135a112fd558746698e422282c6807f0cf08"
+          }
+        },
+        {
+          "client_id": "65287622797-tol0qm42a0hjfii06d087slgg0gnss57.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-B-HdN9HzS1OvTGm_OL5sQCT42nxbRe8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65287622797-tol0qm42a0hjfii06d087slgg0gnss57.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/EtDateStrt"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:inputType="date"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Activation(DD/MM/YYYY)"/>
+    <EditText
+        android:id="@+id/EtDateExp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:inputType="date"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Expiry (DD/MM/YYYY)"/>
+
+
+    <EditText
+        android:id="@+id/EtTimeAct"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:inputType="time"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Start Time (HH MM) (09:00) "/>
+
+    <EditText
+        android:id="@+id/EtTimeExp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:inputType="time"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="End Time (HH MM) eg (18:30)"/>
+    <CheckBox android:id="@+id/CbOneTimeAccess"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="One time Access ?"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"/>
+</LinearLayout>

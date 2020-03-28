@@ -6,7 +6,7 @@
 	extern void app_test_1000ms(void);
     extern void app_test_BG(void);
     extern inline void app_ini(void);
-    
+     extern inline void Do_Every_Day(void);
     uint8 mem_compare(uint8 *dest,uint8 *sour, uint8 len);
  
     uint8 CRC_Chk(uint8 *dbuf,uint8 len,uint8 flg,uint8 MacKey); // CRC in last bte
@@ -50,6 +50,8 @@
 	
    #define  FCTORY_RESET 0x50
    #define GET_VERSION 0x51
+   #define GET_DIN 0x52
+   #define GET_CUR_ON_TYM 0x53
 	// remaining are tx and rx for BLE
 	#define FIVE_SEC 5
     #define TEN_SEC 10

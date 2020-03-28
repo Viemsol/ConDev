@@ -5,9 +5,19 @@ uint8 tmr_1ses,tmr_temp_key;
 uint8 cmd_res_data[MAX_CMD_FRAME_LEN];
 uint8 temp_key = 0xFF; // temp key session key
 
-uint8 sw0_st_prev;
-uint8 lock_id[16]; // holds eep read
+uint8 event_read;
 
+uint8 sw0_st_prev;
+uint8 lock_id[24]; // holds eep read for lock commisioning
+
+struct Dev_On_Time
+{
+    uint16 days;    // 0-((2^16)-2)
+    uint8 hrs;      // 0-23
+    uint8 min;      // 0-59
+    uint8 sec;      // 0-59
+};
+struct Dev_On_Time OnTym;
 #define MAX_REPLY_ATTACK_COUNT 5 // 5 continuous error frames 
 #define MAX_REPLY_ATTACK_TIME 30 // lock down for 30 seconds
 uint8 Replay_Attack = 0;
@@ -27,7 +37,7 @@ inline void app_ini(void)
     // test Operatig system
     
     // load back EEP DATA
-    temp_add = FDR_DAT_APP_VALID_ADDRESS;
+    temp_add = APP_EEP_START_ADDRESS;
     dest_add = 0;
     while(temp_add <= FECT_DAT_VALID_TYP_ADDRESS)
     {
@@ -54,14 +64,13 @@ void app_test_100ms(void)
 {
     uint8 i=0, resp_len = 0,MacKeyTemp = 0;
     volatile uint8 sw0_st;
-    if( lock_id[3] == 0xFF )
+    
+    MacKeyTemp = lock_id[EEP_APP_MACOK];  // commisiond
+    if( MacKeyTemp == 0xFF ) // check if un commisiond
     {
-        MacKeyTemp = lock_id[8];  // uncommisiond
+        MacKeyTemp = lock_id[EEP_APP_LID0];  // uncommisiond
     }
-    else
-    {
-        MacKeyTemp = lock_id[3];  // commisiond
-    }
+
     
     if(com_get_rx_buf_lnt()) // buffer have some data
     {     
@@ -84,7 +93,7 @@ void app_test_100ms(void)
             cmd_res_data[1] = get_temp_key(); // random key to  app
             // calculate encription key           
             temp_key ^= cmd_res_data[1];
-            temp_key ^=  lock_id[8]; // fist chr of UID ie CD5678 then 5 is to be used
+            temp_key ^=  lock_id[EEP_APP_LID0]; // fist chr of UID ie CD5678 then 5 is to be used
             
             OS_Start_Tmr(tmr_temp_key); // temp key expier timer
             
@@ -109,11 +118,11 @@ void app_test_100ms(void)
                 {
                      resp_len = 16;
                    // com_send_dat('M',1);
-                    if( lock_id[3] == 0xFF ) // not commitioned so comission it
+                    if( lock_id[EEP_APP_MACOK] == 0xFF ) // not commitioned so comission it
                     {
                         // write MASTER MAC
                        uint8 temp_add_or_rand = FDR_DAT_MASTER_MAC_START_ADD_LSB;
-                       uint8 dat_idx_offset = 4;
+                       uint8 dat_idx_offset = EEP_APP_MAC0;
                        uint8 cmd_idx_offset = 3;  //cmd_res_data[3] is for mac start
                        
                        while(temp_add_or_rand <= FDR_DAT_MASTER_MAC_END_ADD_LSB)
@@ -125,25 +134,24 @@ void app_test_100ms(void)
                            temp_add_or_rand++; 
                        }
                        
-                       // write RAND
-                       lock_id[3] =  get_temp_key();
-                      // lock_id[3] = 0xAA;  // TODO: remove this this is for test purpose
+                       // write RANDOM VALUE
+                       lock_id[EEP_APP_MACOK] =  get_temp_key();
                        
-                       eep_write_char(FDR_DAT_MASTER_FREEZ_ADD_LSB,lock_id[3]); // write EEP write RAND
+                       eep_write_char(FDR_DAT_MASTER_FREEZ_ADD_LSB,lock_id[EEP_APP_MACOK]); // write EEP write RAND
 
 
                        // sand back data ....command and1 , enc1 and mac4is unchanged
-                       cmd_res_data[2] =  lock_id[3];
-                       cmd_res_data[7] =  lock_id[8];  // Device ID
-                       cmd_res_data[8] =  lock_id[9];
-                       cmd_res_data[9] =  lock_id[10];
-                       cmd_res_data[10] = lock_id[11];        
-                       cmd_res_data[11] = lock_id[12];  // Device type
+                       cmd_res_data[2] =  lock_id[EEP_APP_MACOK];
+                       cmd_res_data[7] =  lock_id[EEP_APP_LID0];  // Device ID
+                       cmd_res_data[8] =  lock_id[EEP_APP_LID1];
+                       cmd_res_data[9] =  lock_id[EEP_APP_LID2];
+                       cmd_res_data[10] = lock_id[EEP_APP_LID3];        
+                       cmd_res_data[11] = lock_id[EEP_APP_DEVTYP];  // Device type
                        cmd_res_data[12] = GET_VERSION;  // GET Version
-                       cmd_res_data[13] = lock_id[14];  // BL VERSION
-                       cmd_res_data[14] = lock_id[2];   // APP version
+                       cmd_res_data[13] = lock_id[EEP_BOOT_VERSION];  // BL VERSION
+                       cmd_res_data[14] = lock_id[EEP_APP_VERSION];   // APP version
                    }
-                   else if(!mem_compare(&cmd_res_data[2],&lock_id[3],10)) // validate random no and mac
+                   else if(!mem_compare(&cmd_res_data[2],&lock_id[EEP_APP_MAC1],9)) // validate mac ,device id, and type  , keep amc ok  = 0xFF and its secret 
                    {
                        // TODO: DONOT EXPOCE MASTER MAC AND RAND in CRAD, ENCRYPT devid with mac and send
                  
@@ -156,10 +164,18 @@ void app_test_100ms(void)
                         */
                        if(cmd_res_data[12] == GET_VERSION )
                         {
-                            cmd_res_data[13] = lock_id[14];  // BL VERSION
-                            cmd_res_data[14] = lock_id[2];   // APP version
+                            cmd_res_data[13] = lock_id[EEP_BOOT_VERSION];  // BL VERSION
+                            cmd_res_data[14] = lock_id[EEP_APP_VERSION];   // APP version
                         }
-                       
+  						else if(cmd_res_data[12] == GET_DIN )
+                        {
+                            cmd_res_data[13] = lock_id[EEP_DAY_IN_USE_LSB];  // BL VERSION
+                            cmd_res_data[14] = lock_id[EEP_DAY_IN_USE_MSB];   // APP version
+                        }
+						else if(cmd_res_data[12] == GET_CUR_ON_TYM )
+                        {					 
+                             cmd_res_data[14] = *(((char*)&OnTym.days)+ cmd_res_data[13]);    
+					    }                     
                         else if( cmd_res_data[12] == FLASH )
                         {
                             eep_write_char(FDR_DAT_APP_VALID_ADDRESS_LSB,0xFF);// make application invalid
@@ -194,6 +210,7 @@ void app_test_100ms(void)
                                 led0_blink(2);
                                 clear_pin_2;
                             }
+                           
                         }
                         else if(cmd_res_data[12] == READ_GPIO_0)
                         {
@@ -269,11 +286,11 @@ void app_test_100ms(void)
        // event_push(FDR);
         if(sw0_st)
         {    
-            event_push(SW0_RELEASE);     
+            event_read = SW0_RELEASE;     
         }
         else
         {
-            event_push(SW0_PRESS);         
+            event_read = SW0_PRESS;         
         }        
         sw0_st_prev=sw0_st;
     }
@@ -285,9 +302,30 @@ void app_test_1000ms(void)
 {
     uint8 temp_time;
     
-  //  toggle_pin_2;
-
-    os.os_time_sec++;
+  //  toggle_pin_2;  
+    OnTym.sec++;// increment second
+    if(OnTym.sec==60) // its one second
+    {
+        //do something every min
+        OnTym.sec=0;
+        OnTym.min++;
+        if(OnTym.min==60)
+        {
+            //do something every hours
+            
+            //Do_Every_Hour();
+            OnTym.min=0;
+            OnTym.hrs++;
+            if(OnTym.hrs==24) // its one hrs cycle
+            {
+                //do something every day
+                Do_Every_Day();
+                OnTym.hrs=0;
+                OnTym.days++;
+            }
+        }
+    }
+    
     OS_Run_Tmr(tmr_1ses); 
 #if(ENABLE_ENCRIPTION == TRUE)
     OS_Run_Tmr(tmr_temp_key);
@@ -312,7 +350,7 @@ void app_test_1000ms(void)
 	{
 	    //Set the NAME to BLE chip
 	    com_send_dat("AT+NAMECD",9);
-	    com_send_dat(&lock_id[8],4);
+	    com_send_dat(&lock_id[EEP_APP_LID0],4);
 		led0_blink(10); 
 	}
 
@@ -320,43 +358,39 @@ void app_test_1000ms(void)
 void app_test_BG(void)
 {
     uint8 temp_time;
-     
-    switch(event_read())
+    if(event_read == SW0_PRESS)
     {
-        case SW0_PRESS :
-            OS_Start_Tmr(tmr_1ses);
-            led0_blink(2);  
-        break;
-        case SW0_RELEASE :
-            temp_time = OS_Read_Tmr(tmr_1ses); // alwys read timer before stopping
+        OS_Start_Tmr(tmr_1ses);
+        led0_blink(2);
+    }
+    else if(event_read == SW0_RELEASE)
+    {
+         temp_time = OS_Read_Tmr(tmr_1ses); // alwys read timer before stopping
             OS_Stop_Tmr(tmr_1ses);
             
             if((temp_time <= FIFTEEN_SEC))
             {
                 if(temp_time >= TEN_SEC)
                 {
-                  event_push(FDR);
+                  //-------------FDR-------------- CODE
+                  led0_blink(40); // odd no is to compenste for FDR   
+                  eep_write_char(FDR_DAT_MASTER_FREEZ_ADD_LSB,0xFF); // uncommision the device
+                  lock_id[EEP_APP_MAC0]=0xFF; // device not commision
                 }
             }
             else
             {
 				//Set PW to BLE chip
 				com_send_dat("AT+PIN",6);
-				com_send_dat(&lock_id[8],4);
+				com_send_dat(&lock_id[EEP_APP_LID0],4);
 				led0_blink(10);
-			}			
-            
-        break;
-        
-        case FDR :
-
-        led0_blink(40); // odd no is to compenste for FDR   
-        eep_write_char(FDR_DAT_MASTER_FREEZ_ADD_LSB,0xFF); // uncommision the device
-        lock_id[3]=0xFF; // device not commision
-        break;
-		
+			}		
     }
-     
+    else
+    {
+        // do not do any thing
+    }
+    event_read= 0xFF;
 }
 uint8 mem_compare(uint8 *dest,uint8 *sour, uint8 len)
 {
@@ -406,3 +440,12 @@ void enc_dec(uint8 *data, uint8 len , uint8 temp_key_0)
     }
 }
 #endif
+inline void Do_Every_Day(void)
+{
+    if(lock_id[EEP_DAY_IN_USE_MSB] != EEP_DEF_VAL) // on time is valid
+    {
+        (*(uint16 *)(&lock_id[EEP_DAY_IN_USE_LSB]))++;
+        eep_write_char(DAY_IN_USE_ADD_LOW_LSB,lock_id[EEP_DAY_IN_USE_LSB]);
+        eep_write_char(DAY_IN_USE_ADD_HIGH_LSB,lock_id[EEP_DAY_IN_USE_MSB]);
+    }
+}

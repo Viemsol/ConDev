@@ -1,12 +1,11 @@
 #include "os.h"
 // note: make below task assignment const if you want to save some ram, adding and removing task function will not support if const
 uint8 j_1;
-struct EVENT_STR str_event;
+//struct EVENT_STR str_event;
 struct STR_OS os =
 {
 	{app_test_1ms,app_test_10ms,app_test_100ms,app_test_1000ms}, // pro_ptr
     {0},							// sys timer in ms
-    {0},                            // sys timer in seconds , 18 hrs max
 	{0,0,0,0} // time keeper
 };
 void main(void)
@@ -50,16 +49,6 @@ void Run_Os(void)
 }
 
 
-uint32 os_get_sys_tim(void)
-{
-	uint32 temp_tim;
-    
-	CRITICAL_EN;
-	temp_tim = os.os_time_ms;
-	CRITICAL_DIS;
-    
-	return (temp_tim);
-}
 /*
 void Run_Container(Fun_Ptr *F_Ptr)
 {
@@ -106,6 +95,7 @@ void os_insert_task(uint8 pocess_id, Fun_Ptr F_Ptr) // // add perticular task at
 
 } 
 */
+/*
 void event_push(uint8 Event_ID)
 {
     if(!str_event.overflow)  // check if there is space for event in queue
@@ -135,11 +125,11 @@ uint8 event_read(void)
     }
     return (temp_event_id);
 }
-
+*/
 uint8 get_temp_key(void)
 {   
     uint8 temp_key;
-    temp_key = os_get_sys_tim();
+    temp_key = os_get_sys_tim;
     if(temp_key == 0xFF)
     {
         temp_key = 0xAA;

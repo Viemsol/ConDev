@@ -1,0 +1,157 @@
+Two APPS: CDMaster, CDUsers
+  LOGIN :
+    1) checks if user is deleted before log in...BUG and test
+    2) if user is deleted still user get access in app ......BUG
+APP:
+   CDMaster:
+   ) validate user credential
+   ) distoy dialog on sucessfull user cred added
+   ) Relaibility requirment (before sending command check is device is visible , if visible retry 3 times)...todo
+   )Both for CDMaster manages devices user  and CDUsers manages  differant devices used by user
+   ) while deleting cred user delete cred from user ...done to test
+   ) ability to disable user cred...DONE
+   ) when user sucessfully operate device copy audit to the db (sucess / failed both) only last audit is maintaind for each user...DONE
+    ) ability for master to add its self credential..on commisioning....done to test
+    ) when master delete the device delete respective credentials alsociated with device from Cred user account ...done to test
+    ) add start date end date and one time access flag in device bd while sending credential....DO
+    ) credential get deleted from credential recived if user is invalid...() ....DO
+    OR if credential is expeierd promt user...this haapens on action button click..DO
+    )  trying to add credential for  deleted user from sysem account.. is not allowed ..chekk if user rxist first...DO
+    ) Add date and time will creating cradential db and this should be part of db in case of user credential...DO
+    ) date and time is used by MAAP to validate credential...DO
+    1) Delete CredSent on deleting device.........done...cred user credential will have no affect
+    3) add wastapp number as a part of DB for help....DO
+    5) set OTA file download timeout...DO
+    3) try persistant storage for CDUser.....done
+    )ask permission on init and on runtime both, so if user denide it we can halt some operation ....DO
+    delete the user and roll new kys and update cred button for each user.. enc ase of emergency ..DO
+
+Functional Requirment
+*) add retry mechanism in ble commad and handle it in looper....DO
+*) Send App to Prachi and test......DONE
+*) Unique Device name /User selected device name  below device image.DO
+*) User can set/change device name but unique name remain hidden in baground...DO
+*) Set Device image based on Device Type type_1 is switch , type_2 is bulb , type_3 is programable switch ,type_4 is programable Bulb
+*) version will be updated to db on OTA and cummisioning...Done
+*) user manager tab for master..done
+*) Cred Button will Send Credential to user via SMS , and add the user to USER DB.....Done
+*) USers Button will Display USER DB and allow add / delete / resend credential USER....Done
+*) 4 dummy and ping cmd at last of OTA......DONE
+*) ping request 0x05  rand 00 00 00....done
+*) disale add button till some data is loaded from server.......Done
+*) each device will manage list of users for each device in db, uniue user id will be used to tidentify user..to manage...high..done
+*) maste can send credential and update credential and resend(update cred in case of security risc OR if user is removed)
+*) and extrect the password from device name..DONE
+*) Display only CD devices in discovery (start with CD and Length of name is 6 charectors)..DONE
+*) App for master and user should be differant differant...done
+User APP:
+    *) Check the credential data endiness and ,make cred work fine..(make the cread and user mac validation  correct)..todo
+    *) action shuld work for master and user both with db...
+    *) use db only for master device,  no internet needed for user ,User app do not use any online database--- (option to syn it mannually ?)
+*) commisioning device no responce recevid some time ...check rootcause ...DONE
+*) costumized Action button Dialoge for all device type....low to be done for FAN and andjustable bus
+*) Send Action frame when user press any action on dialoge ..do
+*) on action button click first send ping, get device status, populate status in dialog and display dialog ..future
+*) do not populate dialoge if ping responce fails
+*) Request credential button in user app
+
+if(apv=0 its in BL, else in App)
+*) ping encription for FWAPP, No encription for BL...low
+*) OTA click => MASTER SELECT FILSE from dropdown........done
+*) Ping and check if in Application if in application and is commisiond and device id matchis Send Flash frame ???
+// 3) check ble on on every communication of ble , on app start if ble on is canceled app still runs
+// 4) disconnect on closer or timeout..kepp watch
+
+*) Prompt user on deleting the device(make sure device is responding befor deleting the device)...done
+*) manage recovery option for device ...ie deviceis in bootloader and application is curruped ...user deleted the device
+
+********Security Requirment******
+FIrmware:
+
+1) Bootloader:
+   It is observed that device going to bootloader some times and on power cycle comes back..check Root cause
+   If In Bootloader device can be in commisiond state OR un commsion state
+   => if uncommision state shared factory key is 0xFFFF DDAA .. DD AA are Device key and app key
+   => if commisiond state shared fectory key is 0xPQRX DDAA .. PQRX is shared secret key loaded
+   => 0xPQRX is loaded into application in fectory , PRocees : flash BL , Flash APP using 0xFFFF, Load 0x$$$$
+
+   command/responce encription:
+   cmd: [Command][Payload][Checksum]
+   resp: [Responce][Payload][Checksum]
+   Command and Responce are never encripted
+   Payload and Checksum are encripted with PQDDRXAA
+
+   // comminication setup with device
+   MAPP :   [PING][AA,RAND, MAC][CHECKSUM]
+   DEVICE : [PING(5/8)][DD,RAND, MAC][CHECKSUM]
+   MAAP : form command    =>   [Command][Payload][CHECKSUM]
+          Encript payload and checksum =>   [Command][Payload][CHECKSUM]
+
+Database requirments:
+*) Fectory DB Block...DO(LO_PRIO)
+   -->maintain Lock name and its password and its encription key in db after commisioning.
+   --> this will be used by master for commisioning and creating credentials
+   -->DEVICE NAme is the key
+*) Device DB Block.....DO(LO_PRIO)
+   ---->add MAX cred count in device DB and make its value to 2 while commisioning
+   --->Add used Cred ount while commisioning and set its vale to zero
+*) Master DB Block....DO(LO_PRIO)
+   ----> Evey Master user will have account and Authentication process
+   ----> every master user will have its own DB whre he stores its devices
+   ----> Password tab can be removed or kept encripted
+*) Cred User DB Block....DO(LO_PRIO_FUTURE)
+   ----> this is just maintain in ADmin database
+   ----> Cread user Name, Mobile number and User MAC can be stored (TAG = NAME_User_MAC) (future)
+   ----> this DB is used for keep trak of nuber of user using devices (future)
+   ----> Cread user need to log in one time ...to be done safely ...(future)
+*) procedure to post the image in Firebase storage
+Firmware Requirments:
+*) Make Ping responce 16 bytes for Bootloader and application.....DO(LO_PRIO)
+   ----->If Second byte in ping is 01 then its bootloader
+   ----->If Second byte in ping is 02 then its Application
+*) on OTA click, check the Version with OTA file in firebase....DO(HIGH)
+   -----> Download OTA file for device type from firebase orage
+   -----> Flash the device
+*) OTA file to be changed from assci to binary and Bootloader to be hanged, this is to reduce download size
+
+MAPP Requirments:
+*) user Password to be encripted with UID (base 64 ..to be encripted).....DO(LO_PRIO)
+*) Email varification button. if email is correct then oly user get registed add code for same....DONE(LO_PRIO)
+   ---->  (user get email on metiond email account, user clicks the link , varification susceess)
+   ----> user will not able to login before he varifies email
+*) add forgot password varification email (user get email , user sets new password fromfb brouser/ not handled in APP)...DO(LO_PRIO)
+   ----> (after reset password)Password stored in db will not bmach
+*) keep all the device ID and its encription keys in firebase and mast retrive it on commisioning and use it to send cread ...DO(LO_PRIO)
+   ---->(in future lock password will be differant from device name and not related to lock name )
+*) -----> Verfy  password twicw in signup ... done
+*) -----> welcome with Master name after login ...done
+
+Testing Requirment....DO (HIGH):
+    *) Test the device when application is currupted bootloader is present (COMMISIOND/NOT COMMISIOND)
+    *) Test the device when application is currupted bootloader is present (FECTORY DATA NOT AVILABLE)
+
+BUG_FIX ....DONE (HIGH):
+*) Commision Command Relaiability ...DO (HIGH)......DOne keep watch
+   ---> Onbserved that after Simple FDR, LOck do not respond to commison cmd and Lock need to be reset for commisioning.
+   ---> Analyse Firmware for "Simple FDR"
+*) MAIN UI Busy is not apearing sometimes on discovory process...DO (HIGH)....DOne keep watch
+
+AUTOMATION REQUIRMENT....DO (HIGH):
+*) BUID Automation....DONE:
+   -----> Bootloader MAP file is read by pre build scrip , update address in system.h , build hex file
+    -----> Build the Firmware Application
+   -----> POST BUILD Create OTA file form hex file on Post build
+*) Factory Data Automation:
+   ---> to be done from PC and Microchip debugger Cable
+   ---> update Device info into Fectory DB Block after verification of data
+*) Post Fectory Test :
+   ----> Try commisioning , OTA , CRED ...10 times
+   ---->Delete the device
+   ---->Soft FDR the device .. Hard FDR will erase Aplication so no nned of HARD FDR
+
+DOCUMENT....DO
+*) MAPP functioning
+*) OTA
+*) SECUITY
+
+------------------------BASIC USER DO NOT NEED ANY ONLINE DATABASE---------------------------------

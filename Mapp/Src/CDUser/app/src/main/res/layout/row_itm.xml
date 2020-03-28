@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="2dp"
+        app:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="1dp">
+
+            <ImageView
+                android:id="@+id/ImageView_Icon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                 />
+
+            <TextView
+                android:id="@+id/TextView_Name"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+
+
+                android:layout_toEndOf="@id/ImageView_Icon"
+                android:layout_toRightOf="@id/ImageView_Icon"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginBottom="3dp"
+
+                android:background="#333"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+            <Button
+                android:id="@+id/Button_Action"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+
+                android:layout_toEndOf="@+id/TextView_Name"
+                android:layout_toRightOf="@+id/TextView_Name"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginBottom="3dp"
+
+                android:background="#333"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="ACTION"
+
+                />
+            <Button
+                android:id="@+id/Button_Delete"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+
+                android:layout_toEndOf="@+id/Button_Action"
+                android:layout_toRightOf="@+id/Button_Action"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginBottom="3dp"
+
+                android:background="#333"
+                android:gravity="center"
+                android:textColor="#fff"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:text="DELETE"
+
+                />
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>

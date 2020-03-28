@@ -1,0 +1,86 @@
+{
+  "rules":
+  {
+    "User":
+    {
+      "$user_id":
+      {
+        "Devices":
+        {
+          "$DeviceId":
+          {
+             "DeviceInfo":
+             {
+             ".write": "auth != null && $user_id == auth.uid",
+             ".read": "auth != null && $user_id == auth.uid"
+             },
+             "CredSent":
+        	 {
+              "$CredUserId":
+                {
+                ".write": "auth != null && $user_id == auth.uid",
+          		  ".read": "auth != null && (($CredUserId == auth.uid)||($user_id == auth.uid))"
+                }
+             },
+             "Audit"
+             {
+                "User_Audit"
+                {
+                       "$CredUserId":
+                         {
+                         ".write": "auth != null && auth.uid == $CredUserId",
+                          ".read": "auth != null && (($CredUserId == auth.uid)||($user_id == auth.uid))"
+                         }
+                 }
+              }
+          }
+        },
+        "CredReceived":
+        {
+          "$DeviceId":
+          {
+							".write": "auth != null && $user_id == auth.uid",
+              ".read": "auth != null && $user_id == auth.uid"
+          }
+        },
+        "UserInfo":
+        {
+
+         ".write": "auth != null && $user_id == auth.uid",
+         ".read": "auth != null && $user_id == auth.uid"
+        },
+      }
+    },
+    "FirmwareMeta":
+    {
+      "$DeviceType":
+      {
+        "Image":
+        {
+          ".write": "auth != null",
+        	".read": "auth != null"
+        },
+        "Keys":
+        {
+          ".write": "auth != null",
+        	".read": "auth != null"
+        },
+        "DeviceHelp":
+        {
+          ".write": "auth != null",
+        	".read": "auth != null"
+        },
+        "UserComment":
+        {
+          "$UserCommentId":
+          {
+            ".write": "auth != null",
+            ".read": "auth != null"
+          }
+        }
+
+      }
+
+    }
+  }
+}

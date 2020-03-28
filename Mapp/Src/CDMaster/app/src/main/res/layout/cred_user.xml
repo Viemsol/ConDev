@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:isScrollContainer="true">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+
+        <EditText
+            android:id="@+id/EtCredName"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="20dp"
+            android:inputType="textPersonName"
+            android:hint="Cred User Name" />
+        <EditText
+            android:id="@+id/EtCredPhoneNo"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="20dp"
+            android:inputType="phone"
+            android:digits="0123456789+"
+            android:hint="Phone Number"
+            android:imeOptions="actionDone"/>
+        <EditText
+            android:id="@+id/EtCredEmail"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+
+            android:layout_marginStart="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="30dp"
+
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            android:hint="Email"/>
+
+            <EditText
+            android:id="@+id/EtCredential"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:inputType="textPersonName"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Paste SMS from User"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
