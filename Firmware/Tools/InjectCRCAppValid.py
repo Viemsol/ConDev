@@ -44,6 +44,8 @@ def FectInjectCRCAppValid(file_path,otafile,Device_Typ):
                 c = [int(i, 16) for i in b] # [16, 248, 0, ...
                 d = 256 - sum(c) % 256 # 0x30
                 e = hex(d)[2:] # '30'
+                if(len(e)==1):
+                    e = '0' + e
                 crc = ':' + a + e.upper()
                 crc2 = ':02E1F800'+tempDevTyp+'34CC'
                 a = crc2[1:(len(crc2)-2)]
@@ -51,10 +53,12 @@ def FectInjectCRCAppValid(file_path,otafile,Device_Typ):
                 c = [int(i, 16) for i in b] # [16, 248, 0, ...
                 d = 256 - sum(c) % 256 # 0x30
                 e = hex(d)[2:] # '30'
+                if(len(e)==1):
+                    e = '0' + e
                 crc2 = ':' + a + e.upper()
-                temp = temp + crc + '\n' + line+'\n'+crc2+'\n'              
+                temp = temp + crc + '\n' + line+crc2+'\n'              
             else:
-                temp = temp + line+'\n'
+                temp = temp + line
         f.close()
         f = open(file_path,'w')     
         f.write(temp)

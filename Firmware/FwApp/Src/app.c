@@ -65,7 +65,7 @@ void app_test_100ms(void)
     uint8 i=0, resp_len = 0,MacKeyTemp = 0;
     volatile uint8 sw0_st;
     
-    MacKeyTemp = lock_id[EEP_APP_MACOK];  // commisiond
+    MacKeyTemp = lock_id[EEP_APP_MAC_OK];  // commisiond
     if( MacKeyTemp == 0xFF ) // check if un commisiond
     {
         MacKeyTemp = lock_id[EEP_APP_LID0];  // uncommisiond
@@ -118,7 +118,7 @@ void app_test_100ms(void)
                 {
                      resp_len = 16;
                    // com_send_dat('M',1);
-                    if( lock_id[EEP_APP_MACOK] == 0xFF ) // not commitioned so comission it
+                    if( lock_id[EEP_APP_MAC_OK] == 0xFF ) // not commitioned so comission it
                     {
                         // write MASTER MAC
                        uint8 temp_add_or_rand = FDR_DAT_MASTER_MAC_START_ADD_LSB;
@@ -135,13 +135,13 @@ void app_test_100ms(void)
                        }
                        
                        // write RANDOM VALUE
-                       lock_id[EEP_APP_MACOK] =  get_temp_key();
+                       lock_id[EEP_APP_MAC_OK] =  get_temp_key();
                        
-                       eep_write_char(FDR_DAT_MASTER_FREEZ_ADD_LSB,lock_id[EEP_APP_MACOK]); // write EEP write RAND
+                       eep_write_char(FDR_DAT_MASTER_FREEZ_ADD_LSB,lock_id[EEP_APP_MAC_OK]); // write EEP write RAND
 
 
                        // sand back data ....command and1 , enc1 and mac4is unchanged
-                       cmd_res_data[2] =  lock_id[EEP_APP_MACOK];
+                       cmd_res_data[2] =  lock_id[EEP_APP_MAC_OK];
                        cmd_res_data[7] =  lock_id[EEP_APP_LID0];  // Device ID
                        cmd_res_data[8] =  lock_id[EEP_APP_LID1];
                        cmd_res_data[9] =  lock_id[EEP_APP_LID2];
@@ -151,7 +151,7 @@ void app_test_100ms(void)
                        cmd_res_data[13] = lock_id[EEP_BOOT_VERSION];  // BL VERSION
                        cmd_res_data[14] = lock_id[EEP_APP_VERSION];   // APP version
                    }
-                   else if(!mem_compare(&cmd_res_data[2],&lock_id[EEP_APP_MAC1],9)) // validate mac ,device id, and type  , keep amc ok  = 0xFF and its secret 
+                   else if(!mem_compare(&cmd_res_data[3],&lock_id[EEP_APP_MAC0],9)) // validate mac ,device id, and type  , keep amc ok  = 0xFF and its secret 
                    {
                        // TODO: DONOT EXPOCE MASTER MAC AND RAND in CRAD, ENCRYPT devid with mac and send
                  
@@ -273,8 +273,9 @@ void app_test_100ms(void)
         }
         else
         {
-           // resp_len = 6;
-            // com_send_dat(cmd_res_data,resp_len);
+		   
+           //  resp_len = 8;
+           //  com_send_dat(cmd_res_data,resp_len);
         }
     }
     
@@ -375,7 +376,8 @@ void app_test_BG(void)
                   //-------------FDR-------------- CODE
                   led0_blink(40); // odd no is to compenste for FDR   
                   eep_write_char(FDR_DAT_MASTER_FREEZ_ADD_LSB,0xFF); // uncommision the device
-                  lock_id[EEP_APP_MAC0]=0xFF; // device not commision
+                  lock_id[EEP_APP_MAC_OK]=0xFF; // device not commision
+				  clear_pin_2;// REQ:FDR:turn off the output on FDR
                 }
             }
             else
@@ -449,3 +451,6 @@ inline void Do_Every_Day(void)
         eep_write_char(DAY_IN_USE_ADD_HIGH_LSB,lock_id[EEP_DAY_IN_USE_MSB]);
     }
 }
+/********************************************
+REQ:FDR:on FDR reset the DIO pin
+********************************************/
