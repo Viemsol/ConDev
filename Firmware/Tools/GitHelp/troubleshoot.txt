@@ -1,0 +1,2 @@
+if PUSH fails: delete passwd file from below loaction and try
+C:\Users\acer\AppData\Local\Atlassian\SourceTree
