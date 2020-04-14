@@ -198,7 +198,7 @@ void   Bt_FlashWriteBlock(void); // @  0x00C5;
 
 void   Bt_ReadData(void);       //  @ 0x0166;
 void   Bt_WriteEep(void);       //  @ 0x012A;
-
+inline void BlCheckDefResetSeq(void);
 //void memcpy(uint8* to, const uint8* from,uint8 lnt );
 
 void interrupt serrvice_isr()  // all interrupt will jump to this def address but we are making it to jump some differant address
@@ -255,71 +255,7 @@ void main(void)
     BRG16 = 0;    // set baud rate at 32 MZ internal ocillator
     
     RC1STA=0x90;  // enable seial port
-    
-    if(get_pin_5 == 0)  // if switch is pressed on power up
-    { 
-        while(get_pin_5 == 0);// wait for switch to release
-        
-        SPBRG=207u;   // set baud 9600 as its basic baud of HC-06
-        
-        Bt_Data.Com.lent = 8;  // do not send end string
-        Bt_Data.Com.ptr = "AT+BAUD7"; // set 57k baud 
-        Bt_ComSendData();  // but this command is sent at 9600 baud
-        
-         set_delay(10); 
-        
-        // READ default BLE pin stored in EEPROM 
-        Bt_Data.ReadMem.add = FECT_DAT_LID_START_ADDRESS;
-        Bt_Data.ReadMem.typ = 1;
-        while(lid_len_cnt < LID_LEN)
-        {
-            Bt_ReadData(); // read eeprom  
-            LID[lid_len_cnt] = (uint8)Bt_Data.ReadMem.result;
-            lid_len_cnt++;
-            Bt_Data.ReadMem.add++;
-        }
-        
-        // set the def baud
-        SPBRG=34u;    // 34: 57.6k , 103:19.3k , 207:9600
-       
-        
-        // set default UN 
-        Bt_Data.Com.lent = 9;  //  do not send end of string
-        Bt_Data.Com.ptr = "AT+NAMECD" ; 
-        Bt_ComSendData();
-        
-        Bt_Data.Com.lent = 4; // 
-        Bt_Data.Com.ptr = LID;
-        Bt_ComSendData();
-        
-     
-        set_delay(10); 
-        
-   
-        
-        // set PW
-        Bt_Data.Com.lent = 6;        
-        Bt_Data.Com.ptr =  "AT+PIN";
-        Bt_ComSendData();
-        
-        Bt_Data.Com.lent = 4; // no end of string chr
-        Bt_Data.Com.ptr = LID;
-        Bt_ComSendData();
-       
-                
-        // erase data which is FDR erasable
-        Bt_Data.EepWr.add = FDR_DAT_START_ADDRESS_LSB; // f0ff make application invalid
-        Bt_Data.EepWr.eep_data = 0xFF;  // default data to be written to eep
-        
-        while(Bt_Data.EepWr.add < FECT_DAT_START_ADDRESS_LSB)
-        {       
-            Bt_WriteEep();
-            Bt_Data.EepWr.add++;
-        }
-        
-        asm("RESET"); //  reset the device after FDR (this was  done because uart receiver was not working after fdr)
-        
-    }
+    BlCheckDefResetSeq();
     
     // set the baud
 
@@ -637,7 +573,80 @@ void Bt_WriteEep(void) // @ 0x0150
     while(NVMCON1bits.WR);
     WREN = 0;
 }
-
+inline void BlCheckDefResetSeq(void)
+{
+	if(get_pin_5 == 0)  // if switch is pressed on power up
+    { 
+		clear_pin_0;
+		set_delay(60); // switch hold for enough time 
+		if(get_pin_5 != 0)
+		{
+		   return;
+		}
+		set_pin_0;// disply LED indication saying Switch sequence is passed
+        while(get_pin_5 == 0);// wait for switch to release
+        clear_pin_0;
+        SPBRG=207u;   // set baud 9600 as its basic baud of HC-06
+        
+        Bt_Data.Com.lent = 8;  // do not send end string
+        Bt_Data.Com.ptr = "AT+BAUD7"; // set 57k baud 
+        Bt_ComSendData();  // but this command is sent at 9600 baud
+        
+        set_delay(10); 
+        
+        // READ default BLE pin stored in EEPROM 
+        Bt_Data.ReadMem.add = FECT_DAT_LID_START_ADDRESS;
+        Bt_Data.ReadMem.typ = 1;
+        while(lid_len_cnt < LID_LEN)
+        {
+            Bt_ReadData(); // read eeprom  
+            LID[lid_len_cnt] = (uint8)Bt_Data.ReadMem.result;
+            lid_len_cnt++;
+            Bt_Data.ReadMem.add++;
+        }
+        
+        // set the def baud
+        SPBRG=34u;    // 34: 57.6k , 103:19.3k , 207:9600
+       
+        
+        // set default UN 
+        Bt_Data.Com.lent = 9;  //  do not send end of string
+        Bt_Data.Com.ptr = "AT+NAMECD" ; 
+        Bt_ComSendData();
+        
+        Bt_Data.Com.lent = 4; // 
+        Bt_Data.Com.ptr = LID;
+        Bt_ComSendData();
+        
+     
+        set_delay(10); 
+        
+   
+        
+        // set PW
+        Bt_Data.Com.lent = 6;        
+        Bt_Data.Com.ptr =  "AT+PIN";
+        Bt_ComSendData();
+        
+        Bt_Data.Com.lent = 4; // no end of string chr
+        Bt_Data.Com.ptr = LID;
+        Bt_ComSendData();
+       
+                
+        // erase data which is FDR erasable
+        Bt_Data.EepWr.add = FDR_DAT_START_ADDRESS_LSB; // f0ff make application invalid
+        Bt_Data.EepWr.eep_data = 0xFF;  // default data to be written to eep
+        
+        while(Bt_Data.EepWr.add < FECT_DAT_START_ADDRESS_LSB)
+        {       
+            Bt_WriteEep();
+            Bt_Data.EepWr.add++;
+        }
+        
+        asm("RESET"); //  reset the device after FDR (this was  done because uart receiver was not working after fdr)
+        
+    }
+}
 /*
 asm("global _memcpy");
 void memcpy(uint8* to, const uint8* from,uint8 lnt )
