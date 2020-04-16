@@ -53,27 +53,33 @@ inline void app_ini(void)
 /*private function inclusion*/
 void app_test_1ms(void)
 {
-   // toggle_pin_1;     
-}
-void app_test_10ms(void)
-{
-   
-}
+   // toggle_pin_1;    
 
-void app_test_100ms(void)
-{
-    uint8 i=0, resp_len = 0,MacKeyTemp = 0;
-    volatile uint8 sw0_st;
-    
-    MacKeyTemp = lock_id[EEP_APP_MAC_OK];  // commisiond
-    if( MacKeyTemp == 0xFF ) // check if un commisiond
-    {
-        MacKeyTemp = lock_id[EEP_APP_LID0];  // uncommisiond
-    }
-
-    
-    if(com_get_rx_buf_lnt()) // buffer have some data
+//-----Handle RX Tx Pkt------------------------------------------
+	uint8 i=0, resp_len = 0,MacKeyTemp = 0;  
+	uint8 pktreceived=0;
+	
+	CRITICAL_EN;
+	if(RxDataReceived) // if byte is received
+	{
+	   RxDataReceived=RxDataReceived+1; // addressing
+	   if(RxDataReceived>=3)  //this ensures responce in 3 OS tick = 3 ms TX is idel its pkt
+	   {
+			RxDataReceived=0;
+			pktreceived=1;
+	     // packet Received
+	   }
+	}
+	CRITICAL_DIS;
+	
+    if(pktreceived) // buffer have some data
     {     
+		MacKeyTemp = lock_id[EEP_APP_MAC_OK];  // commisiond
+		if( MacKeyTemp == 0xFF ) // check if un commisiond
+		{
+			MacKeyTemp = lock_id[EEP_APP_LID0];  // uncommisiond
+		}
+
         // read command
         cmd_res_data[0] = 0xFF;
         while(com_get_rx_buf_lnt() && (i < MAX_CMD_FRAME_LEN)) // read all data
@@ -277,10 +283,17 @@ void app_test_100ms(void)
            //  resp_len = 8;
            //  com_send_dat(cmd_res_data,resp_len);
         }
-    }
-    
+    }   
+}
+void app_test_10ms(void)
+{
+   
+}
+
+void app_test_100ms(void)
+{
    //------------switch event---------------
-  
+    volatile uint8 sw0_st;
     sw0_st = get_pin_5;  
     if(sw0_st_prev!=sw0_st)
     {
@@ -393,6 +406,7 @@ void app_test_BG(void)
         // do not do any thing
     }
     event_read= 0xFF;
+	
 }
 uint8 mem_compare(uint8 *dest,uint8 *sour, uint8 len)
 {

@@ -39,7 +39,7 @@ void Run_Os(void)
             }
             os.os_time_ms++; // overflow after 50 days of operation
         }
-        app_test_BG();
+        app_test_BG(); // execute bagroud task on every tick
         // go to sleep , only periperal are active CPU in sleep, wake up by any Interrupt
         while(com_get_tx_buf_lnt());
         SLEEP();

@@ -189,4 +189,5 @@ extern void   Bt_FlashWriteBlock(void)   @  0x001A8;
 
 extern void   Bt_ReadData(void)          @  0x00214;
 
+extern volatile uint8 RxDataReceived;
 #endif

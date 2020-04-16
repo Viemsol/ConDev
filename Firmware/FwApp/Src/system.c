@@ -15,7 +15,7 @@ struct str_adc_mgr adc;
 //uint16 app_data= 0xabcd;
 //uint8 test2= 0xef;
 //const struct str_eep_mgr eep[MAX_EEP_ENTRY]={{&app_data,0,2}/*,{&test2,2,1}*/};  // variable address,eep index ,length in bytes
-
+volatile uint8 RxDataReceived;
 uint8 Led_st_cnt;
 /*ISR routines*/
 void interrupt isr(void) // 10ms timer    os timer
@@ -33,6 +33,7 @@ void interrupt isr(void) // 10ms timer    os timer
   if(PIR1bits.RCIF)
   {
      // toggle_pin_0;
+	  RxDataReceived =1;
       byte_received();
       // RCIF=0;  //read onl set reset by hardware
   }
