@@ -3,14 +3,15 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="3dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="2dp"
         app:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="1dp">
+            android:background="@drawable/border"
+            android:padding="5dp">
 
             <ImageView
                 android:id="@+id/ImageView_Icon"
@@ -22,6 +23,7 @@
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_marginBottom="3dp"
+                android:contentDescription="@string/button_image"
                  />
 
             <TextView
@@ -46,7 +48,6 @@
                 android:layout_width="100dp"
                 android:layout_height="35dp"
                 android:layout_toEndOf="@+id/ImageView_Icon"
-                android:layout_toRightOf="@+id/ImageView_Icon"
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="3dp"
@@ -56,9 +57,7 @@
                 android:textColor="#fff"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:text="ACTION"
-
-                />
+                android:text="@string/info"/>
 
             <Button
                 android:id="@+id/Button_Delete"
@@ -66,7 +65,6 @@
                 android:layout_height="35dp"
 
                 android:layout_toEndOf="@+id/Button_Action"
-                android:layout_toRightOf="@+id/Button_Action"
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="3dp"
@@ -77,7 +75,7 @@
                 android:textColor="#fff"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:text="DELETE"
+                android:text="@string/delete"
                 />
 
             <Button
@@ -86,7 +84,6 @@
                 android:layout_height="35dp"
 
                 android:layout_toEndOf="@id/ImageView_Icon"
-                android:layout_toRightOf="@id/ImageView_Icon"
                 android:layout_below="@id/Button_Action"
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="3dp"
@@ -98,7 +95,7 @@
                 android:textColor="#fff"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:text="OTA"
+                android:text="@string/ota"
 
                 />
 
@@ -108,7 +105,6 @@
                 android:layout_height="35dp"
                 android:layout_below="@+id/Button_Delete"
                 android:layout_toEndOf="@+id/Button_Ota"
-                android:layout_toRightOf="@+id/Button_Ota"
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="3dp"
@@ -118,7 +114,7 @@
                 android:textColor="#fff"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:text="User Cred"
+                android:text="@string/user_cred"
 
                 />
             <TextView
@@ -127,7 +123,6 @@
                 android:layout_height="30dp"
                 android:layout_below="@+id/Button_Ota"
                 android:layout_toEndOf="@id/ImageView_Icon"
-                android:layout_toRightOf="@id/ImageView_Icon"
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="3dp"
@@ -137,6 +132,6 @@
                 android:textColor="@color/orange"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:text="Device Audits"/>
+                android:text="@string/device_audits"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

@@ -117,12 +117,12 @@
 #define MAX_EVENT 4
 enum
 {
-    EEP_E8,
-    EEP_E9,
-    EEP_EA,
-    EEP_DAY_RTC_ACTION,
-    EEP_DAY_RTC_HRS_STOP,
-    EEP_DAY_RTC_HRS_START,
+    EEP_PW0,     // PW
+    EEP_PW1,     // PW
+    EEP_PW2,     // PW
+    EEP_PW3,     // PW
+    EEP_PWC,     // PW CSUM used for commisioning encryption
+    EEP_DAY_RTC_HRS_START24_DUR_30,   // first 5 bits will contain hrs of day 0 - 23) (24 to 31 values un used) (next two bits contain 0:0 min(disable) 1:30 min 2:1hrs 3: 2 hrs) last one bit is action 0 is off 1 is on (this mode can be interrupted/ this mode retain pervious value if not interrupted on completion)
     EEP_DAY_IN_USE_LSB,
     EEP_DAY_IN_USE_MSB,
     EEP_APP_VALID,
@@ -206,7 +206,7 @@ enum
 #define APP_EEP_START_ADDRESS_LSB 0xE8   // eep write address are 1 byte
 #define APP_EEP_START_ADDRESS  0x70E8
 
-#define SYSTEM_VER 0x03 // give info about version number 
+#define SYSTEM_VER 0x02 // give info about version number 
 #define DEVICE_TYP 0x01 // give info about product (01 is demo test product) {1: DEMO ; 2 :Wall switch ...}
 
 const unsigned char sys_ver @ 0xF0F2 = SYSTEM_VER; 

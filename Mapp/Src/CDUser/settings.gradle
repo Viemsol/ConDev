@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name='CDMaster'
+rootProject.name='CDUser'

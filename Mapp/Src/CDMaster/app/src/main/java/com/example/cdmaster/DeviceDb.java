@@ -17,6 +17,7 @@ public class DeviceDb implements Cloneable
     public int MAX_CRED;       // meximum credential master user can distribute
     public int NUM_CRED_USED;  // credential master have distributed
     public String Version;     // Holds Device version
+    public boolean Deleted;     // Holds Device version
 
     // fields used by Cred user only
     public String DeviceBelongsTo; // this is Master user db ID , used by cred user to update audit
@@ -26,12 +27,14 @@ public class DeviceDb implements Cloneable
     public String StartTime;      // (HH/MM)
     public String EndTime;         // (HH/MM)
     public  int OneTimeAccess;
+
+    public String PairingPw;
     public DeviceDb()
     {
         // empty contructor
 
     }
-    public DeviceDb( String Dev_ID,int Dev_Typ,int Dev_Rand,String Dev_Mac,int Mast_Id,String Dev_Name,String Dev_Img,String User_Cred,boolean Is_Master,String Version,String DeviceBelongsTo,String ActivationDate,String ExpiryDate,String StartTime,String EndTime,int OneTimeAccess)
+    public DeviceDb( String Dev_ID,int Dev_Typ,int Dev_Rand,String Dev_Mac,int Mast_Id,String Dev_Name,String Dev_Img,String User_Cred,boolean Is_Master,String Version,String DeviceBelongsTo,String ActivationDate,String ExpiryDate,String StartTime,String EndTime,int OneTimeAccess,String PairingPw)
     {
         this.Dev_ID = Dev_ID;
         this.Dev_Typ = Dev_Typ;
@@ -52,7 +55,7 @@ public class DeviceDb implements Cloneable
         this.StartTime = StartTime;      // (HH/MM)
         this.EndTime  = EndTime;         // (HH/MM)
         this.OneTimeAccess = OneTimeAccess;
-
+        this.PairingPw = PairingPw;
     }
 
     @Override

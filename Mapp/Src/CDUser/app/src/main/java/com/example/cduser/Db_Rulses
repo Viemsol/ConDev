@@ -15,13 +15,24 @@
              ".read": "auth != null && $user_id == auth.uid"
              },
              "CredSent":
-        		 {
+        	 {
               "$CredUserId":
                 {
                 ".write": "auth != null && $user_id == auth.uid",
           		  ".read": "auth != null && (($CredUserId == auth.uid)||($user_id == auth.uid))"
                 }
-             }
+             },
+             "Audit"
+             {
+                "User_Audit"
+                {
+                       "$CredUserId":
+                         {
+                         ".write": "auth != null && auth.uid == $CredUserId",
+                          ".read": "auth != null && (($CredUserId == auth.uid)||($user_id == auth.uid))"
+                         }
+                 }
+              }
           }
         },
         "CredReceived":

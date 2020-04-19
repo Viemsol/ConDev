@@ -12,7 +12,7 @@ public class AuditDb
     }
 
     public AuditDb( String UsrName, String Time,String Action) {
-        this.UsrName = UsrName;
+        this.UsrName = UsrName; // user name % Phone % User ID
         this.Time = Time;
         this.Action = Action;
     }

@@ -23,8 +23,8 @@
 
             android:layout_marginTop="40dp"
             android:layout_marginStart="50dp"
-            android:text="Welcome"
-            android:textSize="25dp"
+            android:text="@string/welcome"
+            android:textSize="25sp"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimaryDark" />
 
@@ -34,43 +34,55 @@
             android:layout_height="45dp"
 
             android:layout_marginStart="50dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginTop="100dp"
 
             android:ems="10"
             android:inputType="textEmailAddress"
-            android:hint="Em@il"/>
+            android:hint="@string/email"
+            android:autofillHints="@string/email" />
 
         <EditText
             android:id="@+id/EtPassword"
             android:layout_width="match_parent"
             android:layout_height="45dp"
 
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginTop="20dp"
             android:ems="10"
             android:inputType="textPassword"
-            android:hint="Password"/>
+            android:hint="@string/password"
+            android:autofillHints="@string/password"/>
 
         <Button
             android:id="@+id/ButLogin"
             android:layout_width="100dp"
             android:layout_height="45dp"
 
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginTop="20dp"
-            android:text="Login" />
+            android:text="@string/login" />
 
         <TextView
             android:id="@+id/TvSignup"
             android:layout_width="match_parent"
             android:layout_height="45dp"
 
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginTop="40dp"
-            android:text="Not registered yet ? Click to Signup " />
+            android:text="@string/ClickToSignUp" />
+
+        <TextView
+            android:id="@+id/TvForgotPw"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:textColor="@color/orange"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/ForgotPW" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

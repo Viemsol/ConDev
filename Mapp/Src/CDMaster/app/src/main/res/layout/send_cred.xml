@@ -1,57 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="45dp"
 
-    <EditText
-        android:id="@+id/EtDateStrt"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:inputType="date"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Activation(DD/MM/YYYY)"/>
-    <EditText
-        android:id="@+id/EtDateExp"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:inputType="date"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Expiry (DD/MM/YYYY)"/>
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:text="@string/activation_date"
+            android:textColor="@color/blue"
+            />
 
+        <TextView
+            android:id="@+id/EtDateStrt"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
 
-    <EditText
-        android:id="@+id/EtTimeAct"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:inputType="time"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Start Time (HH MM) (09:00) "/>
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:hint="@string/DateFormat_dd_mm_yyyy"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="45dp"
 
-    <EditText
-        android:id="@+id/EtTimeExp"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:inputType="time"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="End Time (HH MM) eg (18:30)"/>
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:text="@string/expiry_date"
+            android:textColor="@color/blue"
+            />
+
+        <TextView
+            android:id="@+id/EtDateExp"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:hint="@string/DateFormat_dd_mm_yyyy"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:text="@string/start_time"
+            android:textColor="@color/blue"
+            />
+
+        <TextView
+            android:id="@+id/EtTimeAct"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:hint="@string/Time_Format_hh_mm"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:text="@string/end_time"
+            android:textColor="@color/blue"
+            />
+
+        <TextView
+            android:id="@+id/EtTimeExp"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:hint="@string/Time_Format_hh_mm"/>
+    </LinearLayout>
     <CheckBox android:id="@+id/CbOneTimeAccess"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:text="One time Access ?"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="5dp"
+        android:text="@string/one_time_access"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginTop="20dp"
         android:ems="10"/>
 </LinearLayout>

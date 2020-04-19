@@ -29,7 +29,36 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC-B-HdN9HzS1OvTGm_OL5sQCT42nxbRe8"
+          "current_key": "YOUR_API_KEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65287622797-tol0qm42a0hjfii06d087slgg0gnss57.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65287622797:android:145f3c59b46ff2592312c4",
+        "android_client_info": {
+          "package_name": "com.example.cduser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65287622797-tol0qm42a0hjfii06d087slgg0gnss57.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "YOUR_API_KEY"
         }
       ],
       "services": {

@@ -26,16 +26,7 @@ uint8 Replay_Attack_Frame = 0;
 inline void app_ini(void)
 {
     uint16 temp_add,dest_add;
-    // test LED
-    // Test Switch
-    sw0_st_prev = ! (get_pin_5);
-    OS_Init_Tmr(tmr_1ses);
-#if(ENABLE_ENCRIPTION == TRUE) 
-    OS_Init_Tmr(tmr_temp_key);
-#endif
-    // Test Communication
-    // test Operatig system
-    
+
     // load back EEP DATA
     temp_add = APP_EEP_START_ADDRESS;
     dest_add = 0;
@@ -45,6 +36,16 @@ inline void app_ini(void)
         dest_add++;
         temp_add++;
     }
+	    // test LED
+    // Test Switch
+    sw0_st_prev = ! (get_pin_5);
+    OS_Init_Tmr(tmr_1ses);
+#if(ENABLE_ENCRIPTION == TRUE) 
+    OS_Init_Tmr(tmr_temp_key);
+#endif
+    // Test Communication
+    // test Operatig system
+    
    // com_send_dat(lock_id,10);
 }
 // set temp key to 0xFF after 5 second 
@@ -77,7 +78,7 @@ void app_test_1ms(void)
 		MacKeyTemp = lock_id[EEP_APP_MAC_OK];  // commisiond
 		if( MacKeyTemp == 0xFF ) // check if un commisiond
 		{
-			MacKeyTemp = lock_id[EEP_APP_LID0];  // uncommisiond
+			MacKeyTemp = lock_id[EEP_PWC];  // uncommisiond
 		}
 
         // read command
@@ -99,7 +100,7 @@ void app_test_1ms(void)
             cmd_res_data[1] = get_temp_key(); // random key to  app
             // calculate encription key           
             temp_key ^= cmd_res_data[1];
-            temp_key ^=  lock_id[EEP_APP_LID0]; // fist chr of UID ie CD5678 then 5 is to be used
+            temp_key ^=  lock_id[EEP_PWC]; // fist chr of UID ie CD5678 then 5 is to be used
             
             OS_Start_Tmr(tmr_temp_key); // temp key expier timer
             
@@ -175,8 +176,8 @@ void app_test_1ms(void)
                         }
   						else if(cmd_res_data[12] == GET_DIN )
                         {
-                            cmd_res_data[13] = lock_id[EEP_DAY_IN_USE_LSB];  // BL VERSION
-                            cmd_res_data[14] = lock_id[EEP_DAY_IN_USE_MSB];   // APP version
+                            cmd_res_data[13] = lock_id[EEP_DAY_IN_USE_LSB];  //  days in use
+                            cmd_res_data[14] = lock_id[EEP_DAY_IN_USE_MSB];   // days in use
                         }
 						else if(cmd_res_data[12] == GET_CUR_ON_TYM )
                         {					 
@@ -397,7 +398,7 @@ void app_test_BG(void)
             {
 				//Set PW to BLE chip
 				com_send_dat("AT+PIN",6);
-				com_send_dat(&lock_id[EEP_APP_LID0],4);
+				com_send_dat(&lock_id[EEP_PW0],4);
 				led0_blink(10);
 			}		
     }

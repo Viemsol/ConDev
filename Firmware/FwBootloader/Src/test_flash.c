@@ -98,7 +98,34 @@
 #define ERASE_FLASH_BLOCKSIZE    32
 #define START_WRITE_FLASH_BLOCKSIZE (WRITE_FLASH_BLOCKSIZE - 1)
 
-
+enum
+{
+    EEP_PW0,     // PW
+    EEP_PW1,     // PW
+    EEP_PW2,     // PW
+    EEP_PW3,     // PW
+    EEP_PWC,     // PW CSUM used for commisioning encryption
+    EEP_DAY_RTC_HRS_START24_DUR_30,   // first 5 bits will contain hrs of day 0 - 23) (24 to 31 values un used) (next two bits contain 0:0 min(disable) 1:30 min 2:1hrs 3: 2 hrs) last one bit is action 0 is off 1 is on (this mode can be interrupted/ this mode retain pervious value if not interrupted on completion)
+    EEP_DAY_IN_USE_LSB,
+    EEP_DAY_IN_USE_MSB,
+    EEP_APP_VALID,
+    EEP_APP_CHKSM,
+    EEP_APP_VERSION,
+    EEP_APP_MAC_OK,
+    EEP_APP_MAC0,
+    EEP_APP_MAC1,
+    EEP_APP_MAC2,
+    EEP_APP_MAC3,
+    EEP_APP_LID0,
+    EEP_APP_LID1,
+    EEP_APP_LID2,
+    EEP_APP_LID3,
+    EEP_APP_DEVTYP,
+    EEP_FD,
+    EEP_BOOT_VERSION,
+    EEP_FECTORY_OK,
+    MAX_EEP_IDX
+};
 
 
 typedef unsigned char uint8;
@@ -151,7 +178,7 @@ const unsigned char Bl_Ver1 @ 0xF0FE = 0x01; // Bl_Ver
 #define FECT_DAT_START_ADDRESS 0x70F8
 #define FECT_DAT_LID_START_ADDRESS 0x70F8
 #define LID_LEN 4u
-
+#define PW_LEN 4u
 #define FECT_DAT_START_ADDRESS_LSB 0xF8
 
 #define FECT_DAT_DEV_TYP_ADDRESS 0x70FC  // this data (device id) indicates app is valid and can be jmed to app after CRC validation
@@ -160,6 +187,8 @@ const unsigned char Bl_Ver1 @ 0xF0FE = 0x01; // Bl_Ver
 
 #define FECT_DAT_VALID_TYP_ADDRESS_LSB 0xFF
 #define FECT_DAT_VALID_TYP_ADDRESS 0x70FF
+
+#define APP_EEP_START_ADDRESS  0x70E8
 struct Str_Com
 {
     uint8 *ptr;
@@ -212,6 +241,7 @@ void interrupt serrvice_isr()  // all interrupt will jump to this def address bu
 */
 }
 uint8 frame[69]; // one for command , 2 for address , 64  for data240
+uint8 lock_id[24]; // holds eep read for lock commisioning
 uint16 count; // used for delay
 //0xAA is appp valid else invalid
 uint8 dat_cnt;     // stores no of bytes
@@ -219,7 +249,7 @@ uint8 data_checksum;  // checksum data
 uint8 lid_len_cnt;
 uint8 dev_type_ota;
 uint8 tx_len;
-uint8 LID[LID_LEN];
+uint8 LIDPW[LID_LEN + PW_LEN];
 
 uint16 del1;
 uint8 flash_range_ok;
@@ -595,15 +625,18 @@ inline void BlCheckDefResetSeq(void)
         set_delay(10); 
         
         // READ default BLE pin stored in EEPROM 
-        Bt_Data.ReadMem.add = FECT_DAT_LID_START_ADDRESS;
+		uint8 dest_add=0;
+		// load back EEP DATA
+		dest_add = 0;
+		Bt_Data.ReadMem.add = APP_EEP_START_ADDRESS;
         Bt_Data.ReadMem.typ = 1;
-        while(lid_len_cnt < LID_LEN)
-        {
-            Bt_ReadData(); // read eeprom  
-            LID[lid_len_cnt] = (uint8)Bt_Data.ReadMem.result;
-            lid_len_cnt++;
-            Bt_Data.ReadMem.add++;
-        }
+		while(Bt_Data.ReadMem.add <= FECT_DAT_VALID_TYP_ADDRESS)
+		{
+			Bt_ReadData(); // read eeprom
+			lock_id[dest_add] = (uint8)Bt_Data.ReadMem.result;;
+			dest_add++;
+			Bt_Data.ReadMem.add++;
+		}
         
         // set the def baud
         SPBRG=34u;    // 34: 57.6k , 103:19.3k , 207:9600
@@ -615,7 +648,7 @@ inline void BlCheckDefResetSeq(void)
         Bt_ComSendData();
         
         Bt_Data.Com.lent = 4; // 
-        Bt_Data.Com.ptr = LID;
+        Bt_Data.Com.ptr = &lock_id[EEP_APP_LID0];
         Bt_ComSendData();
         
      
@@ -629,7 +662,7 @@ inline void BlCheckDefResetSeq(void)
         Bt_ComSendData();
         
         Bt_Data.Com.lent = 4; // no end of string chr
-        Bt_Data.Com.ptr = LID;
+        Bt_Data.Com.ptr = &lock_id[EEP_PW0];
         Bt_ComSendData();
        
                 

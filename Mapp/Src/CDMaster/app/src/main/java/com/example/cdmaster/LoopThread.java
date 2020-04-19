@@ -5,39 +5,31 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.SystemClock;
 import android.util.Log;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+
 
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLE_UART_COMMISION;
 
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLE_UART_FLASH;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLE_UART_FUCTION_GET_GPIO;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLE_UART_FUCTION_SET_GPIO;
+import static com.example.cdmaster.GLOBAL_CONSTANTS.BLE_UART_GET_ON_TIME;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLE_UART_PING_APP;
-import static com.example.cdmaster.GLOBAL_CONSTANTS.BLE_UART_PING_APP_RESP;
+
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_BONDING_PASS;
 
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_COMMISION_FAIL;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_COMMISION_PASS;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_CRED_FAIL;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_CRED_GET_STATUS_FAIL;
-import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_CRED_GET_STATUS_SUCESS;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_CRED_SUCESS;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_DIV_DISCOVERY_COMPLETE;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_ERROR;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_FLASH_FAIL;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_FLASH_SUCESS;
+import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_GET_DEV_ON_TIME_SUCCESS;
+import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_GET_DIN_SUCCESS;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_GET_VERSION_SUCCESS;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.BLUETOOTH_SUCESS;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.CMD_BLUETOOTH_CONNECT_COMMISION;
@@ -46,6 +38,8 @@ import static com.example.cdmaster.GLOBAL_CONSTANTS.CMD_BLUETOOTH_DEV_CRED_STATU
 import static com.example.cdmaster.GLOBAL_CONSTANTS.CMD_BLUETOOTH_DEV_FLASH;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.CMD_BLUETOOTH_DEV_PING;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.CMD_BLUETOOTH_DIV_DISCOVERY_5SEC;
+import static com.example.cdmaster.GLOBAL_CONSTANTS.CMD_BLUETOOTH_GET_DEV_ON_TIME;
+import static com.example.cdmaster.GLOBAL_CONSTANTS.CMD_BLUETOOTH_GET_DIN;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.CMD_BLUETOOTH_GET_VERSION;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.CMD_BLUETOOTH_INIT;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.CMD_DISPLAY_SHORT_ALEART;
@@ -74,11 +68,17 @@ import static com.example.cdmaster.GLOBAL_CONSTANTS.TIMER_ONESHOT;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.TIMER_PAIR_TIMEOUT;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.TIMER_RX_TIMEOUT;
 import static com.example.cdmaster.MainActivity._Handler_MainHandler;
+import static com.example.cdmaster.MainActivity.globalCurrentPairingKey;
+import static com.example.cdmaster.Security.CRC_Chk;
 import static com.example.cdmaster.Security.nen_enc_dec;
+import static com.example.cdmaster.ServLib.getNZRandom;
 
 
 public class LoopThread extends Thread {
     public Context ctx;
+    public static byte [] globaltempOnTime ={0,0,0,0,0}; // hold device on time from last restsrt
+    public static int globaltempDIN =0;  // total days in use (hold days even after power cycle)
+
     public LoopThread(String name,Context context)
     {
         super(name);
@@ -87,8 +87,8 @@ public class LoopThread extends Thread {
     // this handles all beground activitys
     private static final String TAG = "TAG_LooperThread";
     public static Handler LoopHandler;
-    public BleLib bleLib = new BleLib();
-    public static volatile TimerScheduler  Timer_Sched= new TimerScheduler();
+    private BleLib bleLib = new BleLib();
+    private static volatile TimerScheduler  Timer_Sched= new TimerScheduler();
 
     @Override
     public void run()
@@ -158,7 +158,6 @@ public class LoopThread extends Thread {
                 }
                 break;
             case CMD_BLUETOOTH_DIV_DISCOVERY_5SEC:
-
                 APP_SendCmdToMainUI(CMD_SET_MAIN_DIALOG_STATUS,"Discovering Devices");
                 APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,Temp_Progress);
                 APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_STATUS,"Discovering Devices");
@@ -177,23 +176,28 @@ public class LoopThread extends Thread {
 
             break;
             case CMD_BLUETOOTH_GET_VERSION:
+            case CMD_BLUETOOTH_GET_DEV_ON_TIME:
+            case CMD_BLUETOOTH_GET_DIN:
             case CMD_BLUETOOTH_DEV_FLASH:
             case CMD_BLUETOOTH_DEV_PING:
             case CMD_BLUETOOTH_DEV_CRED:
             case CMD_BLUETOOTH_CONNECT_COMMISION:
-                Temp_Progress+=20;
-                APP_SendCmdToMainUI(CMD_SET_MAIN_DIALOG_STATUS,"Connecting to Device");
-                APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,Temp_Progress);
-                APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_STATUS,"Connecting to Device");
-                APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_PROGRESS_PERCENT,Temp_Progress);
+                if(bleLib.BleLibisBleEnabled()) {
+                    Temp_Progress += 20;
+                    APP_SendCmdToMainUI(CMD_SET_MAIN_DIALOG_STATUS, "Connecting to Device");
+                    APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT, Temp_Progress);
+                    APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_STATUS, "Connecting to Device");
+                    APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_PROGRESS_PERCENT, Temp_Progress);
+                    APP_SendCmdToMainUI(CMD_SET_DISPLY_VISIBILITY, SCREEN_WAIT_INPROGRESS);
+                    Timer_Sched.Start_Timer(TIMER_PAIR_TIMEOUT, TIMEOUT_BLUETOOTH_CONNECT_PAIR, TIMER_ONESHOT, msg.obj);
 
-
-                APP_SendCmdToMainUI(CMD_SET_DISPLY_VISIBILITY,SCREEN_WAIT_INPROGRESS);
-                Timer_Sched.Start_Timer( TIMER_PAIR_TIMEOUT,TIMEOUT_BLUETOOTH_CONNECT_PAIR,TIMER_ONESHOT,msg.obj);
-
-
-
-                bleLib.Ble_Try_Connection((BleLibCmd) msg.obj,ctx);
+                    bleLib.Ble_Try_Connection((BleLibCmd) msg.obj);
+                }
+                else
+                {
+                    APP_SendCmdToMainUI(BLUETOOTH_CRED_GET_STATUS_FAIL,"Failed to connect");
+                    APP_SendCmdToMainUI(CMD_DISPLAY_SHORT_ALEART,"Turn on Bluetooth");
+                }
             break;
 
             case EVENT_TIMER:
@@ -208,10 +212,10 @@ public class LoopThread extends Thread {
                 Timer_Sched.Stop_Time(TIMER_PAIR_TIMEOUT);
                 BluetoothDevice Temp_BleDev = ((BleLibCmd) msg.obj).Device;
                 int Temp_OriginalCmd = ((BleLibCmd) msg.obj).Command;
-                int random = new Random().nextInt(256) + 1;
+                byte random = (byte) getNZRandom();
 
-                byte CmdPing[] = new byte[]{BLE_UART_PING_APP,(byte) random,0x00,0x00,0x00};
-                byte CmdCredCommision[] = new byte[]{BLE_UART_COMMISION, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
+                byte[] CmdPing = new byte[]{BLE_UART_PING_APP, random,0x00,0x00,0x00};
+                byte[] CmdCredCommision = new byte[]{BLE_UART_COMMISION, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF,
                         // CMD              //ENC        // RAND   // MAC      //MAC       //MAC       //MAC    //DEVID
                         (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF
                         //DEVID       // DEVID          //DEVID    // DEVTYP    //FUNCTION   // DATA  //DATA     //CRC
@@ -219,11 +223,11 @@ public class LoopThread extends Thread {
                 byte[] RespPing = new byte[5];
                 byte[] RespCredCommision = new byte[MAX_CMD_RESP_LEN_APP];
                 // get command
-                CmdCredCommision[0] = (((BleLibCmd) msg.obj).uart_commad);
+                CmdCredCommision[0] = (((BleLibCmd) msg.obj).uart_command);
                 // get random no
-                CmdCredCommision[2] = (byte)(((BleLibCmd) msg.obj).Dev_Rand);
+                MacKey = (byte)(((BleLibCmd) msg.obj).Dev_Rand); // MAC key as rendom byte
 
-                MacKey =   CmdCredCommision[2];  // MAC key as rendom byte
+                 //   CmdCredCommision[2] = (byte)0xFF;  // do not send rendom byte in frame
                 //get Uniue master number
                 CmdCredCommision[3] = (byte)((((BleLibCmd) msg.obj).Master_MAC_4)& 0xFF);
                 CmdCredCommision[4] = (byte)(((((BleLibCmd) msg.obj).Master_MAC_4)>>8)& 0xFF);
@@ -252,8 +256,6 @@ public class LoopThread extends Thread {
 
                 if(bleLib.Ble_CheckIfBondingSuces(Temp_BleDev))
                 {
-
-
                     // device is already bonded try connecting and send command
                     int tmp_status;
                     Log.d(TAG, "Pairing OK !!");
@@ -266,12 +268,15 @@ public class LoopThread extends Thread {
                     {
                         case CMD_BLUETOOTH_DEV_PING:
                             Timer_Sched.Start_Timer(TIMER_RX_TIMEOUT, TIMEOUT_COMMISON_FRAME, TIMER_ONESHOT, msg.obj);
-                            tmp_status = bleLib.Send_Receive(Temp_BleDev, CmdPing, 1, RespPing);
+                            bleLib.Send_Receive(Temp_BleDev, CmdPing, 1, RespPing);
                             Timer_Sched.Stop_Time(TIMER_RX_TIMEOUT);
                         break;
                         case CMD_BLUETOOTH_CONNECT_COMMISION:
-                            MacKey = (((BleLibCmd) msg.obj).Dev_IDName).getBytes()[2];
+                            byte[] temp_pw = globalCurrentPairingKey.getBytes();
+                            MacKey = (byte)((temp_pw[0] + temp_pw[1] + temp_pw[2] + temp_pw[3])&0xFF);
                         case CMD_BLUETOOTH_GET_VERSION:
+                        case CMD_BLUETOOTH_GET_DIN:
+                        case CMD_BLUETOOTH_GET_DEV_ON_TIME:
                         case  CMD_BLUETOOTH_DEV_FLASH:
                             //1) send commision frame with all data
                             // 2) wait and start flashing sequence
@@ -282,7 +287,7 @@ public class LoopThread extends Thread {
                             // send credential get status frame
 
 
-                            CmdCredCommision[15] = CRC_Chk(CmdCredCommision, MAX_CMD_RESP_LEN_APP, 1,MacKey);
+                            CmdCredCommision[15] = CRC_Chk(CmdCredCommision, MAX_CMD_RESP_LEN_APP-1, 1,MacKey);
 
                             if(ENCRIPTION_EN == 1)
                             {
@@ -299,8 +304,15 @@ public class LoopThread extends Thread {
                                     // encrypt the data befor sending
                                     Log.d(TAG, "Raw Data" + Arrays.toString(CmdCredCommision) );
                                     Log.d(TAG,"MAC Key:" + MacKey);
-                                            Log.d(TAG,"Session key :" + Session_key);
+                                    Log.d(TAG,"Session key :" + Session_key);
+                                    //Log.d(TAG,"Unencrypted data :" + Arrays.toString(CmdCredCommision));
                                     nen_enc_dec(CmdCredCommision,Session_key);
+                                }
+                                else
+                                {
+                                    Timer_Sched.Stop_Time(TIMER_RX_TIMEOUT);
+                                    APP_SendCmdToMainUI(BLUETOOTH_CRED_GET_STATUS_FAIL, Temp_BleDev);
+                                    break;
                                 }
 
                             }
@@ -322,7 +334,7 @@ public class LoopThread extends Thread {
                             if(ENCRIPTION_EN == 1 && (tmp_status == RX_CMD_SUCESS) ) {
                                 nen_enc_dec(RespCredCommision, Session_key);
                             }
-                            if ((tmp_status == RX_CMD_SUCESS) && (1 == CRC_Chk(RespCredCommision, MAX_CMD_RESP_LEN_APP, 0, MacKey)))
+                            if ((tmp_status == RX_CMD_SUCESS) && (1 == CRC_Chk(RespCredCommision, MAX_CMD_RESP_LEN_APP-1, 0, MacKey)))
                             {
 
                                 switch (Temp_OriginalCmd)
@@ -355,7 +367,6 @@ public class LoopThread extends Thread {
 
                                     case CMD_BLUETOOTH_DEV_CRED:
 
-
                                         APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,100);
 
                                         if( (RespCredCommision[0] == BLE_UART_COMMISION) &&  ((RespCredCommision[12] ==  BLE_UART_FUCTION_SET_GPIO) || (RespCredCommision[12] ==  BLE_UART_FUCTION_GET_GPIO)) )
@@ -363,9 +374,6 @@ public class LoopThread extends Thread {
                                              (((BleLibCmd) msg.obj).Function_Data) = RespCredCommision[13];
                                             (((BleLibCmd) msg.obj).Function_Data) |= ((int)RespCredCommision[14]<<8);
                                             Log.d(TAG, "Credential pass Data" + ((BleLibCmd) msg.obj).Function_Data);
-
-
-
                                             APP_SendCmdToMainUI(BLUETOOTH_CRED_SUCESS, msg.obj);
                                         }
                                         else
@@ -380,7 +388,7 @@ public class LoopThread extends Thread {
                                         if (RespCredCommision[0] == BLE_UART_COMMISION)
                                         {
                                             // device is captured now read the responce data and store it
-                                            String Dev_ID = (Temp_BleDev).getName();      // Unique device serial number Alpha numaric ie CD5678
+                                            String Dev_Name = (Temp_BleDev).getName();      // Unique device serial number Alpha numaric ie CD5678
                                             int Dev_Typ = RespCredCommision[11];        // Device type 1 for demo ,
                                             int BL_version = RespCredCommision[13];
                                             int App_version = RespCredCommision[14];
@@ -389,16 +397,14 @@ public class LoopThread extends Thread {
                                             int Mast_Id = ((int) RespCredCommision[3] | ((int) RespCredCommision[4] << 8) | ((int) RespCredCommision[5] << 16) | ((int) RespCredCommision[6] << 24));
 
                                             Log.d(TAG, "Mast_Id" + Mast_Id); // Master ID after commision of uniue id of master
-                                            String Dev_Mac = (Temp_BleDev).getAddress();
-                                            String Dev_Name = Dev_ID;    // user given name for device
+                                            String Dev_Mac = (Temp_BleDev).getAddress(); // dev mac for connecting device
+                                            //String Dev_Name = Dev_ID;    // user given name for device
                                             String Dev_Img = "NA";     // image for device user selected
                                             String User_Cred = "";      // for master its same,  this is linked to phone user and canot useit on other phone
                                             boolean Is_Master = true;  // 1 is master else user chredential
                                             String Dev_Version = "Ver " + (Dev_Typ) + "." + (BL_version) + "." + (App_version);
                                             Log.d(TAG,"Version" + Dev_Version);
-                                            DeviceDb DeviceDb_temp = new DeviceDb(Dev_ID, Dev_Typ, Dev_Rand, Dev_Mac, Mast_Id, Dev_Name, Dev_Img, User_Cred, Is_Master,Dev_Version,"","","","","",0);
-                                            msg.obj = DeviceDb_temp;
-
+                                            msg.obj = new DeviceDb(Dev_Name, Dev_Typ, Dev_Rand, Dev_Mac, Mast_Id, Dev_Name, Dev_Img, User_Cred, Is_Master,Dev_Version,"","","","","",0,globalCurrentPairingKey);
                                             APP_SendCmdToMainUI(BLUETOOTH_COMMISION_PASS, msg.obj);
                                         }
                                         else
@@ -414,11 +420,34 @@ public class LoopThread extends Thread {
                                         String Dev_Version = "Ver " + (Dev_Typ) + "." + (BL_version) + "." + (App_version);
                                         Log.d(TAG,"Version" + Dev_Version);
 
-                                        DeviceDb DeviceDb_temp = new DeviceDb(Dev_ID, 0, 0, "", 0, "", "", "", true,Dev_Version,"","","","","",0);
-                                        msg.obj = DeviceDb_temp;
+                                        msg.obj = new DeviceDb(Dev_ID, 0, 0, "", 0, "", "", "", true,Dev_Version,"","","","","",0,"");
+
 
                                         APP_SendCmdToMainUI(BLUETOOTH_GET_VERSION_SUCCESS, msg.obj);
 
+                                        break;
+                                    case CMD_BLUETOOTH_GET_DEV_ON_TIME:
+                                         Log.d(TAG,"Time Received ID " + (RespCredCommision[13]&0xFF) +" "+ (RespCredCommision[14]&0xFF));
+                                         int  tmpIdx = (RespCredCommision[13]&0xFF);
+                                         if(tmpIdx<5)
+                                         {
+                                             globaltempOnTime[tmpIdx] = RespCredCommision[14];
+                                             if(tmpIdx>=4) {
+                                                 APP_SendCmdToMainUI(BLUETOOTH_GET_DEV_ON_TIME_SUCCESS, msg.obj);
+                                             }
+                                         }
+                                         else
+                                         {
+
+                                         }
+                                         break;
+                                    case CMD_BLUETOOTH_GET_DIN:
+                                        globaltempDIN = ((int)(RespCredCommision[13]& 0xFF)|(int)((RespCredCommision[14]& 0xFF)<<8));
+                                        if(globaltempDIN == 65535)
+                                        {
+                                            globaltempDIN =0;
+                                        }
+                                        APP_SendCmdToMainUI(BLUETOOTH_GET_DIN_SUCCESS, msg.obj);
                                         break;
                                 }
                             }
@@ -465,8 +494,14 @@ public class LoopThread extends Thread {
                                         break;
                                     case CMD_BLUETOOTH_GET_VERSION:
                                         Log.d(TAG, "Version read fail Failed");
-
                                         break;
+                                    case CMD_BLUETOOTH_GET_DIN:
+                                        Log.d(TAG, "Days in Use read fail Failed");
+                                        break;
+                                    case CMD_BLUETOOTH_GET_DEV_ON_TIME:
+                                        Log.d(TAG, "On time read fail Failed");
+                                        break;
+
                                 }
                                 APP_SendCmdToMainUI(CMD_SET_DISPLY_VISIBILITY,SCREEN_NORMAL);
                             }
@@ -518,33 +553,5 @@ public class LoopThread extends Thread {
         }
     }
 
-    byte CRC_Chk(byte data[], int len , int cmd_crc_calc,byte mac_key)
-    {
-        len = len -1;
-        byte st=0;
-        int sum = 0,i=0;
-        while(len>0)
-        {
-            sum+=data[i];
-            i++;
-            len--;
-        }
-        if(ENCRIPTION_EN == 1)
-        {
-            sum ^= mac_key;
-        }
-        if(cmd_crc_calc == 1) // CRC calculate
-        {
-            Log.d(TAG,"Checksum :" + (byte)sum);
-            return((byte)sum);
-        }
 
-        if(((byte)sum) == data[i])
-        {
-            st =1;
-            Log.d(TAG,"Checksum matching ");
-        }
-        Log.d(TAG,"Checksum" + sum);
-        return(st);
-    }
 }

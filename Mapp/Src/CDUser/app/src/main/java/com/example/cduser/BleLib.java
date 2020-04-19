@@ -5,14 +5,12 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Message;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -32,22 +30,20 @@ import static com.example.cduser.GLOBAL_CONSTANTS.BLUETOOTH_SUCESS;
 
 import static com.example.cduser.GLOBAL_CONSTANTS.CMD_DISPLAY_SHORT_ALEART;
 import static com.example.cduser.GLOBAL_CONSTANTS.CMD_PAIR_DEVICE;
-import static com.example.cduser.GLOBAL_CONSTANTS.CMD_SET_PROGRESS_PERCENT;
+import static com.example.cduser.GLOBAL_CONSTANTS.CMD_SET_MAIN_PROGRESS_PERCENT;
 import static com.example.cduser.GLOBAL_CONSTANTS.RX_CMD_SUCESS;
 import static com.example.cduser.GLOBAL_CONSTANTS.TIMEOUT_BLUETOOTH_DISCOVORY;
 import static com.example.cduser.GLOBAL_CONSTANTS.TX_CMD_SUCESS_NO_RESP;
 import static com.example.cduser.GLOBAL_CONSTANTS.TX_RXSOCKET_ERROR;
 import static com.example.cduser.LoopThread.LoopHandler;
 import static com.example.cduser.MainActivity._Handler_MainHandler;
+import static com.example.cduser.MainActivity.globalCurrentPairingKey;
 import static com.example.cduser.MainActivity.pairedDeviceArrayList;
 import static com.example.cduser.MainActivity.pairedDeviceArrayList_ble_copy;
 
 
 public class BleLib {
-    public String[] macAddressParts;
-    public static String col_macAddressParts;
 
-    public static final String SECURE_SETTINGS_BLUETOOTH_ADDRESS = "bluetooth_address";
     public static volatile BluetoothSocket bluetoothSocket = null;
     // all BLE connection and Handling
     public static final String TAG = "TAG_BleLib";
@@ -59,7 +55,7 @@ public class BleLib {
     // Variables
     public static BluetoothAdapter App_Ba;
 
-    ;  // list of paired devices
+    // list of paired devices
     IntentFilter  filter = new IntentFilter();
 
     public UUID myUUID;
@@ -88,16 +84,10 @@ public class BleLib {
             return (BLUETOOTH_ERROR);
         }
         Ble_Start(context); // try Starting Bluetooth
-
-        col_macAddressParts = BleGetMac(context);
-        Log.d(TAG,"MAC ADDRESS:" +col_macAddressParts);
-        macAddressParts = BleGetMac(context).split(":");
-
-
         return BLUETOOTH_SUCESS;
     }
 
-    public  BroadcastReceiver mReceiver = new BroadcastReceiver()
+    public static BroadcastReceiver mReceiver = new BroadcastReceiver()
     {
         public void onReceive(Context context, Intent intent)
         {
@@ -105,17 +95,17 @@ public class BleLib {
 
             String action = intent.getAction();
 
-            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action))
+            if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action))
             {
                 //discovery starts, we can show progress dialog or perform other tasks
             }
-            else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
+            else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
             {
                 //discovery finishes, dismis progress dialog
             }
             else if (BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action))
             {
-                BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                BluetoothDevice device =  intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
                 if(device.getBondState() == BluetoothDevice.BOND_BONDED)
                 {
@@ -134,12 +124,13 @@ public class BleLib {
             if (BluetoothDevice.ACTION_FOUND.equals(action))
             {
                 //bluetooth device found
-                BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                BluetoothDevice device =  intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 // add this device to list
                 //add to device lis ony if it starts with CD and length is 6 charecters
+
                 if(device.getName() != null)
                 {
-                    if((device.getName().length()==6 )&&( device.getName().indexOf("CD") == 0) )
+                    if((device.getName().length()==6 )&&(device.getName().substring(0,2).equals("CD")) )
                     {
                         pairedDeviceArrayList.add(device.getName() + " ( " + device.getAddress() + "  )");
                         // also copy item to list view
@@ -163,15 +154,13 @@ public class BleLib {
                             if(device.getName() != null)
                             {
                                 if ((device.getName().length() == 6) && (device.getName().indexOf("CD") == 0)) {
-
-                                    byte[] b = (device.getName().substring(2, 6)).getBytes();
                                     Log.d(TAG,"Started Pairing Device");
-                                    device.setPin(b);
+                                    device.setPin(globalCurrentPairingKey.getBytes());
 
                                 }
 
                             }
-                            device.setPairingConfirmation(true);
+                            //device.setPairingConfirmation(true);
                            // APP_SendCmdToLooper(BLUETOOTH_BONDING_PASS,device);
 
                             break;
@@ -230,18 +219,18 @@ public class BleLib {
         App_Ba.startDiscovery();  // discovering nearby devices , wait for discovry to complte
         // discovry time 1 and half second
         SystemClock.sleep(TIMEOUT_BLUETOOTH_DISCOVORY/3);
-        APP_SendCmdToMainUI(CMD_SET_PROGRESS_PERCENT,30);
+        APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,30);
         SystemClock.sleep(TIMEOUT_BLUETOOTH_DISCOVORY/3);
-        APP_SendCmdToMainUI(CMD_SET_PROGRESS_PERCENT,60);
+        APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,60);
         SystemClock.sleep(TIMEOUT_BLUETOOTH_DISCOVORY/3);
-        APP_SendCmdToMainUI(CMD_SET_PROGRESS_PERCENT,100);
+        APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,100);
         App_Ba.cancelDiscovery();
 
         Log.d(TAG,"Size of devices :" + pairedDeviceArrayList.size() );
     }
 
 
-    public void Ble_Try_Connection(BleLibCmd BleCmd , Context ctx)
+    public void Ble_Try_Connection(BleLibCmd BleCmd)
     {
         BluetoothDevice device =  BleCmd.Device;
         if (App_Ba.isDiscovering())  // if alredy discovering cancel it
@@ -256,18 +245,14 @@ public class BleLib {
                 + "Class: " + device.getClass();
 
         Log.d(TAG,TempText);
+            if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
+                Log.d(TAG, "Device Already Paired ");
+                APP_SendCmdToLooper(BLUETOOTH_BONDING_PASS, BleCmd);
 
-        if (device.getBondState() == BluetoothDevice.BOND_BONDED)
-        {
-            Log.d(TAG,"Device Already Paired ");
-            APP_SendCmdToLooper(BLUETOOTH_BONDING_PASS,BleCmd);
-
-        }
-        else
-        {
-            Log.d(TAG,"Device Not Paired pairig device... ");
-            APP_SendCmdToMainUI(CMD_PAIR_DEVICE,BleCmd.Device);
-        }
+            } else {
+                Log.d(TAG, "Device Not Paired pairig device... ");
+                APP_SendCmdToMainUI(CMD_PAIR_DEVICE, BleCmd.Device);
+            }
     }
 
 
@@ -306,45 +291,55 @@ public class BleLib {
         return(device.getBondState() == BluetoothDevice.BOND_BONDED);
     }
 
-    int Send_Receive( BluetoothDevice BleDevice, byte cmd[], int ReceivFlg , byte resp[])
+    int Send_Receive( BluetoothDevice BleDevice, byte[] cmd, int ReceivFlg , byte[] resp)
     {
-
        bluetoothSocket = null;
        InputStream connectedInputStream;
        OutputStream connectedOutputStream;
-        InputStream in = null;
-        OutputStream out = null;
+       InputStream in = null;
+       OutputStream out = null;
 
         int bytes_len = 0;
         int temp_st =0;
-        try {
-            bluetoothSocket = BleDevice.createRfcommSocketToServiceRecord(myUUID);
-           // bluetoothSocket = BleDevice.createInsecureRfcommSocketToServiceRecord(myUUID);
-            bluetoothSocket.connect();
-            in = bluetoothSocket.getInputStream();
-            out = bluetoothSocket.getOutputStream();
-            connectedInputStream = in;
-            connectedOutputStream = out;
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-            Log.d(TAG,"Socket Connection ...Failed Retrying ");
+        int retry=0;
+        Log.d(TAG,"Enterd loop");
+        while(true) {
             try {
-                bluetoothSocket = (BluetoothSocket) BleDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(BleDevice, 1);
+                bluetoothSocket = BleDevice.createRfcommSocketToServiceRecord(myUUID);
                 bluetoothSocket.connect();
                 in = bluetoothSocket.getInputStream();
                 out = bluetoothSocket.getOutputStream();
                 connectedInputStream = in;
                 connectedOutputStream = out;
-            }
-            catch (Exception e2) {
-                Log.e("", "Couldn't establish Bluetooth connection!");
-                return(TX_RXSOCKET_ERROR);
-            }
+                break;
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(TAG, "Socket Connection Typ 1 Failed.. Retrying ");
+                try {
+                    bluetoothSocket = (BluetoothSocket) BleDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(BleDevice, 1);
+                    bluetoothSocket.connect();
+                    in = bluetoothSocket.getInputStream();
+                    out = bluetoothSocket.getOutputStream();
+                    connectedInputStream = in;
+                    connectedOutputStream = out;
+                    break;
+                } catch (Exception e2) {
+                    retry++;
+                    Log.d(TAG, "Socket Connection Typ 2 Failed.. Retrying "+ retry);
+                    // close the socket and retry
+                    try{
+                        bluetoothSocket.close();
+                    }
+                    catch (IOException t)
+                    {
 
+                    }
+                    if (retry >= 2) {
+                        return (TX_RXSOCKET_ERROR);
+                    }
+                }
+            }
         }
-
         Log.d(TAG,"Socket Connected");
         try
         {
@@ -358,7 +353,6 @@ public class BleLib {
             SystemClock.sleep(150);
             while(bytes_len < resp.length)
             {
-
                 temp_st = connectedInputStream.read(resp,bytes_len,(resp.length - bytes_len));
                 if(temp_st>=0)
                 {
@@ -370,10 +364,6 @@ public class BleLib {
             if(bytes_len == resp.length)
             {
                 Log.d(TAG, "Socket Data Received : " + Arrays.toString(resp));
-                switch (resp[0])
-                {
-
-                }
                 bluetoothSocket.close();
                 return(RX_CMD_SUCESS);
             }
@@ -387,16 +377,18 @@ public class BleLib {
         {
             Log.d(TAG,"Socket Read write Failed");
             e.printStackTrace();
-            try{
+            try
+            {
                 bluetoothSocket.close();
-            }catch (IOException e1)
+            }
+            catch (IOException e1)
             {
                 e1.printStackTrace();
             }
             return(TX_RXSOCKET_ERROR);
         }
     }
-    int Send_Receive_Stream_Flash( BluetoothDevice BleDevice, BleLibCmd Temp_BleLibCmd , byte resp[])
+    int Send_Receive_Stream_Flash( BluetoothDevice BleDevice, BleLibCmd Temp_BleLibCmd , byte[] resp)
     {
         bluetoothSocket = null;
         InputStream connectedInputStream;
@@ -416,7 +408,7 @@ public class BleLib {
         catch (IOException e)
         {
             e.printStackTrace();
-            Log.d(TAG,"Socket Connection ...Failed Retrying ");
+            Log.d(TAG,"Socket Connection ...Failed Retrying(Flash) ");
             try {
                 bluetoothSocket = (BluetoothSocket) BleDevice.getClass().getMethod("createRfcommSocket", new Class[]{int.class}).invoke(BleDevice, 1);
                 bluetoothSocket.connect();
@@ -440,7 +432,7 @@ public class BleLib {
             is = new ByteArrayInputStream((byte[])( Temp_BleLibCmd ).flashfileobject);
             bfReader = new BufferedReader(new InputStreamReader(is));
             String temp = null;
-            String strNums[];
+            String[] strNums;
             int file_size = ((byte[]) ( Temp_BleLibCmd ).flashfileobject).length + 1; // (Not Critial data)1 is added to avoid divide by zero exception
             Log.d(TAG,"Flash File Size :"+file_size);
             int file_read = 0;
@@ -454,7 +446,7 @@ public class BleLib {
                 strNums = temp.split("\\s");
                 int length = strNums.length;
 
-                if( (length ==0 ) || ((length != 5) && (length != 67) ))
+                if(((length != 5) && (length != 67) )) //  (length ==0 ) ||
                 {
                     // invalid length
                     Log.d(TAG,"invalid length");
@@ -478,7 +470,7 @@ public class BleLib {
                 Log.d(TAG,"Socket Data Sent : " + Arrays.toString(flsh_byt));
                 SystemClock.sleep(1000);
                 Log.d(TAG,"Flash File read :"+file_read);
-                APP_SendCmdToMainUI(CMD_SET_PROGRESS_PERCENT,((file_read*100)/file_size)); // display progress
+                APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,((file_read*100)/file_size)); // display progress
 
                 if((flsh_byt[0] ==7) || (flsh_byt[0] == -1)) // its dummy byte or reflash command which do not respond
                 {
@@ -543,6 +535,7 @@ public class BleLib {
 
         return(TX_RXSOCKET_ERROR);
     }
+    /*
     String BleGetMac(Context ctx)
     {
         String macAddress;
@@ -555,5 +548,10 @@ public class BleLib {
         Log.d(TAG,macAddress);
         return(macAddress);
 
+    }*/
+    boolean BleLibisBleEnabled()
+    {
+        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        return mBluetoothAdapter.isEnabled();
     }
 }

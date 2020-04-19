@@ -1,6 +1,5 @@
 package com.example.cdmaster;
 
-import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
@@ -15,10 +14,10 @@ import static com.example.cdmaster.MainActivity._Handler_MainHandler;
 
 class TimerScheduler extends Thread {
     final static  String TAG = "TAG_Timer";
-    static int[] timerTyp = new int[MAX_TIMERS];// 00 is one shot RX , 01 is periodic else stop ,02 Pering Timeout
-    static Object[] timerObj = new Object[MAX_TIMERS];
-    static int[] timer = new int[MAX_TIMERS];  // hold timer
-    static int[] timerTemp = new int[MAX_TIMERS]; // hold reload value
+    private static int[] timerTyp = new int[MAX_TIMERS];// 00 is one shot RX , 01 is periodic else stop ,02 Pering Timeout
+    private static Object[] timerObj = new Object[MAX_TIMERS];
+    private static int[] timer = new int[MAX_TIMERS];  // hold timer
+    private static int[] timerTemp = new int[MAX_TIMERS]; // hold reload value
     int i;  // index  // 00is rx timeout  , 0x01 is ping blink
 
     TimerScheduler() {
@@ -30,7 +29,7 @@ class TimerScheduler extends Thread {
     @Override
     public void run() {
         Log.d(TAG,"Running"); // 100 ms resolution timer
-
+        //noinspection InfiniteLoopStatement : error suppression comment
         while (true) {
             SystemClock.sleep(100);
             for (i = 0; i < MAX_TIMERS; i++) {

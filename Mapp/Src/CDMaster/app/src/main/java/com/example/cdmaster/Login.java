@@ -3,7 +3,9 @@ package com.example.cdmaster;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.PermissionChecker;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -32,8 +34,8 @@ public class Login extends AppCompatActivity {
     public TextView TvSignup_temp,TvForgotPw_temp;
     FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-
-
+    public AlertDialog alertDialog;
+    boolean loingSucess = false;
 
     @Override
     protected void onStart()
@@ -54,7 +56,8 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
 
-                Login.this.finish();
+                finishAffinity();
+                System.exit(0);
             }
         });
         alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener()
@@ -72,7 +75,27 @@ public class Login extends AppCompatActivity {
     public  void onPause()
     {
         super.onPause();
-        Login.this.finish();
+        Log.d(TAG,"Pausing login activity and Finishing");
+        if(alertDialog!=null)
+        {
+            Log.d(TAG,"Destroying Dialog ");
+            alertDialog.dismiss();
+            alertDialog = null;
+        }
+    }
+    @Override
+    public  void onDestroy()
+    {
+        super.onDestroy();
+        if(alertDialog!=null)
+        {
+            Log.d(TAG,"Destroying Dialog ");
+            alertDialog.dismiss();
+            alertDialog = null;
+        }
+        Log.d(TAG,"Destroying login activity ");
+
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,8 +145,8 @@ public class Login extends AppCompatActivity {
                 if((mFirebaseUser != null)&& (mFirebaseUser.isEmailVerified()))
                 {
                     Log.d(TAG,"You are Logged in");
-                    Intent i = new Intent(Login.this, MainActivity.class);
-                    startActivity(i);
+                    LoginSucess();
+
                 }
                 else
                 {
@@ -154,14 +177,7 @@ public class Login extends AppCompatActivity {
 
                                 try {
                                     throw task.getException();
-                                } catch (FirebaseAuthUserCollisionException e) {
-                                    // log error here
-                                    Log.d(TAG,""+e);
-
-                                } catch (FirebaseNetworkException e) {
-                                    // log error here
-                                    Log.d(TAG,""+e);
-                                } catch (Exception e) {
+                                }  catch (Exception e) {
                                     // log error here
                                     Log.d(TAG,""+e);
                                 }
@@ -172,9 +188,8 @@ public class Login extends AppCompatActivity {
                             {
                                 if(mFirebaseAuth.getCurrentUser().isEmailVerified()) {
                                     Log.d(TAG, "Login Successful!!");
-                                    Intent i = new Intent(Login.this, MainActivity.class);
-
-                                    startActivity(i);
+                                    //listenr should handle things
+                                  //  LoginSucess();
                                 }
                                 else
                                 {
@@ -193,6 +208,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(Login.this,Signup.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -245,6 +261,71 @@ public class Login extends AppCompatActivity {
 
 
     }
+    boolean checkNeededPermissions()
+    {
+        if( PermissionChecker.PERMISSION_GRANTED == PermissionChecker.checkSelfPermission(Login.this, Manifest.permission.SEND_SMS))
+        {
+            Log.d(TAG,"SMS Permission granted");
+            if( PermissionChecker.PERMISSION_GRANTED == PermissionChecker.checkSelfPermission(Login.this, Manifest.permission.BLUETOOTH))
+            {
+                Log.d(TAG,"Bluetooth Permission granted");
+                return true;
+               /*
+               if( PermissionChecker.PERMISSION_GRANTED == PermissionChecker.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE))
+               {
+                   Log.d(TAG,"Read Storage Permission granted");
+                   if( PermissionChecker.PERMISSION_GRANTED == PermissionChecker.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                   {
+                       Log.d(TAG,"Write Storage Permission granted");
 
+                   }
+               }
+
+                */
+            }
+        }
+        return false;
+    }
+
+    void LoginSucess()
+    {
+        if(!checkNeededPermissions())
+        {
+            Log.d(TAG,"Permission needed");
+            String Msg = "\nBluetooth:Connect to Devices\nSMS:Send Credential data\n\nKindly provide the same.";
+
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Login.this);
+            alertDialogBuilder.setTitle("App Need Below Permissions:");
+            alertDialogBuilder.setMessage(Msg);
+
+            alertDialogBuilder.setPositiveButton("Got It", new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    Log.d(TAG,"Swiching Activity ");
+                    Intent i = new Intent(Login.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); // It will make only one activity be open at the top of the history stack.
+                    startActivity(i);
+                    finish();
+
+
+                }
+            });
+            alertDialog=alertDialogBuilder.create();
+            if(!isFinishing()) {
+                alertDialog.show();
+            }
+        }
+        else { // all needed permission ok
+
+            Log.d(TAG,"Swiching Activity ");
+            Intent i = new Intent(Login.this, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); // It will make only one activity be open at the top of the history stack.
+            startActivity(i);
+            finish();
+
+        }
+
+    }
 
 }

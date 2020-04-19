@@ -75,7 +75,6 @@ def main():
         dirname = os.path.dirname(__file__)
         config_fin_name = os.path.join(dirname, sys.argv[3] + "\Src\system_config.h")
         print "Reading Device Type  from :" + config_fin_name
-    
         Device_Typ = 0
         try:
             f = open(config_fin_name,'r')

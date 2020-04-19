@@ -27,7 +27,7 @@
             android:gravity="center"
 
             android:background="#333"
-            android:text="Connected Device Manager"
+            android:text="@string/connected_device_manager"
             android:textColor="#fff"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -51,7 +51,8 @@
                 android:textColor="#fff"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text=" + "/>
+                android:text="@string/addDevice"
+                style="?android:attr/borderlessButtonStyle"/>
             <Button
                 android:id="@+id/ButHelp"
                 android:layout_width="0dp"
@@ -68,7 +69,8 @@
                 android:textColor="#fff"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text="Help"/>
+                android:text="@string/help"
+                style="?android:attr/borderlessButtonStyle"/>
 
 
 
@@ -88,7 +90,8 @@
                 android:textColor="#fff"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text="QUIT"/>
+                android:text="@string/quit"
+                style="?android:attr/borderlessButtonStyle"/>
 
             <Button
                 android:id="@+id/ButLogout"
@@ -106,7 +109,8 @@
                 android:textColor="#fff"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text="Logout"/>
+                android:text="@string/logout"
+                style="?android:attr/borderlessButtonStyle"/>
 
         </LinearLayout>
         <RelativeLayout
@@ -114,8 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp">
 
             <ProgressBar
@@ -179,9 +182,9 @@
             android:textColor="#fff"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:visibility="gone"
-            />
+            style="?android:attr/borderlessButtonStyle"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"

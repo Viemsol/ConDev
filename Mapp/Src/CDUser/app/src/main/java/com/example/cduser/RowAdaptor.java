@@ -24,9 +24,10 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
 
     public interface OnItemClickListener{
         void onItemClick(int position);
+        void onDeviceNameClick(int position);
         void onDeleteClick(int position);
-        void onActionClick(int position);
-
+        void onInfoClick(int position);
+        void  onImageClick(int position);
     };
 
     public void setOnItemClickListener(OnItemClickListener listener)
@@ -76,6 +77,22 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
             TvDevName = itemView.findViewById(R.id.TextView_Name);
             tempButton_Delete = itemView.findViewById(R.id.Button_Delete);
             tempButton_Action = itemView.findViewById(R.id.Button_Action);
+
+            Image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null)
+                    {
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION )
+                        {
+                            // TODO : set all other test style to bold
+                            listener.onImageClick(position);  // callback
+                        }
+                    }
+                }
+            });
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -112,13 +129,24 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
                     int position = getAdapterPosition();
                     if(position != RecyclerView.NO_POSITION )
                     {
-                        listener.onActionClick(position); // callback
+                        listener.onInfoClick(position); // callback
                     }
                 }
             });
 
 
 
+            //
+            TvDevName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getLayoutPosition();
+                    if(position != RecyclerView.NO_POSITION )
+                    {
+                        listener.onDeviceNameClick(position); // callback
+                    }
+                }
+            });
 
         }
     }

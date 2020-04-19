@@ -26,12 +26,12 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
         void onItemClick(int position);
         void onDeviceNameClick(int position);
         void onDeleteClick(int position);
-        void onActionClick(int position);
+        void onInfoClick(int position);
         void onOtaClick(int position);
         void  onCredClick(int position);
         void  onImageClick(int position);
         void  onAuditClick(int position);
-    };
+    }
 
     public void setOnItemClickListener(OnItemClickListener listener)
     {
@@ -50,8 +50,8 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
     public RowAdaptorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater Inflator = LayoutInflater.from(ctx);
         View view = Inflator.inflate(R.layout.row_itm,parent,false);
-        RowAdaptorViewHolder holder = new RowAdaptorViewHolder(view, mListener);
-        return  holder;
+       return (new RowAdaptorViewHolder(view, mListener));
+
     }
 
     @Override
@@ -90,7 +90,7 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
                 public void onClick(View v) {
                     if(listener != null)
                     {
-                        int position = getAdapterPosition();
+                        int position = getLayoutPosition();
                         if(position != RecyclerView.NO_POSITION )
                         {
                             // TODO : set all other test style to bold
@@ -105,7 +105,7 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
                 public void onClick(View v) {
                     if(listener != null)
                     {
-                        int position = getAdapterPosition();
+                        int position = getLayoutPosition();
                         if(position != RecyclerView.NO_POSITION )
                         {
                             // TODO : set all other test style to bold
@@ -120,7 +120,7 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
             tempButton_Delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+                    int position = getLayoutPosition();
                     if(position != RecyclerView.NO_POSITION )
                     {
                         listener.onDeleteClick(position);  // callback
@@ -133,10 +133,10 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
             tempButton_Action.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+                    int position = getLayoutPosition();
                     if(position != RecyclerView.NO_POSITION )
                     {
-                        listener.onActionClick(position); // callback
+                        listener.onInfoClick(position); // callback
                     }
                 }
             });
@@ -145,7 +145,7 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
             tempButton_Ota.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+                    int position = getLayoutPosition();
                     if(position != RecyclerView.NO_POSITION )
                     {
                         listener.onOtaClick(position); // callback
@@ -157,7 +157,7 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
             TvDevName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+                    int position = getLayoutPosition();
                     if(position != RecyclerView.NO_POSITION )
                     {
                         listener.onDeviceNameClick(position); // callback
@@ -169,7 +169,7 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
             tempButton_Cred.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+                    int position = getLayoutPosition();
                     if(position != RecyclerView.NO_POSITION )
                     {
                         listener.onCredClick(position); // callback
@@ -179,7 +179,7 @@ public class RowAdaptor extends RecyclerView.Adapter<RowAdaptor.RowAdaptorViewHo
             TvAudit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+                    int position = getLayoutPosition();
                     if(position != RecyclerView.NO_POSITION )
                     {
                         listener.onAuditClick(position); // callback

@@ -1,40 +1,73 @@
 Two APPS: CDMaster, CDUsers
-1) Delete CredSent on deleting device.........done...cred user credential will have no affect
-3) add chat window option
-5) set OTA file download timeout...
-2) if user is deleted still user get access in app ......BUG
-3) try persistant storage.....done
-Both for CDMaster manages devices user  and CDUsers manages  differant devices used by user
-ask permission on init and on runtime both, so if user denide it we can halt some operation
-use persistant device for firebaee and test...
-delete the user and roll new kys and update cred button for each user
-Functional Requirment
-*) add retry mechanism in ble commad and handle it in looper
-*) Send App to Prachi and test......HIGH
-*) user able to chnage device name.....Low
-*) version will be updated to db on OTA and cummisioning...Done
-*) user manager tab for master..done
-*) Cred Button will Send Credential to user via SMS , and add the user to USER DB.....Done
-*) USers Button will Display USER DB and allow add / delete / resend credential USER....Done
-*) 4 dummy and ping cmd at last of OTA......DONE
-*) ping request 0x05  rand 00 00 00....done
-*) disale add button till some data is loaded from server.......Done
-*) each device will manage list of users for each device in db, uniue user id will be used to tidentify user..to manage...high
-*) maste can send credential and update credential and resend(update cred in case of security risc OR if user is removed)
+//only UI changes for CDUser and CDMaster
+//only Main file chnges for both else all platform remain same
+// 6)Both for CDMaster manages devices user  and CDUsers manages  differant devices used by user
+LOGIN :
+    1) checks if user is deleted before log in...(BUG)...TODO
+    2) if user is deleted still user get access in app.... (BUG)...TODO
 
-*) and extrect the password from device name..DONE
-*) Display only CD devices in discovery (start with CD and Length of name is 6 charectors)..DONE
-*) App for master and user should be differant differant
-User APP:
-    *) Check the credential data endiness and ,make cred work fine..(make the cread and user mac validation  correct)
+OTA:
+   1) Accept TLV file for OTA...TODO
+   5) set OTA file download timeout...DO
+   *) version will be updated to db on OTA and cummisioning...Done
+   *) 4 dummy and ping cmd at last of OTA......DONE
+*) ping request 0x05  rand 00 00 00....done
+CREDENTIAL:
+    18) device turn off on FDR state
+    17) CDUser:date and time is used by MAAP to validate credential...DO
+    16) CDUser: before deleting user prompt user ......Do
+   3) CDUser:validate user credential. one time access.....Todo
+   4) distoy dialog on sucessfull user cred added..??? TODO
+   CDMaster: while deleting cred user delete cred from user ...done to test
+   8) CDMaster: ability to disable user cred...DONE
+   15) CDMaster: trying to add credential for  deleted user from sysem account.. is not allowed ..chekk if user rxist first...DO
+   9) CDUser:when user sucessfully operate device copy audit to the db (sucess / failed both) only last audit is maintaind for each user...DONE
+   10) CDMaster: ability for master to add its self credential..on commisioning....done to test
+   11) CDMaster:when master delete the device delete respective credentials alsociated with device from Cred user account ...done to test
+   16) Add date and time will creating cradential db and this should be part of db in case of user credential...DO
+   12) CDMaster: add start date end date and one time access flag in device bd while sending credential....DO
+    13) CDUser:credential get deleted from credential recived if user is invalid...() ....DO
+    14)CDUser: OR if credential is expeierd promt user...this haapens on action button click..DO
+    1) Delete CredSent on deleting device.........done...cred user credential will have no affect
+    *) user manager tab for master..done
+    *) Cred Button will Send Credential to user via SMS , and add the user to USER DB.....Done
+*) USers Button will Display USER DB and allow add / delete / resend credential USER....Done
+    *) Check the credential data endiness and ,make cred work fine..(make the cread and user mac validation  correct)..todo
     *) action shuld work for master and user both with db...
     *) use db only for master device,  no internet needed for user ,User app do not use any online database--- (option to syn it mannually ?)
-*) commisioning device no responce recevid some time ...check rootcause ...DONE
-*) costumized Action button Dialoge for all device type....low to be done for FAN and andjustable bus
-*) Send Action frame when user press any action on dialoge ..do
-*) on action button click first send ping, get device status, populate status in dialog and display dialog ..future
-*) do not populate dialoge if ping responce fails
-*) Request credential button in user app
+BLE :
+   5) Relaibility requirment (before sending command check is device is visible , if visible retry 3 times)...todo
+   2) Remove device rand from frmae and relace it with 0xFF rand tobe used foe mac only ...Done
+
+HELP UI:
+    3) add wastapp number as a part of DB for help....DO
+    *) Unique Device name /User selected device name  below device image.DO
+    *) User can set/change device name but unique name remain hidden in baground...DONE
+    *) disale add button till some data is loaded from server.......Done
+    *) Set Device image based on Device Type type_1 is switch , type_2 is bulb , type_3 is programable switch ,type_4 is programable Bulb
+    *) commisioning device no responce recevid some time ...check rootcause ...DONE
+    *) costumized Action button Dialoge for all device type....low to be done for FAN and andjustable bus
+    *) Send Action frame when user press any action on dialoge ..do
+    *) on action button click first send ping, get device status, populate status in dialog and display dialog ..future
+    *) do not populate dialoge if ping responce fails
+    *) Request credential button in user app
+FIRE BASE:
+    1)For CDMaster only disable the device do not disable database, so that it can be enabled agin in app currupt case(ie. device db is needed in APP for OTA )
+    3) try persistant storage for CDUser.....done
+PERMISSION:
+    )ask permission on init and on runtime both, so if user denide it we can halt some operation ....DO
+COMMISION:
+   delete the user and roll new kys and update cred button for each user.. enc ase of emergency ..DO
+
+TEST:
+    Test both App on differant mobile...TODO
+
+LOGIC:
+*) each device will manage list of users for each device in db, uniue user id will be used to tidentify user..to manage...high..done
+*) maste can send credential and update credential and resend(update cred in case of security risc OR if user is removed)
+*) and extrect the password from device name..DONE
+*) Display only CD devices in discovery (start with CD and Length of name is 6 charectors)..DONE
+*) App for master and user should be differant differant...done
 
 if(apv=0 its in BL, else in App)
 *) ping encription for FWAPP, No encription for BL...low
@@ -42,13 +75,14 @@ if(apv=0 its in BL, else in App)
 *) Ping and check if in Application if in application and is commisiond and device id matchis Send Flash frame ???
 // 3) check ble on on every communication of ble , on app start if ble on is canceled app still runs
 // 4) disconnect on closer or timeout..kepp watch
-
 *) Prompt user on deleting the device(make sure device is responding befor deleting the device)...done
-*) manage recovery option for device ...ie deviceis in bootloader and application is curruped ...user deleted the device
+*) manage recovery option for device ...ie deviceis in bootloader and application is curruped ...user deleted the device... do not delete from db but disable???
 
 ********Security Requirment******
 FIrmware:
+
 1) Bootloader:
+   It is observed that device going to bootloader some times and on power cycle comes back..check Root cause
    If In Bootloader device can be in commisiond state OR un commsion state
    => if uncommision state shared factory key is 0xFFFF DDAA .. DD AA are Device key and app key
    => if commisiond state shared fectory key is 0xPQRX DDAA .. PQRX is shared secret key loaded
@@ -92,9 +126,10 @@ Firmware Requirments:
    -----> Download OTA file for device type from firebase orage
    -----> Flash the device
 *) OTA file to be changed from assci to binary and Bootloader to be hanged, this is to reduce download size
+
 MAPP Requirments:
 *) user Password to be encripted with UID (base 64 ..to be encripted).....DO(LO_PRIO)
-*) Email varification button. if email is correct then oly user get registed add code for same....DO(LO_PRIO)
+*) Email varification button. if email is correct then oly user get registed add code for same....DONE(LO_PRIO)
    ---->  (user get email on metiond email account, user clicks the link , varification susceess)
    ----> user will not able to login before he varifies email
 *) add forgot password varification email (user get email , user sets new password fromfb brouser/ not handled in APP)...DO(LO_PRIO)
@@ -108,7 +143,7 @@ Testing Requirment....DO (HIGH):
     *) Test the device when application is currupted bootloader is present (COMMISIOND/NOT COMMISIOND)
     *) Test the device when application is currupted bootloader is present (FECTORY DATA NOT AVILABLE)
 
-BUG_FIX ....DO (HIGH):
+BUG_FIX ....DONE (HIGH):
 *) Commision Command Relaiability ...DO (HIGH)......DOne keep watch
    ---> Onbserved that after Simple FDR, LOck do not respond to commison cmd and Lock need to be reset for commisioning.
    ---> Analyse Firmware for "Simple FDR"
@@ -126,6 +161,17 @@ AUTOMATION REQUIRMENT....DO (HIGH):
    ----> Try commisioning , OTA , CRED ...10 times
    ---->Delete the device
    ---->Soft FDR the device .. Hard FDR will erase Aplication so no nned of HARD FDR
+SECURITY:
+-------> API key restriction https://console.developers.google.com/apis/credentials?project=cdmaster-f51fc
+-------> Restrict your API key to your app from Google console
+--------> Firebase cloud restriction
+-------> google-services.jason contains key do not push it
+--------> vaues.xml contains key donot push it
+before publishing
+https://www.youtube.com/watch?v=psu3pPdfYSM
+https://www.youtube.com/watch?v=dhbkLiu9rZM
+sign app
+https://www.youtube.com/watch?v=PuaYhnGmeEk
 DOCUMENT....DO
 *) MAPP functioning
 *) OTA

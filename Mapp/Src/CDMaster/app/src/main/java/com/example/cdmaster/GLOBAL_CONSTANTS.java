@@ -54,6 +54,12 @@ public class GLOBAL_CONSTANTS
         public static final int BLUETOOTH_FLASH_FAIL = 270;
         public static final int BLUETOOTH_FLASH_SUCESS = 271;
 
+    public static final int CMD_BLUETOOTH_GET_DEV_ON_TIME =28;
+        public static final int BLUETOOTH_GET_DEV_ON_TIME_SUCCESS = 280;
+
+    public static final int CMD_BLUETOOTH_GET_DIN =29;
+        public static final int BLUETOOTH_GET_DIN_SUCCESS = 290;
+
     public static final int  CMD_PAIR_DEVICE = 27;
 
     public static final int EVENT_TIMER = 90;
@@ -66,8 +72,7 @@ public class GLOBAL_CONSTANTS
     public static final int DEVICE_COMMISION = 4; //
     public static final int DEVICE_SEND_DATA = 5; //
     public static final int DEVICE_OTA = 6; //
-    public static final int UPDATE_DB =7;
-    public static final int DISPLAY_MESSAGE =8;
+
 
 
     public static final int MAX_TIMERS = 5;
@@ -84,8 +89,6 @@ public class GLOBAL_CONSTANTS
         public static final int RX_CMD_SUCESS= 704;
         public static final int TX_CMD_SUCESS_NO_RESP= 705;
 
-        public static final int TX_BLUETOOTH_PING= 705;
-        public static final int TX_BLUETOOTH_COMMISION= 706;
 
     //Sleep time of OS in ms
     public static final int     TIMEOUT_BLUETOOTH_DISCOVORY = 7000;
@@ -102,7 +105,8 @@ public class GLOBAL_CONSTANTS
     public static final int BLE_UART_FLASH = 0x07;
     public static final int BLE_UART_PING_APP_RESP = (byte)0x08;
     public static final int BLE_UART_GET_VERSION = 0x51;
-
+    public static final int BLE_UART_GET_DIN = 0x52;
+    public static final int BLE_UART_GET_ON_TIME= 0x53;
     public static final int BLE_UART_COMMISION = 0x0C;
 
     public static final int BLE_UART_FUCTION_SET_GPIO = 0x11;

@@ -3,31 +3,37 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="3dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="2dp"
         app:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="1dp">
+            android:background="@drawable/border"
+            android:padding="5dp">
 
             <ImageView
                 android:id="@+id/ImageView_Icon"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
+                android:scaleType="fitXY"
+
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginBottom="3dp"
+                android:contentDescription="@string/button_image"
                  />
 
             <TextView
                 android:id="@+id/TextView_Name"
                 android:layout_width="80dp"
                 android:layout_height="30dp"
+                android:layout_below="@id/ImageView_Icon"
 
-
-                android:layout_toEndOf="@id/ImageView_Icon"
-                android:layout_toRightOf="@id/ImageView_Icon"
                 android:layout_marginLeft="3dp"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="1dp"
                 android:layout_marginRight="3dp"
                 android:layout_marginBottom="3dp"
 
@@ -38,31 +44,25 @@
                 android:textStyle="bold" />
             <Button
                 android:id="@+id/Button_Action"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-
-                android:layout_toEndOf="@+id/TextView_Name"
-                android:layout_toRightOf="@+id/TextView_Name"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:layout_toEndOf="@+id/ImageView_Icon"
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_marginBottom="3dp"
-
                 android:background="#333"
                 android:gravity="center"
                 android:textColor="#fff"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:text="ACTION"
-
-                />
-            <Button
+                android:text="@string/info"/>
+		<Button
                 android:id="@+id/Button_Delete"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="35dp"
 
                 android:layout_toEndOf="@+id/Button_Action"
-                android:layout_toRightOf="@+id/Button_Action"
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="3dp"
@@ -73,9 +73,6 @@
                 android:textColor="#fff"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:text="DELETE"
-
-                />
-
+                android:text="@string/delete"/>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

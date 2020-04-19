@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,20 +17,19 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.UnsupportedEncodingException;
-import java.util.concurrent.TimeUnit;
+
+import static com.example.cdmaster.Security.DecodeStrBase64;
+import static com.example.cdmaster.Security.EncodeStrBase64;
+
 
 public class Signup extends AppCompatActivity {
 
@@ -57,7 +55,8 @@ public class Signup extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
 
-                Signup.this.finish();
+                finishAffinity();
+                System.exit(0);
             }
         });
         alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener()
@@ -143,10 +142,7 @@ public class Signup extends AppCompatActivity {
                                     Log.d(TAG, "" + e);
 
 
-                                } catch (FirebaseNetworkException e) {
-                                    // log error here
-                                    Log.d(TAG, "" + e);
-                                } catch (Exception e) {
+                                }  catch (Exception e) {
                                     // log error here
                                     Log.d(TAG, "" + e);
                                 }
@@ -173,17 +169,12 @@ public class Signup extends AppCompatActivity {
                                 String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                 TempRef = FirebaseDatabase.getInstance().getReference("User");
                                 // Encode data on your side using BASE64
-                                byte[] data = new byte[0];
-                                try {
-                                    data = _password.getBytes("UTF-8");
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-                                String base64Pw = Base64.encodeToString(data, Base64.DEFAULT);
+
+                                String base64Pw = EncodeStrBase64(_password);
 
                                 // Decoding password
-                                byte[] decPw = Base64.decode(base64Pw, Base64.DEFAULT);
-                                String pasword = decPw.toString();
+
+                                String pasword = DecodeStrBase64(base64Pw);
 
                                 UserProfileDb User_data = new UserProfileDb(UID, _name, _emailid, base64Pw, _phoneNo);
                                 TempRef.child(UID).child("UserInfo").setValue(User_data).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -194,13 +185,6 @@ public class Signup extends AppCompatActivity {
 
                                             try {
                                                 throw task.getException();
-                                            } catch (FirebaseAuthUserCollisionException e) {
-                                                // log error here
-                                                Log.d(TAG, "" + e);
-
-                                            } catch (FirebaseNetworkException e) {
-                                                // log error here
-                                                Log.d(TAG, "" + e);
                                             } catch (Exception e) {
                                                 // log error here
                                                 Log.d("TAG_err2", "" + e);
@@ -210,7 +194,7 @@ public class Signup extends AppCompatActivity {
                                         } else {
                                             Log.d(TAG, "Log_created Success! ");
                                             if (user_tmp.isEmailVerified()) {
-                                                startActivity(new Intent(Signup.this, MainActivity.class));
+                                                startActivity(new Intent(Signup.this, Login.class));
                                             } else {
                                                 user_tmp.sendEmailVerification();
                                                 alertDialog.show();
