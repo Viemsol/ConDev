@@ -327,7 +327,7 @@ void app_test_1000ms(void)
         if(OnTym.min==60)
         {
             //do something every hours
-            
+            Do_Every_Hr();
             //Do_Every_Hour();
             OnTym.min=0;
             OnTym.hrs++;
@@ -459,12 +459,18 @@ void enc_dec(uint8 *data, uint8 len , uint8 temp_key_0)
 #endif
 inline void Do_Every_Day(void)
 {
-    if(lock_id[EEP_DAY_IN_USE_MSB] != EEP_DEF_VAL) // on time is valid
+
+}
+inline void Do_Every_Hr(void)
+{
+    if(lock_id[EEP_DAY_IN_USE_MSB] == EEP_DEF_VAL) // on time is valid
     {
-        (*(uint16 *)(&lock_id[EEP_DAY_IN_USE_LSB]))++;
-        eep_write_char(DAY_IN_USE_ADD_LOW_LSB,lock_id[EEP_DAY_IN_USE_LSB]);
-        eep_write_char(DAY_IN_USE_ADD_HIGH_LSB,lock_id[EEP_DAY_IN_USE_MSB]);
-    }
+		lock_id[EEP_DAY_IN_USE_MSB] =0;
+		lock_id[EEP_DAY_IN_USE_LSB] =0;
+	}
+	(*(uint16 *)(&lock_id[EEP_DAY_IN_USE_LSB]))++;
+	eep_write_char(DAY_IN_USE_ADD_LOW_LSB,lock_id[EEP_DAY_IN_USE_LSB]);
+	eep_write_char(DAY_IN_USE_ADD_HIGH_LSB,lock_id[EEP_DAY_IN_USE_MSB]);
 }
 /********************************************
 REQ:FDR:on FDR reset the DIO pin

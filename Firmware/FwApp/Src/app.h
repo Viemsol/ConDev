@@ -7,6 +7,7 @@
     extern void app_test_BG(void);
     extern inline void app_ini(void);
      extern inline void Do_Every_Day(void);
+	 extern inline void Do_Every_Hr(void);
     uint8 mem_compare(uint8 *dest,uint8 *sour, uint8 len);
  
     uint8 CRC_Chk(uint8 *dbuf,uint8 len,uint8 flg,uint8 MacKey); // CRC in last bte
