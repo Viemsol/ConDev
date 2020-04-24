@@ -88,7 +88,7 @@ public class LoopThread extends Thread {
     private static final String TAG = "TAG_LooperThread";
     public static Handler LoopHandler;
     private BleLib bleLib = new BleLib();
-    private static volatile TimerScheduler  Timer_Sched= new TimerScheduler();
+    public static volatile TimerScheduler  Timer_Sched= new TimerScheduler();
 
     @Override
     public void run()
@@ -115,7 +115,6 @@ public class LoopThread extends Thread {
     public void APP_SendCmdToMainUI(final int command , Object Obj)   //  This function to be used to pass command to looper thread
     {
         Message msg = Message.obtain();
-        Log.d(TAG, "Sending message to UI, Command " + command + " , Obj :"+ Obj);
         if (msg != null) {
             msg.what = command;
             msg.obj = Obj;
@@ -127,7 +126,7 @@ public class LoopThread extends Thread {
     public void Lpr_SendCmdToLooper(int command, Object SubCommand)   //  This function to be used to pass command to looper thread
     {
         Message msg = Message.obtain();
-        Log.d(TAG,"Send Cmd :" + command);
+
         if(msg != null)
         {
             msg.what = command;
@@ -144,7 +143,7 @@ public class LoopThread extends Thread {
         int Temp_Progress ;
         Temp_Progress = 0;
         byte Session_key = 0,MacKey = 0;
-        Log.d(TAG,"executing Command " + msg.what);
+
         switch(msg.what)
         {
             case CMD_BLUETOOTH_INIT:
@@ -158,22 +157,27 @@ public class LoopThread extends Thread {
                 }
                 break;
             case CMD_BLUETOOTH_DIV_DISCOVERY_5SEC:
-                APP_SendCmdToMainUI(CMD_SET_MAIN_DIALOG_STATUS,"Discovering Devices");
-                APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,Temp_Progress);
-                APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_STATUS,"Discovering Devices");
-                APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_PROGRESS_PERCENT,Temp_Progress);
+                if(bleLib.BleLibisBleEnabled()) {
+                    APP_SendCmdToMainUI(CMD_SET_MAIN_DIALOG_STATUS, "Discovering Devices");
+                    APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT, 0);
+                    APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_STATUS, "Discovering Devices");
+                    APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_PROGRESS_PERCENT, 0);
 
-                APP_SendCmdToMainUI(CMD_SET_DISPLY_VISIBILITY,SCREEN_WAIT_INPROGRESS);
-                bleLib.Ble_Start_Discovery(ctx); // TODO check if object can be returnd this way
+                    APP_SendCmdToMainUI(CMD_SET_DISPLY_VISIBILITY, SCREEN_WAIT_INPROGRESS);
+                    bleLib.Ble_Start_Discovery(ctx); // TODO check if object can be returnd this way
 
-                APP_SendCmdToMainUI(CMD_SET_DISPLY_VISIBILITY,SCREEN_LIST_NEARBY_DEVICE);
-                APP_SendCmdToMainUI(BLUETOOTH_DIV_DISCOVERY_COMPLETE,"Ok");
+                    APP_SendCmdToMainUI(CMD_SET_DISPLY_VISIBILITY, SCREEN_LIST_NEARBY_DEVICE);
+                    APP_SendCmdToMainUI(BLUETOOTH_DIV_DISCOVERY_COMPLETE, "Ok");
 
-                APP_SendCmdToMainUI(CMD_SET_MAIN_DIALOG_STATUS,"Device Discovery Complete");
-                APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,Temp_Progress);
-                APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_STATUS,"Discovering Devices");
-                APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_PROGRESS_PERCENT,Temp_Progress);
-
+                    APP_SendCmdToMainUI(CMD_SET_MAIN_DIALOG_STATUS, "Device Discovery Complete");
+                    APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT, 100);
+                    APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_STATUS, "Discovering Devices");
+                    APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_PROGRESS_PERCENT, 100);
+                }
+                else
+                {
+                    APP_SendCmdToMainUI(CMD_DISPLAY_SHORT_ALEART,"Turn on Bluetooth");
+                }
             break;
             case CMD_BLUETOOTH_GET_VERSION:
             case CMD_BLUETOOTH_GET_DEV_ON_TIME:
@@ -183,11 +187,11 @@ public class LoopThread extends Thread {
             case CMD_BLUETOOTH_DEV_CRED:
             case CMD_BLUETOOTH_CONNECT_COMMISION:
                 if(bleLib.BleLibisBleEnabled()) {
-                    Temp_Progress += 20;
+
                     APP_SendCmdToMainUI(CMD_SET_MAIN_DIALOG_STATUS, "Connecting to Device");
-                    APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT, Temp_Progress);
+                    APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT, 0);
                     APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_STATUS, "Connecting to Device");
-                    APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_PROGRESS_PERCENT, Temp_Progress);
+                    APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_PROGRESS_PERCENT, 0);
                     APP_SendCmdToMainUI(CMD_SET_DISPLY_VISIBILITY, SCREEN_WAIT_INPROGRESS);
                     Timer_Sched.Start_Timer(TIMER_PAIR_TIMEOUT, TIMEOUT_BLUETOOTH_CONNECT_PAIR, TIMER_ONESHOT, msg.obj);
 
@@ -259,11 +263,8 @@ public class LoopThread extends Thread {
                     // device is already bonded try connecting and send command
                     int tmp_status;
                     Log.d(TAG, "Pairing OK !!");
-                    Temp_Progress+=20;
-                    APP_SendCmdToMainUI(CMD_SET_MAIN_DIALOG_STATUS,"Sending Command to Device");
-                    APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,Temp_Progress);
-                    APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_STATUS,"Sending Command to Device");
-                    APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_PROGRESS_PERCENT,Temp_Progress);
+                    byte [] temp_pw = globalCurrentPairingKey.getBytes();
+                   byte pwCrc = (byte)((temp_pw[0] + temp_pw[1] + temp_pw[2] + temp_pw[3])&0xFF);
                     switch (Temp_OriginalCmd)
                     {
                         case CMD_BLUETOOTH_DEV_PING:
@@ -272,11 +273,12 @@ public class LoopThread extends Thread {
                             Timer_Sched.Stop_Time(TIMER_RX_TIMEOUT);
                         break;
                         case CMD_BLUETOOTH_CONNECT_COMMISION:
-                            byte[] temp_pw = globalCurrentPairingKey.getBytes();
-                            MacKey = (byte)((temp_pw[0] + temp_pw[1] + temp_pw[2] + temp_pw[3])&0xFF);
-                        case CMD_BLUETOOTH_GET_VERSION:
+
+                            MacKey = pwCrc;
+
                         case CMD_BLUETOOTH_GET_DIN:
                         case CMD_BLUETOOTH_GET_DEV_ON_TIME:
+                        case CMD_BLUETOOTH_GET_VERSION:
                         case  CMD_BLUETOOTH_DEV_FLASH:
                             //1) send commision frame with all data
                             // 2) wait and start flashing sequence
@@ -286,7 +288,14 @@ public class LoopThread extends Thread {
                         case   CMD_BLUETOOTH_DEV_CRED_STATUS:
                             // send credential get status frame
 
+                            if((Temp_OriginalCmd!=CMD_BLUETOOTH_GET_DIN )&& (Temp_OriginalCmd!=CMD_BLUETOOTH_GET_DEV_ON_TIME ))
+                            {
+                                APP_SendCmdToMainUI(CMD_SET_MAIN_DIALOG_STATUS,"Sending Command to Device");
+                                APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,30);
+                                APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_STATUS,"Sending Command to Device");
+                                APP_SendCmdToMainUI(CMD_SET_ACTION_DIALOG_PROGRESS_PERCENT,30);
 
+                            }
                             CmdCredCommision[15] = CRC_Chk(CmdCredCommision, MAX_CMD_RESP_LEN_APP-1, 1,MacKey);
 
                             if(ENCRIPTION_EN == 1)
@@ -298,7 +307,7 @@ public class LoopThread extends Thread {
                                 {
                                     // get key
                                     RespPing[1] ^= CmdPing[1];
-                                    RespPing[1] ^=  CmdCredCommision[7];
+                                    RespPing[1] ^=  pwCrc;
                                     // calculate session key
                                     Session_key = RespPing[1];
                                     // encrypt the data befor sending
@@ -429,8 +438,13 @@ public class LoopThread extends Thread {
                                     case CMD_BLUETOOTH_GET_DEV_ON_TIME:
                                          Log.d(TAG,"Time Received ID " + (RespCredCommision[13]&0xFF) +" "+ (RespCredCommision[14]&0xFF));
                                          int  tmpIdx = (RespCredCommision[13]&0xFF);
+
+
                                          if(tmpIdx<5)
                                          {
+                                             APP_SendCmdToMainUI(CMD_SET_MAIN_DIALOG_STATUS,"Reading Device Info");
+                                             APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,tmpIdx*20);
+
                                              globaltempOnTime[tmpIdx] = RespCredCommision[14];
                                              if(tmpIdx>=4) {
                                                  APP_SendCmdToMainUI(BLUETOOTH_GET_DEV_ON_TIME_SUCCESS, msg.obj);

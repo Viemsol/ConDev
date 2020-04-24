@@ -420,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
                 else {
 				 Button_typ1.setImageResource(R.drawable.img_off);
 				 Button_typ1.setTag("img_off");
-                    App_UI_Call(CMD_DISPLAY_SHORT_ALEART, " Device Turned Off");
+                    App_UI_Call(CMD_DISPLAY_SHORT_ALEART, " Device Is Off");
                     Action = "Device Turned Off";
                 }
 				}
@@ -431,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
                 String Mast_UID = Device_List.get(((BleLibCmd) msg.obj).position).DeviceBelongsTo;
                 String Dev_ID = Device_List.get(((BleLibCmd) msg.obj).position).Dev_ID;
 
-                if(((BleLibCmd)(msg.obj)).Command == BLUETOOTH_CRED_SUCESS) {
+                if(((BleLibCmd)(msg.obj)).Command == CMD_BLUETOOTH_DEV_CRED) {
                     AppSaveAudit(Mast_UID, Dev_ID, Action);
                 } // save audit if device activated
 
@@ -1105,7 +1105,7 @@ public class MainActivity extends AppCompatActivity {
     {
         String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String displayName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-
+        Log.d(TAG,"Writing Audit");
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
         String currentDateandTime = sdf.format(new Date());
 

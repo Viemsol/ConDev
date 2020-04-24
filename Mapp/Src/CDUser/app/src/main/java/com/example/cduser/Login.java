@@ -302,7 +302,7 @@ public class Login extends AppCompatActivity {
             {
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
-                    Log.d(TAG,"Swiching Activity ");
+                    Log.d(TAG,"Swiching  Activity  from login to Main ");
                     Intent i = new Intent(Login.this, MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); // It will make only one activity be open at the top of the history stack.
                     startActivity(i);
@@ -318,7 +318,7 @@ public class Login extends AppCompatActivity {
         }
         else { // all needed permission ok
 
-            Log.d(TAG,"Swiching Activity ");
+            Log.d(TAG,"Swiching Activity from Login to Main");
             Intent i = new Intent(Login.this, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); // It will make only one activity be open at the top of the history stack.
             startActivity(i);

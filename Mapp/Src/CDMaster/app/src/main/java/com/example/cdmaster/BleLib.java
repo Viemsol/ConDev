@@ -91,7 +91,6 @@ public class BleLib {
     {
         public void onReceive(Context context, Intent intent)
         {
-            Log.d(TAG,"Broccast received" );
 
             String action = intent.getAction();
 
@@ -226,9 +225,8 @@ public class BleLib {
         APP_SendCmdToMainUI(CMD_SET_MAIN_PROGRESS_PERCENT,100);
         App_Ba.cancelDiscovery();
 
-        Log.d(TAG,"Size of devices :" + pairedDeviceArrayList.size() );
+        Log.d(TAG,"Nearby devices found :" + pairedDeviceArrayList.size() );
     }
-
 
     public void Ble_Try_Connection(BleLibCmd BleCmd)
     {
@@ -260,7 +258,7 @@ public class BleLib {
     public void APP_SendCmdToMainUI(final int command , Object Obj)   //  This function to be used to pass command to looper thread
     {
         Message msg = Message.obtain();
-        Log.d(TAG, "Sending message to UI, Command " + command + " , Obj :"+ Obj);
+
         if (msg != null) {
             msg.what = command;
             msg.obj = Obj;

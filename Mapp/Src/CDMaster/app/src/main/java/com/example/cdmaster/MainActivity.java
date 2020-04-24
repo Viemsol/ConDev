@@ -108,7 +108,13 @@ import static com.example.cdmaster.GLOBAL_CONSTANTS.EVENT_TIMER;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.SCREEN_LIST_NEARBY_DEVICE;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.SCREEN_NORMAL;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.SCREEN_WAIT_INPROGRESS;
+import static com.example.cdmaster.GLOBAL_CONSTANTS.TIMEOUT_FLSHING_FRAME;
+import static com.example.cdmaster.GLOBAL_CONSTANTS.TIMER_CLOUD_READ_TIME;
+import static com.example.cdmaster.GLOBAL_CONSTANTS.TIMER_CLOUD_READ_TIMEOUT;
+import static com.example.cdmaster.GLOBAL_CONSTANTS.TIMER_ONESHOT;
+import static com.example.cdmaster.GLOBAL_CONSTANTS.TIMER_PAIR_TIMEOUT;
 import static com.example.cdmaster.GLOBAL_CONSTANTS.TIMER_RX_TIMEOUT;
+import static com.example.cdmaster.LoopThread.Timer_Sched;
 import static com.example.cdmaster.LoopThread.globaltempDIN;
 import static com.example.cdmaster.LoopThread.globaltempOnTime;
 import static com.example.cdmaster.Security.CRC_Chk;
@@ -314,13 +320,14 @@ public class MainActivity extends AppCompatActivity {
         App_UI_Call(CMD_SET_DISPLY_VISIBILITY,SCREEN_WAIT_INPROGRESS);
         App_UI_Call(CMD_SET_MAIN_DIALOG_STATUS,"Loading your Device's");
         App_UI_Call(CMD_SET_MAIN_PROGRESS_PERCENT,0);
+        Timer_Sched.Start_Timer(TIMER_CLOUD_READ_TIMEOUT, TIMER_CLOUD_READ_TIME, TIMER_ONESHOT, "firbase cloud Timer");
 
     }
 
     public void APP_SendCmdToLooper(int command, Object SubCommand)   //  This function to be used to pass command to looper thread
     {
         Message msg = Message.obtain();
-        Log.d(TAG,"Send Cmd :" + command);
+
         if(msg != null)
         {
             msg.what = command;
@@ -335,10 +342,15 @@ public class MainActivity extends AppCompatActivity {
 
     void App_HandleLooperMsg(Message msg) // all messages from other threads are handled in this
     {
-        Log.d(TAG,"Received Cmd : " + msg.what + " obj "+ msg.obj);
+
         switch(msg.what)
         {
             case EVENT_TIMER:
+                if(msg.arg1 ==TIMER_CLOUD_READ_TIMEOUT)
+                {
+                    App_UI_Call(CMD_DISPLAY_SHORT_ALEART,"Could not connect to cloud!");
+                    App_UI_Call(CMD_SET_DISPLY_VISIBILITY,SCREEN_NORMAL);
+                }
             if(msg.arg1 == TIMER_RX_TIMEOUT) // Bluettooth read task is stuck as no data is received
             {
                 switch (((BleLibCmd)(msg.obj)).Command)
@@ -482,10 +494,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 String onTim = "\n\nOn Time: Days "+((globaltempOnTime[0]&0xFF) | ((globaltempOnTime[1]&0xFF)<<8))+", "+(globaltempOnTime[2]&0xFF)+" : "+(globaltempOnTime[3]&0xFF)+" : "+(globaltempOnTime[4]&0xFF);
 
-                String Msg =  "Device ID: " +(Device_List.get(position)).Dev_ID + "\n\nDevice Type: "+ dev_type + "\n\nFirmware Version: " + (Device_List.get(position)).Version +onTim+"\n\nDays In Use:"+globaltempDIN;
+                String Msg =  "Device ID: " +(Device_List.get(position)).Dev_ID + "\n\nDevice Type: "+ dev_type + "\n\nFirmware Version: " + (Device_List.get(position)).Version +onTim+"\n\nDevice Usage:"+globaltempDIN +" Hrs";
                 App_ShowAlertSimple("Device Info:",Msg);
-
-
+                App_UI_Call(CMD_SET_DISPLY_VISIBILITY,SCREEN_NORMAL);
                 break;
             case BLUETOOTH_GET_DIN_SUCCESS:
                // App_UpdaeDIN((DeviceDb)msg.obj);
@@ -1251,6 +1262,7 @@ public class MainActivity extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        Timer_Sched.Stop_Time(TIMER_CLOUD_READ_TIMEOUT);
                         RowList.clear();
                         Device_List.clear();
                         Log.d(TAG,"Data set Changed !!!");
@@ -1308,12 +1320,12 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
-
-                App_UI_Call(CMD_SET_DISPLY_VISIBILITY,SCREEN_NORMAL);
             }
         });
+
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+
     }
     void App_UI_Call(int Commad, Object SubCommand)
     {
@@ -1536,6 +1548,7 @@ public class MainActivity extends AppCompatActivity {
                     TempRef = FirebaseDatabase.getInstance().getReference("User");
 
                     // update  received credential
+                    DeviceDb_temp.User_Cred = UID.substring(UID.length()-17);
                     TempRef.child(UID).child("CredReceived").child(DeviceDb_temp.Dev_ID).setValue(DeviceDb_temp).addOnCompleteListener(new OnCompleteListener<Void>() {
 
                         @Override
@@ -1673,7 +1686,7 @@ public class MainActivity extends AppCompatActivity {
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         LayoutInflater inflater = getLayoutInflater();
-        builder.setTitle("Enter User Infos");
+        builder.setTitle("Enter User SMS Request:");
         // builder.setMessage("AlertDialog");
         builder.setView(R.layout.cred_user);
         //In case it gives you an error for setView(View) try
@@ -1806,7 +1819,7 @@ public class MainActivity extends AppCompatActivity {
     void AppUsrCredUpdate(final CredUserProfile tempUserProf , final int position,final DatabaseReference MasterCrdSentRef)
     {
         final String MastName =  FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-        final String Cred_User= tempUserProf.UserCred;
+
         final String Cred_Uid = tempUserProf.UserId;
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
@@ -1989,13 +2002,13 @@ public class MainActivity extends AppCompatActivity {
                                     Device_Db_temp.OneTimeAccess = 0;
                                 }
 
-
-                                Device_Db_temp.Is_Master = false;
-                                Device_Db_temp.User_Cred = Cred_User;
+                                Device_Db_temp.Is_Master = false;  // check if master want to update validity
+                                Device_Db_temp.User_Cred = tempUserProf.UserId.substring(tempUserProf.UserId.length()-17);
                                 //TODO: check if user exist
                                 //update validity in master database
                                 String CredValidity =  "Date:"+Device_Db_temp.ActivationDate + "-"+Device_Db_temp.ExpiryDate+"\n"+"Time:"+Device_Db_temp.StartTime+"-"+Device_Db_temp.EndTime+"\nOne Time Access:"+(Device_Db_temp.OneTimeAccess);
                                 MasterCrdSentRef.child(Cred_Uid).child("Validity").setValue(CredValidity);
+
 
                                 TempRef = FirebaseDatabase.getInstance().getReference("User").child(Cred_Uid).child("CredReceived").child(Device_List.get(position).Dev_ID);
                                 //TODO : Update dtatabse layout

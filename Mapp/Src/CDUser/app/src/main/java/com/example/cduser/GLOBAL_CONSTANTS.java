@@ -66,6 +66,7 @@ public class GLOBAL_CONSTANTS
     public static final int TIMER_RX_TIMEOUT = 900;
     public static final int TIMER_PING_TIMEOUT = 901;
     public static final int TIMER_PAIR_TIMEOUT = 902;
+    public static final int TIMER_CLOUD_READ_TIMEOUT = 903;
 
     public static final int DEVICE_PAIR_CONNECT = 2; //
     public static final int DEVICE_SEND_RCV_DATA = 9; //
@@ -97,6 +98,7 @@ public class GLOBAL_CONSTANTS
     public static final int  TIMEOUT_COMMISON_FRAME = 80;
     public static final int     TIMEOUT_BLUETOOTH_CONNECT_PAIR = 200;
     public static final int TIMEOUT_FLSHING_FRAME = 700;
+    public static final int  TIMER_CLOUD_READ_TIME = 60;
 // BLE UART CMD
     public static final int MAX_CMD_RESP_LEN_APP = (byte)16;
     public static final int BLE_UART_PING_APP = (byte)0x05;

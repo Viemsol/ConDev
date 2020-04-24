@@ -48,7 +48,7 @@ class TimerScheduler extends Thread {
                         }
                         Message temp_msg_loop = new Message();
                         Message temp_msg_main = new Message();
-                        Log.d(TAG,"Timeout Index:"+ i);
+
                         temp_msg_loop.what = EVENT_TIMER;
                         temp_msg_loop.obj = timerObj[i];
                         temp_msg_loop.arg1 = 900+i;

@@ -36,20 +36,24 @@ def main():
         db_key = ""
         db_val =""
         valid = 0
+        Strpath = "cdmasterStorage/FwImages/"+"CD_Img01_V"+sys.argv[3]+".OTA"
+        db_key = "FirmwareMeta/DevTyp1/Image/Img"+sys.argv[3]
+        db_val = "CD_Img01_V"+sys.argv[3]+".OTA%"+sys.argv[4] #image name + image comment 
+            
         if(int(sys.argv[2])==1): #type 1
-            Strpath = "cdmasterStorage/FwImages/"+"CD_Img01_V"+sys.argv[3]+".OTA"
-            db_key = "FirmwareMeta/DevTyp1/Image/Img"+sys.argv[3]
-            db_val = "CD_Img01_V"+sys.argv[3]+".OTA%"+sys.argv[4] #image name + image comment   
-            valid=1         
-        if(valid>0):
             #----------------Update Image to Location 
+            print "Updating image"
             try:
                 storage.child(Strpath).put(config_fin_name) #test1 is a path of file to beloaded and example.txt file name in database
             except:
                 print "Error: File read error"
-            # wite to storage 
+            # wite to storage   
+            valid=1         
+        if(valid>0):
+            print "Updating image Info"
             #----------------Update the Db with firmware image and Info
             results = db.child(db_key).set(db_val)
+            
         else:
             print "Error: Type not supported"
     else:

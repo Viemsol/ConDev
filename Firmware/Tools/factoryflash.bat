@@ -1,7 +1,11 @@
 @echo off
-set IMAGEDIRAPPBOOTHEXPATH=%1
-set SN=%2
-
+set SN=%1
+IF [%2] == [] GOTO Label1
+set IMAGEDIRAPPBOOTHEXPATH=%2
+GOTO Call
+:Label1
+set IMAGEDIRAPPBOOTHEXPATH=..\Image\AppBootCombine.Hex
+:Call
 set "mppath=C:\Program Files\Microchip\MPLABX\v4.05\mplab_ipe"
 set "pk3execpath=%mppath%\pk3cmd.exe"
 @REM set PATH=C:\Program Files\Microchip\MPLABX\v4.05\mplab_ipe;%PATH%
