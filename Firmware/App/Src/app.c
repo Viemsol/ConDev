@@ -151,8 +151,7 @@ void fdr(void)
         while(!(get_pin_5)); // wait for switch to depress
         asm("RESET"); // reset
     }
-}cls
-
+}
 
 void LedUpdate(void)
 {
