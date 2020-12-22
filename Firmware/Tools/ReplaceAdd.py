@@ -6,13 +6,13 @@ import os
 import string
 sys.path.append(os.path.realpath('..'))
 def main():
-	print "-------------Replacing App Function Addressfrom Boot loader -----------\nLog:\nTotal argument passed: " + str(len(sys.argv)) 
+	print( "-------------Replacing App Function Addressfrom Boot loader -----------\nLog:\nTotal argument passed: " + str(len(sys.argv)))
 	count = 0
 	if(len(sys.argv)>=3):
 		for arg in sys.argv[1:]:
-			print "Argument :" + arg
+			print( "Argument :" + arg)
 		# extecting the Share function addresses from 
-		print "\n"
+		print( "\n")
 		dirname = os.path.dirname(__file__)
 		fin_name = os.path.join(dirname, sys.argv[1])
 		fout_name = os.path.join(dirname, sys.argv[2])
@@ -22,11 +22,11 @@ def main():
 		fout.close()
 		fout_name = os.path.join(dirname, sys.argv[2])
 		error = 0
-		check_str = ['_Bt_ComSendData','_Bt_UnlockSeq','_Bt_WriteEep','_Bt_FlashWriteBlock','_Bt_ReadData']
+		check_str = ['_Bt_WriteEep','_Bt_FlashWriteBlock','_Bt_ReadData']
 		for line1 in fin:
-		    if(line1.startswith(tuple(check_str))):
+			if(line1.startswith(tuple(check_str))):
 				list1_temp = line1.split()
-				print "Replacing address for :" + list1_temp[0] + " to " + list1_temp[2]
+				print("Replacing address for :" + list1_temp[0] + " to " + list1_temp[2])
 				found = 0
 				for line2 in data_temp.split('\n'):
 					if(line2.startswith('extern void') and  (list1_temp[0][1:] in line2)): # test to remoe _ from function name
@@ -37,16 +37,16 @@ def main():
 						count = count + 1
 						break
 				if(found == 0):
-					print "Error ,Not found in output file : " + list1_temp[0]
+					print( "Error ,Not found in output file : " + list1_temp[0])
 					error = 1
 		if(error==0):
 			fout = open(fout_name, "wt")
 			fout.write(data_temp)
 			fout.close()
-			print "Total Address Replaced " + str(count) + "\nSuccess !!!"
+			print( "Total Address Replaced " + str(count) + "\nSuccess !!!")
 		fin.close()
 	else:
-		print "Argument length not correct !!! Required 3 Arguments"
+		print( "Argument length not correct !!! Required 3 Arguments")
 		
 if __name__ == "__main__":
     main()

@@ -1,0 +1,401 @@
+Release Notes for PICkit 3 Command Line Interface
+MPLAB® IDE v8.73
+Software and Firmware versions:
+ MPPICkit3.dll	v1.0.1.49	
+ PK3CMD.exe	v1.00.12
+ PICkit 3 Suite (OS/FW)	v1.26.65	(PK3FW_012665.jam)
+
+
+June 24, 2011
+
+-----------------------------------------------------------------------------
+Table of Contents
+-----------------------------------------------------------------------------
+1.  Tool Definition
+2.  Device Support List
+3.  Operating System Support List
+4.  What's New or Updated
+5.  Known Problems
+6.  Important Notes
+7.  Upgrading the Firmware
+8.  Command Line Options
+9.  Exit codes
+10. Troubleshooting
+11. Command Line Examples
+12. Customer Support
+
+----------------------------------------------------------------------------
+1. Tool Definition
+----------------------------------------------------------------------------
+     PK3CMD is a 32 bit command-line interface to
+MPLAB PK3CMD device programming support.
+
+The PK3CMD executable may be found, by default, in:
+C:\Program Files\Microchip\MPLAB IDE\Programmer Utilities\PICkit3
+
+
+Note:  PK3CMD will only work with MPLAB IDE v8.33 and above
+-----
+----------------------------------------------------------------------------
+2. Device Support List
+----------------------------------------------------------------------------
+- PICmicro devices: drop "PIC", e.g., PIC16F877 becomes 16F877
+- dsPIC devices:    drop "dsPIC", e.g., dsPIC30F6014 becomes 30F6014
+
+
+----------------------------------------------------------------------------
+3. Operating System Support List
+----------------------------------------------------------------------------
+Windows® 2000 SP4, Windows XP SP2 and Windows Vista™ (32-Bit)* OSs
+
+* Only initial testing has been performed on 32-bit Vista for this release. 
+
+NOTE: Windows NT® and Windows ME OSs are NOT supported.
+
+
+----------------------------------------------------------------------------
+4. What's New or Updated
+----------------------------------------------------------------------------
+ 1.0.2	Auto Update Firmware
+ 1.0.3  SQTP Support and Batch mode Operation
+ 1.0.4  Power Target from PICkit3
+ 1.0.5  Programming Calibration memory 
+ 1.0.6  Hold in Reset 
+ 1.0.7  Release From Reset,Reporgramming and Read specific region
+ 1.0.8  High Voltage MCLR and Program only selected Program Memory Range
+ 1.0.9  Read selected Program Memory Range
+
+----------------------------------------------------------------------------
+5. Known Problems
+----------------------------------------------------------------------------
+
+ICD3-243: PK3CMD does not work on 64-bit OSs. The issue is that 
+if the command line tool has to switch firmware versions, it will not be 
+able to do that as it times out early.
+
+Workaround: Download the correct firmware for the device using MPLAB IDE. 
+Once that is done the command line utility will detect the device. 
+
+----------------------------------------------------------------------------
+6. Important Notes
+----------------------------------------------------------------------------
+   a. PK3CMD will auto update Firmware, this will cause delay to the operation
+   b. Part name should be mentioned without Family Information like PIC/dsPIC
+      Example. PIC18F67J50 should be mentioned as -P18F67J50
+   c. Program and Verify Operation makes use of Selected Hex File using -F<file>
+   d. Only Single session of PICkit3 communication is allowed
+   e. Command line arguments are parsed alphabetically
+   f. Batch Mode Operation will Initialize the PICkit3 once and perform the 
+      same operations repeatedly. On each repeat operation user intervention is required.
+      Batch Mode will exit on following condition, Failure of operation or user request to stop.
+      Warning: Batch Mode is suggested to use only for the .bat or direct invocation of 
+               PK3CMD as because it will enter into wait state for the user input.
+   g. To generate SQTP file use MPLAB IDE, Select 'Programmer' under that 'MPLAB PM3',          
+      then select 'Settings' and open 'SQTP' tab.
+   h. Reprogram will enable the user to update the selected part of memory.
+      The reprogram hex file should contain only data for the selected memory range that
+      needs to be updated. This option first read the device and update the selected memory 
+      then writes it back to the device. 
+   i. Program Memory Range Address must be aligned to the device's program memory boundary size.
+ 
+
+----------------------------------------------------------------------------
+9.  Upgrading the Firmware
+----------------------------------------------------------------------------
+    PK3CMD will automatically download the latest firmware if required
+
+----------------------------------------------------------------------------
+10. Command Line Options
+----------------------------------------------------------------------------
+The following commands are available in the command line interface.
+
+
+ Description			Options
+----------------------------------------------------------------------------
+ Part/Device			-P<Part name>
+ Batch Mode Operation		-B 	 	 
+ Blank Check			-C			  
+ Erase Flash			-E			  
+ Hex File Selection		-F<file>		  
+ Read to file			-G<Region>F<file>
+				   Region:
+				     P= Program Memory
+				     E= EEPROM	
+				     I= ID Memory
+				     C= Configuration Memory
+				     B= Boot Flash Memory
+				     If no region is entered, 
+                                     the entire device will be read
+ Hold in Reset 			-H
+ Release from Reset		-L
+ High Voltage MCLR		-I
+ Program			-M<Memory Region>
+				   P - Program Memory
+				   E= EEPROM	
+				   I= ID Memory
+				   C= Configuration Memory
+				   B= Boot Flash Memory
+				   If no region is entered, 
+				   the entire device will be programmed
+ Program Memory Range           -N####,####
+				  #### is a hexidecimal number representing 
+                                  Start and End Address in sequence
+ Reprogram			-R<file>
+ SQTP File Selection		-S<file>
+ Program Calibration memory	-U##
+				   ## is a hexidecimal number representing
+	                           the least significant byte of the 
+                                   calibration value to be programmed	 			
+ Power Target			-V<Voltage> 	
+ Verify				-Y
+ Help				-?	
+ Exit Code			-?E
+
+Note: Commands are not case sensitive. Escape character can be a ‘-‘ or  ‘/’.  
+-----
+
+----------------------------------------------------------------------------
+11. Exit Codes
+----------------------------------------------------------------------------
+
+     0 - All of the selected operations complete successfully
+     1 - Invalid Command Line Argument
+     2 - PICkit3 Communication Failed
+     3 - Selected Operation Failed
+     4 - Unknown Runtime Failure
+     5 - Invalid Device Detected
+     6 - SQTP Failed
+
+----------------------------------------------------------------------------
+12. Troubleshooting
+----------------------------------------------------------------------------
+I. Failed to communicate to PK3CMD:
+   a. Make sure only one session is communication with PICkit3 
+      If PICkit3 is already loaded in MPLAB this will fail to communicate.
+   b. Make sure computable Firmware type loaded on PICkit3 for the selected Device.
+      To do that open MPLAB select the specific Device and Select PICkit3 
+      MPLAB will detect the FW if need it will update the PICkit3 
+      (By Default PICkit3 will automatically update Firmware)
+
+II. Programming Failed:
+   a. Make sure the Selected Hex file computable with the current device
+   b. Check the selected Memory Region it available in the Device 
+   c. Check the selected device requires Erase before programming
+
+
+----------------------------------------------------------------------------
+11. Command Line Examples
+----------------------------------------------------------------------------
+
+Program:
+--------
+	Program Entire Device:	
+
+		PK3CMD -P18F67J50 -FC:\DemoCode.Hex -M
+	
+	Program Entire device with SQTP file loaded :
+	
+		PK3CMD -P18F67J50 -Sc:\IdSQTP.NUM -FC:\DemoCode.Hex -M
+			
+	Program PROGRAM Memory:	
+
+		PK3CMD -P18F67J50 -FC:\DemoCode.Hex -MP
+
+	Program CONFIG Memory:	
+
+		PK3CMD -P18F67J50 -FC:\DemoCode.Hex -MC
+
+	Program EEPROM Memory:	
+
+		PK3CMD -P18F67J50 -FC:\DemoCode.Hex -ME
+
+	Program USER ID Memory:	
+
+		PK3CMD -P18F67J50 -FC:\DemoCode.Hex -MI
+
+	Program BOOT Memory:	
+
+		PK3CMD -P18F67J50 -FC:\DemoCode.Hex -MB
+
+	Program only selected Program Memory Range:
+
+		PK3CMD -P18F67J50 -FC:\DemoCode.Hex -M -N100,2FF	
+
+
+Hold in Reset: 
+--------------
+		PK3CMD -P18F67J50 -H
+
+
+Release from Reset:
+-------------------
+		PK3CMD -P18F67J50 -L
+
+
+Programming Calibration Memory:
+-------------------------------
+
+		PK3CMD -P10F206 -FC:\DemoCode.Hex -M -U45		
+
+Read:
+-----
+	Read Entire Device to File:
+	
+		PK3CMD 	   -P18F67J50 -GFC:\DemoCode.Hex 		
+
+	Read PROGRAM Memory:
+	
+		PK3CMD 	   -P18F67J50 -GPFC:\DemoCode.Hex 		
+
+	Read CONFIG Memory:
+	
+		PK3CMD 	   -P18F67J50 -GCFC:\DemoCode.Hex 		
+
+	Read EEPROM Memory:
+	
+		PK3CMD 	   -P18F67J50 -GEFC:\DemoCode.Hex 		
+
+	Read USER ID Memory:
+	
+		PK3CMD 	   -P18F67J50 -GIFC:\DemoCode.Hex 		
+
+	Read BOOT Memory:
+	
+		PK3CMD 	   -P18F67J50 -GBFC:\DemoCode.Hex 		
+
+	Read selected Program Memory Range:
+
+		PK3CMD 	   -P18F67J50 -GPFC:\DemoCode.Hex -N100,2FF	
+
+Verify:
+-------	
+	Verify Data from File:
+
+		PK3CMD -P18F67J50 -FC:\DemoCode.Hex -Y
+
+
+Erase:
+------
+	Erase Entire Device:
+
+		PK3CMD -P18F67J50 -E
+
+
+Blank Check:
+-----------
+	Blank Check Entire Device:
+
+		PK3CMD -P18F67J50 -C
+
+Batch Mode Operation:
+---------------------
+	Batch Mode can be combined with any operation:
+
+		PK3CMD -P18F67J50 -B -C
+
+
+Power Target:
+-------------
+	Power Target from PICkit3:
+
+		PK3CMD -P18F67J50 -V3.000 -B -C	
+
+Reprogram :
+-----------
+        Reprogram with new Hex File:
+		PK3CMD -P18F67J50 -RF:\NewCode.hex -GFC:\OLDCode.Hex 
+
+High Voltage MCLR :
+-------------------
+	Use High Voltage MCLR:
+		PK3CMD -P18F67J50  -I
+
+
+Help:
+-----
+	Help for All commands:
+
+		PK3CMD -?
+
+	Help for Exit Code:	
+
+		PK3CMD -?E
+
+
+		
+----------------------------------------------------------------------------
+12. Customer Support
+----------------------------------------------------------------------------
+The Microchip Web Site
+----------------------
+
+Microchip provides online support via our web site at www.microchip.com.
+This web site is used as a means to make files and information easily
+available to customers. Accessible by using your favorite Internet browser,
+the web site contains the following information:
+
+* Product Support - Data sheets and errata, application notes and sample
+  programs, design resources, user's guides and hardware support documents,
+  latest software releases and archived software
+
+* General Technical Support - Frequently Asked Questions (FAQs), technical
+  support requests, online discussion groups, Microchip consultant program
+  member listing
+
+* Business of Microchip - Product selector and ordering guides, latest
+  Microchip press releases, listing of seminars and events, listings of
+  Microchip sales offices, distributors and factory representatives
+
+Development Systems Customer Change Notification Service
+--------------------------------------------------------
+
+Microchip's customer notification service helps keep customers current on
+Microchip products. Subscribers will receive e-mail notification whenever
+there are changes, updates, revisions or errata related to a specified
+product family or development tool of interest.
+
+To register, access the Microchip web site at www.microchip.com, click
+on Customer Change Notification and follow the registration instructions.
+
+The Development Systems product group categories are:
+
+* Compilers - The latest information on Microchip C compilers and other
+  language tools. These include the MPLAB C18 and MPLAB C30 C compilers;
+  MPASM(TM) and MPLAB ASM30 assemblers; MPLINK(TM) and MPLAB LINK30 object
+  linkers; and MPLIB(TM) and MPLAB LIB30 object librarians.
+
+* Emulators - The latest information on Microchip in-circuit emulators.
+  This includes the MPLAB ICE 2000, MPLAB ICE 4000 and Real ICE.
+
+* In-Circuit Debuggers - The latest information on the Microchip
+  in-circuit debugger, MPLAB ICD 2 and ICD 3.
+
+* MPLAB IDE - The latest information on Microchip MPLAB IDE, the Windows(R)
+  Integrated Development Environment for development systems tools. This
+  list is focused on the MPLAB IDE, MPLAB IDE Project Manager, MPLAB Editor
+  and MPLAB SIM simulator, as well as general editing and debugging features.
+
+* Programmers - The latest information on Microchip programmers. These
+  include the MPLAB PM3 and PRO MATE(R) II device programmers and the
+  PICSTART(R) Plus and PICkit(TM) 1 development programmers.
+
+Additional Support
+------------------
+
+Users of Microchip products can receive assistance through several
+channels:
+
+* Distributor or Representative
+* Local Sales Office
+* Field Application Engineer (FAE)
+* Technical Support
+
+Customers should contact their distributor, representative or field
+application engineer (FAE) for support. Local sales offices are also
+available to help customers. A listing of sales offices and locations
+is available on our website.
+
+Technical support is available through the web site at:
+http://support.microchip.com
+
+

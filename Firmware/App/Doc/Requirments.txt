@@ -1,0 +1,28 @@
+CDXXXX: Requirments
+Security Requirment:
+-Reply Attack Protection
+ -Dinal of service if more then 5 consicutuve CHecksum errors
+ -New Session key for every communication lasting life for 5 seconds
+
+FDR Requirment:
+   -on Switch hold >10 second < 15 sec, reset the Device Commision Link
+   -on Switch hold >20 second, Update BLE Chip UN/PW
+	
+UI requirment Red LED:
+   - One Red Blink on Session key setup
+   - Quick blink for one second on Device ON
+   - One Blink On Device Off
+   - 1 blink every second in FDR state on Switch hold >10 second < 15 sec
+   - Quick blink On BLE chip UN/PW update  on Swich hold for 20 seconds
+   - Quick blink On BLE chip UN/PW update  on Switch release after 20 seconds
+
+Commisioning Requirment:
+
+Communication Requirment:
+	PING: to setup Session Key
+	FlSH: for OTA
+        DEVICE ACTION:
+        DEVICE STATUS:
+	DEVICE VERSION: DEVTYP:BLV:APPV
+
+

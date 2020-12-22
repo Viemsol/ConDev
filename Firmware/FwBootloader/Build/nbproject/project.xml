@@ -8,10 +8,24 @@
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>
             <cpp-extensions/>
-            <header-extensions/>
+            <header-extensions>h</header-extensions>
             <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
             <make-dep-projects/>
+            <sourceRootList>
+                <sourceRootElem>.</sourceRootElem>
+                <sourceRootElem>../Src</sourceRootElem>
+                <sourceRootElem>../../fwCom</sourceRootElem>
+            </sourceRootList>
+            <confList>
+                <confElem>
+                    <name>BootSaveSnKey</name>
+                    <type>2</type>
+                </confElem>
+            </confList>
+            <formatting>
+                <project-formatting-style>false</project-formatting-style>
+            </formatting>
         </data>
     </configuration>
 </project>
